@@ -9,7 +9,9 @@
 #' @export
 #' @rdname fixedPoint
 #' @examples
+#' \dontrun{
 #' vignette("fixedPoint", "saeRobustTools")
+#' }
 fixedPoint <- function(fun, x0, convCrit) {
     x1 <- NULL
     repeat {

@@ -32,7 +32,7 @@ To find the value of $x$ for which $f(x) = x$ we can use `fixedPoint`.
 library("saeRobustTools")
 library("functional")
 convCrit <- function(xn1, xn0) abs(xn0 - xn1) < 0.001
-fp <- Curry(fixedPoint, convCrit = convCritFun)
+fp <- Curry(fixedPoint, convCrit = convCrit)
 fp(function(x) 1 + 1 / x, rnorm(1))
 ```
 

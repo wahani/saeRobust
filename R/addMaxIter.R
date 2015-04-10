@@ -2,8 +2,8 @@
 #'
 #' This function can be used to modify convergence criterion functions.
 #'
-#' @param fun
-#' @param maxIter
+#' @param fun function to be wrapped
+#' @param maxIter maximum number of iterations
 #'
 #' @export
 addMaxIter <- function(fun, maxIter) {

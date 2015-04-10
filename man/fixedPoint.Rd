@@ -20,6 +20,8 @@ averageDamp(fun)
 A fixed-point function supplied by the user is iteratively evaluated. \code{averageDamp} can be used to add average damping to the function - this may have a positive effect on the speed of convergence for functions which oscillate otherwise.
 }
 \examples{
+\dontrun{
 vignette("fixedPoint", "saeRobustTools")
+}
 }
 

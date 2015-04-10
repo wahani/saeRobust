@@ -9,6 +9,9 @@
 \usage{
 saveHistory(fun)
 }
+\arguments{
+\item{fun}{function}
+}
 \description{
 This function can be used to save a history of results of a function. The history is stored as a matrix, so this works best if the return value of \code{fun} is numeric. See \code{\link{fixedPoint}} for how it can be used.
 }

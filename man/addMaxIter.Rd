@@ -7,9 +7,9 @@
 addMaxIter(fun, maxIter)
 }
 \arguments{
-\item{fun}{}
+\item{fun}{function to be wrapped}
 
-\item{maxIter}{}
+\item{maxIter}{maximum number of iterations}
 }
 \description{
 This function can be used to modify convergence criterion functions.

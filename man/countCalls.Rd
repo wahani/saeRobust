@@ -9,6 +9,9 @@
 \usage{
 countCalls(fun)
 }
+\arguments{
+\item{fun}{function}
+}
 \description{
 This function can be used to count the number of calls of a function. See \code{\link{fixedPoint}} for how it can be used.
 }
