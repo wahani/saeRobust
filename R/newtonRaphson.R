@@ -12,7 +12,12 @@
 #' vignette("fixedPoint", "saeRobustTools")
 #' }
 newtonRaphson <- function(funList, ...) {
+    fixedPoint(newtonRaphsonFunction(funList), ...)
+}
+
+#' @export
+#' @rdname newtonRaphson
+newtonRaphsonFunction <- function(funList) {
     force(funList)
-    fun <- function(x) as.numeric(x - solve(funList$f1(x)) %*% funList$f(x))
-    fixedPoint(fun, ...)
+    function(x) as.numeric(x - solve(funList$f1(x)) %*% funList$f(x))
 }

@@ -2,9 +2,12 @@
 % Please edit documentation in R/newtonRaphson.R
 \name{newtonRaphson}
 \alias{newtonRaphson}
+\alias{newtonRaphsonFunction}
 \title{Newton-Raphson Algorithm}
 \usage{
 newtonRaphson(funList, ...)
+
+newtonRaphsonFunction(funList)
 }
 \arguments{
 \item{funList}{the function to be evaluated in the algorithm}
