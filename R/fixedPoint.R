@@ -1,6 +1,6 @@
 #' Fixed Point Algorithm Infrastructure
 #'
-#' @description A fixed-point function supplied by the user is iteratively evaluated. \code{averageDamp} can be used to add average damping to the function - this may have a positive effect on the speed of convergence for functions which oscillate otherwise.
+#' @description A fixed-point function supplied by the user is iteratively evaluated. \code{averageDamp} can be used to add average damping to the function - this may have a positive effect on the speed of convergence.
 #'
 #' @param fun the function to be evaluated in the algorithm
 #' @param x0 starting value

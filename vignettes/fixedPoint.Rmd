@@ -11,13 +11,13 @@ vignette: >
 In this vignette you can find some notes and examples on the use of the fixed point function and associated tools. The function itself is simple enough; it evaluates:
 
 $$
-x_{n} = f(x_{n-1})
+x_{n + 1} = f(x_{n})
 $$
 
 until a convergence criterion is reached. A convergence criterion is defined as a function:
 
 $$
-convCrit(x_n, x_{n-1}) = TRUE
+convCrit(x_{n + 1}, x_{n}) = TRUE
 $$
 
 if convergence is reached and `FALSE` otherwise. As a simple example consider the function
@@ -65,4 +65,34 @@ What happens is that the functions oscillates between 1 and 2. To overcome this 
 ```{r}
 fixedPoint(saveHistory(averageDamp(sqrtFp(2))), 2, addMaxIter(convCrit, 10))
 ```
+
+## Square root solved with Newton-Raphson
+
+The Newton Raphson is frequently used to fit statistical models. It is a special case of the fixed point algorithm and exists as a convenience in this package. The algorithm is defined as:
+
+$$
+x_{n + 1} = x_n + (f'(x_n))^{-1} f(x_n)
+$$
+
+To find the square root it is sufficient to find the root of
+
+$$
+f(x) = x^2 - p
+$$
+
+So we can implement the algorithm as follows:
+
+```{r}
+sqrtNr <- function(.p) {
+    force(.p)
+    f <- function(x) x^2 - .p
+    f1 <- function(x) 2 * x
+    as.list(environment())
+    }
+
+nr <- Curry(newtonRaphson, convCrit = convCrit)
+nr(sqrtNr(2), 2)
+```
+
+
 
