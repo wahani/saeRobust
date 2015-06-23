@@ -27,4 +27,3 @@ scoreRobustBeta <- function(y, X, V, Vinv = solve(V), psi, resid = NULL) {
 
     list(f = f, f1 = f1)
 }
-

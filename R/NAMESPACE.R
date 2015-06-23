@@ -1,4 +1,5 @@
+#' @import aoos
 #' @import functional
 #' @import methods
-#' @importFrom Matrix Diagonal
+#' @import Matrix
 NULL

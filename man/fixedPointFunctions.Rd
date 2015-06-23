@@ -2,9 +2,12 @@
 % Please edit documentation in R/fixedPointFunctions.R
 \name{fixedPointRobustBeta}
 \alias{fixedPointRobustBeta}
-\title{Fixed Point Function for Robust Beta}
+\alias{fixedPointRobustVarianceFH}
+\title{Fixed Point Functions}
 \usage{
 fixedPointRobustBeta(y, X, V, Vinv = solve(V), psi, resid = NULL)
+
+fixedPointRobustVarianceFH(y, X, samplingVar, psi, K, beta)
 }
 \arguments{
 \item{y}{vector of response}
@@ -18,6 +21,12 @@ fixedPointRobustBeta(y, X, V, Vinv = solve(V), psi, resid = NULL)
 \item{psi}{influence function}
 
 \item{resid}{function to compute residuals (optional)}
+
+\item{samplingVar}{the sampling variance of the direct estimator.}
+
+\item{K}{constant, see \link{getK}. \code{length(beta) == ncols(X)}}
+
+\item{beta}{beta coefficients to be used.}
 }
 \description{
 This is an implementation of a robustified fixed point function to identify beta coefficients in any mixed linear model. The function is derived from the pseudo linear form of robust mixed models in CCST (2015) and CCT (2011).
