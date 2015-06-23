@@ -7,7 +7,6 @@ Depends: R (>= 3.1.2), methods
 Imports: Matrix, functional
 License: GPL-3 | file LICENSE
 LazyData: true
-Suggests: testthat,
-    knitr, functional
+Suggests: testthat, knitr
 VignetteBuilder: knitr
 Encoding: UTF-8

@@ -20,6 +20,6 @@ fixedPointRobustBeta(y, X, V, Vinv = solve(V), psi, resid = NULL)
 \item{resid}{function to compute residuals (optional)}
 }
 \description{
-This is an implementation of a robustified fixed point function to identify beta coefficients in any mixed linear model. The function is derived from the pseudo linear form of robust mixed model CCST (2015) and CCT (2011).
+This is an implementation of a robustified fixed point function to identify beta coefficients in any mixed linear model. The function is derived from the pseudo linear form of robust mixed models in CCST (2015) and CCT (2011).
 }
 
