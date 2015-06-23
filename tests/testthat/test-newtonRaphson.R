@@ -27,13 +27,15 @@ test_that("NR for robust betas", {
     Vinv <- solve(V)
 
     score <- scoreRobustBeta(y, X, V, Vinv, psiOne)
-    expect_equal(score$f1(c(0, 2)), - crossprod(X, Vinv) %*% X)
+    # as.numeric, because score uses Matrix classes.
+    expect_equal(as.numeric(score$f1(c(0, 2))), as.numeric(-crossprod(X, Vinv) %*% X))
 
     # one outlier
     set.seed(1)
     y <- 2 * 1:5 + rnorm(5)
     score <- scoreRobustBeta(y, X, V, Vinv, psiOne)
-    expect_equal(score$f1(c(0, 2)), - crossprod(X, Vinv) %*% diag(c(1, 1, 1, 0, 1)) %*% X)
+    expect_equal(as.numeric(score$f1(c(0, 2))),
+                 as.numeric(-crossprod(X, Vinv) %*% diag(c(1, 1, 1, 0, 1)) %*% X))
 
     # Equivalence to OLS
     set.seed(1)
@@ -52,9 +54,4 @@ test_that("NR for robust betas", {
         as.numeric(solve(crossprod(X)) %*% crossprod(X, y)))
 
 })
-
-
-
-
-
 
