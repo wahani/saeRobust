@@ -5,6 +5,7 @@
 #' @param fun the function to be evaluated in the algorithm
 #' @param x0 starting value
 #' @param convCrit a function returning a logical scalar. Is called with two arguments; the first is the value from iteration n; the second is the value from iteration n-1
+#' @param tolerance a numeric value > 0
 #'
 #' @export
 #' @rdname fixedPoint
@@ -31,3 +32,18 @@ averageDamp <- function(fun) {
     force(fun)
     function(x) (x + fun(x)) / 2
 }
+
+#' @export
+#' @rdname fixedPoint
+convCritAbsolute <- function(tolerance = 1e-5) {
+    assert_that(tolerance > 0)
+    function(xn1, xn0) all(abs(xn0 - xn1) < tolerance)
+}
+
+#' @export
+#' @rdname fixedPoint
+convCritRelative <- function(tolerance = 1e-5) {
+    assert_that(tolerance > 0)
+    function(xn1, xn0) all((abs(xn0 - xn1) / max(1, abs(xn0))) < tolerance)
+}
+

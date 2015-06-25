@@ -8,7 +8,7 @@
 #' @export
 matU <- function(V) {
     U <- Diagonal(x = diag(V))
-    sqrt <- sqrt(U)
+    sqrt <- Diagonal(x = sqrt(diag(V)))
     sqrtInv <- solve(sqrt)
     retList()
 }

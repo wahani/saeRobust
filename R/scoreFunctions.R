@@ -14,7 +14,7 @@ scoreRobustBeta <- function(y, X, V, Vinv = solve(V), psi, resid = NULL) {
     force(y); force(psi)
 
     # Helper functions
-    if(is.null(resid)) resid <- function(beta) U$sqrtInv %*% (y - X %*% beta)
+    if (is.null(resid)) resid <- function(beta) U$sqrtInv %*% (y - X %*% beta)
     D <- function(beta) Diagonal(x = psi(resid(beta), deriv = TRUE))
 
     # Precalculations - they only have to be done once

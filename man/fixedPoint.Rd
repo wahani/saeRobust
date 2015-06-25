@@ -2,12 +2,18 @@
 % Please edit documentation in R/fixedPoint.R
 \name{fixedPoint}
 \alias{averageDamp}
+\alias{convCritAbsolute}
+\alias{convCritRelative}
 \alias{fixedPoint}
 \title{Fixed Point Algorithm Infrastructure}
 \usage{
 fixedPoint(fun, x0, convCrit)
 
 averageDamp(fun)
+
+convCritAbsolute(tolerance = 1e-05)
+
+convCritRelative(tolerance = 1e-05)
 }
 \arguments{
 \item{fun}{the function to be evaluated in the algorithm}
@@ -15,6 +21,8 @@ averageDamp(fun)
 \item{x0}{starting value}
 
 \item{convCrit}{a function returning a logical scalar. Is called with two arguments; the first is the value from iteration n; the second is the value from iteration n-1}
+
+\item{tolerance}{a numeric value > 0}
 }
 \description{
 A fixed-point function supplied by the user is iteratively evaluated. \code{averageDamp} can be used to add average damping to the function - this may have a positive effect on the speed of convergence.
