@@ -9,7 +9,7 @@
 <meta name="generator" content="pandoc" />
 
 
-<meta name="date" content="2015-06-23" />
+<meta name="date" content="2015-09-01" />
 
 <title>Notes on the fixed point framework</title>
 
@@ -52,7 +52,7 @@ code > span.er { color: #ff0000; font-weight: bold; }
 
 <div id="header">
 <h1 class="title">Notes on the fixed point framework</h1>
-<h4 class="date"><em>2015-06-23</em></h4>
+<h4 class="date"><em>2015-09-01</em></h4>
 </div>
 
 
@@ -74,7 +74,7 @@ f(x) = 1 + \frac{1}{x}
 convCrit &lt;-<span class="st"> </span>function(xn1, xn0) <span class="kw">abs</span>(xn0 -<span class="st"> </span>xn1) &lt;<span class="st"> </span><span class="fl">0.001</span>
 fp &lt;-<span class="st"> </span><span class="kw">Curry</span>(fixedPoint, <span class="dt">convCrit =</span> convCrit)
 <span class="kw">fp</span>(function(x) <span class="dv">1</span> +<span class="st"> </span><span class="dv">1</span> /<span class="st"> </span>x, <span class="kw">rnorm</span>(<span class="dv">1</span>))</code></pre>
-<pre><code>## [1] 1.618179</code></pre>
+<pre><code>## [1] 1.618171</code></pre>
 <div id="square-root" class="section level1">
 <h1>Square Root</h1>
 <p>Another example which can be used is to find the square root. The square root of <span class="math">\(p\)</span> is the fixed point of the function</p>

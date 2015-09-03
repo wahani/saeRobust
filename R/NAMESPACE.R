@@ -3,4 +3,7 @@
 #' @import functional
 #' @import methods
 #' @import Matrix
+#' @import magrittr
 NULL
+
+globalVariables(".")
