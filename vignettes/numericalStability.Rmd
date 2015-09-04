@@ -1,0 +1,91 @@
+---
+title: "Notes on Assessing Numerical Stability"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{numericalStability}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+In this vignette you find some notes on how to assess the numerical stability of
+algorithms.
+
+## Test Data
+
+The package provides some utility functions to construct test data on which the
+numerical stability of algorithms can be tested. The general approach is to
+generate data with the worst possible properties and at the same time is easily
+represented in a computer (only integer values). Research in this area is
+sparse. Zielke (????) is one of the few authors contributing to this subject and
+the construction of constructing the test data is also motivated from a time
+where storage and computation time was much more an issue than today. However,
+the developed ideas are the foundation for this approach.
+
+'Weihs / Mersmann / Ligges (2014): Foundations of Statistical Algorithms: With 
+'References to R Packages' is a recent publication also building on these
+'results...
+
+Literature:
+
+- Weihs / Mersmann / Ligges (2014): Foundations of Statistical Algorithms: With
+References to R Packages
+- Altmann / Gill / McDonald (2004): Numerical Issues in Statistical Computing
+for the Social Scientist
+- Thisted (1988): Elements of Statistical Computing
+- Altmann / Gill / McDonald (2007): accuracy: Tools for Accurate and Reliable
+Statistical Computing
+
+### What is the worst possible?
+
+```{r}
+library("Matrix")
+# Test X
+Z1 <- Matrix(rep(998, 4), ncol = 2)
+X <- testMatX(Z1, Z1)
+isSymmetric(X)
+det(X)
+solve(X)
+
+# Test Y
+y0 <- testResponse0(X)
+y <- testResponse(y0, k = 2)
+
+lmModel <- lm(
+    y ~ X1 + X2 + X3 + X4 + X5 + X6 - 1,
+    data.frame(y = as.numeric(y), as.matrix(X))
+)
+
+tmp <- summary(lmModel)
+tmp$residuals
+
+fpBeta <- fixedPointRobustBeta(y, X, Diagonal(ncol(X)), psi = . %>% psiOne)
+solutionFP <- fixedPoint(fpBeta, rep(1, ncol(X)), addMaxIter(convCritRelative(), 100))
+y0Pred <- solutionFP %*% X %>% as.numeric
+y0Pred - y
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

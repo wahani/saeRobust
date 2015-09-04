@@ -1,6 +1,6 @@
 #' Robust score function (ML) for beta
 #'
-#' Constructs a list of functions with \code{f} as the score and \code{f1} as its derivative. Both are functions of the beat coefficients.
+#' Constructs a list of functions with \code{f} as the score and \code{f1} as its derivative. Both are functions of the beta coefficients.
 #'
 #' @param y vector of response
 #' @param X design matrix
