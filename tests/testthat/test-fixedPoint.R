@@ -22,4 +22,5 @@ test_that("Fixed Point Framework", {
     res <- fp(saveHistory(fpsqrt2Damped), 2)
     expect_equal(nrow(slot(res, "history")), 4)
     expect_equal(res@.Data, sqrt(2))
+
 })

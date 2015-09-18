@@ -13,7 +13,7 @@ test_that("rfh is working", {
     X <- cbind(1, dat$x)
     samplingVar <- rep(16, nrow(dat))
 
-    out <- rfh(y, X, samplingVar)
+    out <- rfhfit(y, X, samplingVar)
     expect_is(out, "list")
     expect_is(out$beta, "numeric")
     expect_is(out$variance, "numeric")
