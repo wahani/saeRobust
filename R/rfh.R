@@ -1,3 +1,29 @@
+#' Robust Fay Herriot Model
+#'
+#' @param formula (formula)
+#' @param data (data.frame)
+#' @param samplingVar (character)
+#' @param ... arguments passed to methods
+#'
+#' @rdname rfh
+#'
+#' @export
+rfh(formula, data, samplingVar, ...) %g% standardGeneric("rfh")
+
+#' @rdname rfh
+#' @export
+rfh(formula ~ formula, data ~ data.frame, samplingVar ~ character, ...) %m% {
+    call <- match.call()
+    xy <- makeXY(formula, data)
+    samplingVar <- data[[samplingVar]]
+
+    retList(
+        public = c("call", "xy", "samplingVar"),
+        super = rfhfit(xy$y, xy$x, samplingVar)
+    )
+
+}
+
 rfhfit <- function(y, X, samplingVar, theta0 = c(rep(1, ncol(X)), 1), convCrit = convCritAbsolute()) {
     # Non interactive fitting function for robust FH
     # y: (numeric) response
@@ -23,7 +49,7 @@ rfhfit <- function(y, X, samplingVar, theta0 = c(rep(1, ncol(X)), 1), convCrit =
 
     beta <- out[-length(out)]
     variance <- out[length(out)]
-    retList("rfh", c("beta", "variance"))
+    retList("rfh", c("beta", "variance")) %>% stripSelf
 
 }
 

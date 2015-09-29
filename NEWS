@@ -1,2 +1,7 @@
+Version 0.0.3
+- New function rfh; is an exported interface to fit a robust Fay Herriot model.
+- New function makeXY to derive design matrix and response vector from formula
+and data.
+
 Version 0.0.2
 - rfh is now rfhfit and private to the package
