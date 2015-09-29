@@ -53,3 +53,23 @@ rfhfit <- function(y, X, samplingVar, theta0 = c(rep(1, ncol(X)), 1), convCrit =
 
 }
 
+#' @param object (rfh) an object of class rfh
+#' @rdname rfh
+#' @export
+predict.rfh <- function(object, ...) {
+    # This interface should be replaced in time.
+    interfaceList <- list(
+        reVar = object$variance,
+        vardir = object$samplingVar,
+        y = object$xy$y,
+        X = as.matrix(object$xy$x),
+        beta = object$beta,
+        k = 1.345,
+        tol = 1e-6,
+        maxIter = 10000
+    )
+
+    re <- saedevel:::optimizeRE.MSRFH(interfaceList)$fitre$x
+    as.numeric(object$xy$x %*% object$beta + re)
+
+}

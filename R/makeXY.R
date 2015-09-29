@@ -9,6 +9,7 @@
 #'
 #' @export
 makeXY <- function(.formula, .data){
+
     assert_that(inherits(.formula, "formula"), is.data.frame(.data))
     .mf <- model.frame(.formula, .data)
     x <- Matrix(model.matrix(attr(.mf, "terms"), data = .mf))

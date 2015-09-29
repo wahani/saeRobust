@@ -2,6 +2,7 @@
 % Please edit documentation in R/rfh.R
 \docType{methods}
 \name{rfh}
+\alias{predict.rfh}
 \alias{rfh}
 \alias{rfh,formula,data.frame,character-method}
 \title{Robust Fay Herriot Model}
@@ -9,6 +10,8 @@
 rfh(formula, data, samplingVar, ...)
 
 \S4method{rfh}{formula,data.frame,character}(formula, data, samplingVar, ...)
+
+\method{predict}{rfh}(object, ...)
 }
 \arguments{
 \item{formula}{(formula)}
@@ -18,6 +21,8 @@ rfh(formula, data, samplingVar, ...)
 \item{samplingVar}{(character)}
 
 \item{...}{arguments passed to methods}
+
+\item{object}{(rfh) an object of class rfh}
 }
 \description{
 Robust Fay Herriot Model
