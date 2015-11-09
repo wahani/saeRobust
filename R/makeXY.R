@@ -16,4 +16,5 @@ makeXY <- function(.formula, .data){
     y <- model.response(.mf)
 
     retList() %>% stripSelf
+
 }
