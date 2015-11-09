@@ -39,7 +39,9 @@ newtonRaphsonFunction(funList)
 
 \item{x0}{starting value}
 
-\item{convCrit}{a function returning a logical scalar. Is called with two arguments; the first is the value from iteration n; the second is the value from iteration n-1}
+\item{convCrit}{a function returning a logical scalar. Is called with two
+arguments; the first is the value from iteration n; the second is the value
+from iteration n-1}
 
 \item{tolerance}{a numeric value > 0}
 
@@ -52,7 +54,9 @@ score.}
 \item{...}{arguments passed to \code{\link{fixedPoint}}}
 }
 \description{
-A fixed-point function supplied by the user is iteratively evaluated. \code{averageDamp} can be used to add average damping to the function - this may have a positive effect on the speed of convergence.
+A fixed-point function supplied by the user is iteratively
+  evaluated. \code{averageDamp} can be used to add average damping to the
+  function - this may have a positive effect on the speed of convergence.
 }
 \details{
 \code{averageDamp} adds average damping to an arbitrary fixed point

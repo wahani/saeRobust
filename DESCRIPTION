@@ -10,3 +10,4 @@ LazyData: true
 Suggests: knitr, sae, saeSim, testthat
 VignetteBuilder: knitr
 Encoding: UTF-8
+ByteCompile: true
