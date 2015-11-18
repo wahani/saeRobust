@@ -88,3 +88,38 @@ fixedPointRobustVarianceFH <- function(y, X, samplingVar, psi, K, beta) {
         max(0, as.numeric(a / A))
     }
 }
+
+#' @param VuSqrtInv (Matrix) n times n matrix of the variance structure of the
+#'   random effects part to the power of -1/2
+#' @param VeSqrtInv (Matrix) n times n matrix of the variance structure of the
+#'   model error part to the power of -1/2
+#' @rdname fixedPointFunctions
+#' @export
+fixedPointRobustRandomEffect <- function(y, X, beta, VuSqrtInv, VeSqrtInv, psi) {
+    force(psi); force(VuSqrtInv); force(VeSqrtInv)
+
+    # Helper functions
+    resid <- function(u) as.numeric(memResid - u)
+
+    w2 <- function(u) {
+        resids <- resid(u) * diag(VeSqrtInv)
+        psi(resids) / resids
+    }
+
+    w3 <- function(u) {
+        resids <- u * diag(VuSqrtInv)
+        psi(resids) / resids
+    }
+
+    # Precalculations - they only have to be done once
+    memXB <- X %*% beta
+    memResid <- y - memXB
+
+    function(u) {
+        W2 <- Diagonal(x = w2(u))
+        W3 <- Diagonal(x = w3(u))
+        memPart1 <- VeSqrtInv %*% W2 %*% VeSqrtInv
+        memPart2 <- VuSqrtInv %*% W3 %*% VuSqrtInv
+        as.numeric(solve(memPart1 + memPart2) %*% memPart1 %*% memResid)
+    }
+}

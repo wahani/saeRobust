@@ -70,6 +70,8 @@ predict.rfh <- function(object, ...) {
     )
 
     re <- saedevel:::optimizeRE.MSRFH(interfaceList)$fitre$x
-    as.numeric(object$xy$x %*% object$beta + re)
+    out <- as.numeric(object$xy$x %*% object$beta + re)
+    attr(out, "re") <- re
+    out
 
 }

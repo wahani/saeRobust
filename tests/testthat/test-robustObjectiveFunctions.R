@@ -1,5 +1,45 @@
 context("Objective Functions")
 
+test_that("Fixed Point for Robust Random Effect is correct", {
+    # Test Data
+    set.seed(1)
+    u <- rnorm(100, sd = 10)
+    y <- 2 * 1:5 + u + rnorm(100, sd = 2)
+    X <- cbind(1, rep(1:5, 20))
+
+    Ve <- list(
+        mat = diag(4, 100),
+        sqrtInv = diag(0.5, 100)
+    )
+
+    Vu <- list(
+        mat = diag(10^2, 100),
+        sqrtInv = diag(1 / 10, 100)
+    )
+
+    fhFit <- rfh(y ~ x, data.frame(y = y, x = X[, 2], dirVar = 4), "dirVar")
+    beta <- fhFit$beta
+    # re <- attr(saeRobustTools:::predict.rfh(fhFit), "re")
+
+    convCrit <- function(xn1, xn0) all(abs(xn0 - xn1) < 1e-3)
+
+    fpFun <- fixedPointRobustRandomEffect(
+        y, X, beta, Vu$sqrtInv, Ve$sqrtInv, Curry(psiOne, k = Inf)
+    )
+
+    # when k -> inf then this should be the estimator for u:
+    uDirect <- as.numeric(
+        Vu$mat %*% solve(Ve$mat + Vu$mat) %*% (y - X %*% beta)
+    )
+    # This is the solution with the fixed point (k = Inf).
+    solutionFP <- fixedPoint(fpFun, uDirect, addMaxIter(convCrit, 10000))
+
+    # They roughly the same:
+    summary(abs(uDirect) - abs(solutionFP))
+    expect_equal(uDirect, solutionFP)
+
+})
+
 test_that("Fixed Point for Robust Beta is correct", {
     # Test Data
     set.seed(1)
