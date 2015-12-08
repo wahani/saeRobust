@@ -57,21 +57,61 @@ rfhfit <- function(y, X, samplingVar, theta0 = c(rep(1, ncol(X)), 1), convCrit =
 #' @rdname rfh
 #' @export
 predict.rfh <- function(object, ...) {
-    # This interface should be replaced in time.
-    interfaceList <- list(
-        reVar = object$variance,
-        vardir = object$samplingVar,
-        y = object$xy$y,
-        X = as.matrix(object$xy$x),
-        beta = object$beta,
-        k = 1.345,
-        tol = 1e-6,
-        maxIter = 10000
+    vC <- matVFH(object$variance, object$samplingVar)
+    re <- reFitCCST(
+        object$xy$y, object$xy$x, object$beta,
+        vC$G, sqrt(vC$gInv),
+        vC$R, sqrt(vC$rInv)
     )
 
-    re <- saedevel:::optimizeRE.MSRFH(interfaceList)$fitre$x
     out <- as.numeric(object$xy$x %*% object$beta + re)
-    attr(out, "re") <- re
+    attr(out, "re") <- as.numeric(re)
     out
 
 }
+
+reFitCCST <- function(y, X, beta, Vu, VuSqrtInv, Ve, VeSqrtInv,
+                      psi = Curry(psiOne, k = 1.345),
+                      convCrit = convCritAbsolute()) {
+    # y: (numeric) response
+    # X: (Matrix) Design-Matrix
+    # beta: (numeric) estimated fixed effects
+    # Vu: (Matrix) estimated variance-covariance of the random effect part
+    # VuSqrtInv: (Matrix)
+    # Ve: (Matrix) given sampling error Matrix
+    # VeSqrtInv (Matrix)
+    # psi (function) influence function
+
+    # Non-robust random effects as starting values:
+    startingValues <- as.numeric(Vu %*% solve(Ve + Vu) %*% (y - X %*% beta))
+
+    fpFun <- fixedPointRobustRandomEffect(
+        y, X, beta, VuSqrtInv, VeSqrtInv, psi
+    )
+
+    fixedPoint(fpFun, startingValues, convCrit)
+}
+
+# this is my old version. It uses a Newton-Raphson algorithm which has a
+# potential bug. I need to reimpement and test that algorithm within this
+# package
+#
+# predict.rfh <- function(object, ...) {
+#     # This interface should be replaced in time.
+#     interfaceList <- list(
+#         reVar = object$variance,
+#         vardir = object$samplingVar,
+#         y = object$xy$y,
+#         X = as.matrix(object$xy$x),
+#         beta = object$beta,
+#         k = 1.345,
+#         tol = 1e-6,
+#         maxIter = 10000
+#     )
+#
+#     re <- saedevel:::optimizeRE.MSRFH(interfaceList)$fitre$x
+#     out <- as.numeric(object$xy$x %*% object$beta + re)
+#     attr(out, "re") <- as.numeric(re)
+#     out
+#
+# }
