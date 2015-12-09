@@ -18,9 +18,16 @@
 #' vignette("fixedPoint", "saeRobustTools")
 #' }
 fixedPoint <- function(fun, x0, convCrit) {
-    x1 <- fun(x0)
-    if (convCrit(x1, x0)) x1
-    else Recall(fun, x1, convCrit)
+    x1 <- NULL
+    repeat {
+        x1 <- fun(x0)
+        if (convCrit(x1, x0)) {
+            break
+        } else {
+            x0 <- x1
+        }
+    }
+    x1
 }
 
 #' @details \code{averageDamp} adds average damping to an arbitrary fixed point

@@ -36,10 +36,14 @@ rfhfit <- function(y, X, samplingVar, theta0 = c(rep(1, ncol(X)), 1), convCrit =
         beta <- param[-length(param)]
         sigma2 <- param[length(param)]
 
-        fpBeta <- fixedPointRobustBeta(y, X, matVFH(sigma2, samplingVar)$V, psi = psiOne)
+        fpBeta <- fixedPointRobustBeta(
+            y, X, matVFH(sigma2, samplingVar)$V, psi = psiOne
+        )
         beta <- fixedPoint(fpBeta, beta, convCrit)
 
-        fpSigma2 <- fixedPointRobustVarianceFH(y, X, samplingVar, psiOne, getK(1.345), beta = beta)
+        fpSigma2 <- fixedPointRobustVarianceFH(
+            y, X, samplingVar, psiOne, getK(1.345), beta = beta
+        )
         sigma2 <- fixedPoint(averageDamp(fpSigma2), sigma2, convCrit)
 
         as.numeric(c(beta, sigma2))
