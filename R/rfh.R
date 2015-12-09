@@ -19,12 +19,12 @@ rfh(formula ~ formula, data ~ data.frame, samplingVar ~ character, ...) %m% {
 
     retList(
         public = c("call", "xy", "samplingVar"),
-        super = rfhfit(xy$y, xy$x, samplingVar)
+        super = fitrfh(xy$y, xy$x, samplingVar)
     )
 
 }
 
-rfhfit <- function(y, X, samplingVar, theta0 = c(rep(1, ncol(X)), 1), convCrit = convCritAbsolute()) {
+fitrfh <- function(y, X, samplingVar, theta0 = c(rep(1, ncol(X)), 1), convCrit = convCritAbsolute()) {
     # Non interactive fitting function for robust FH
     # y: (numeric) response
     # X: ((M|m)atrix) design matrix
@@ -62,7 +62,7 @@ rfhfit <- function(y, X, samplingVar, theta0 = c(rep(1, ncol(X)), 1), convCrit =
 #' @export
 predict.rfh <- function(object, ...) {
     vC <- matVFH(object$variance, object$samplingVar)
-    re <- reFitCCST(
+    re <- fitReCCST(
         object$xy$y, object$xy$x, object$beta,
         vC$G, sqrt(vC$gInv),
         vC$R, sqrt(vC$rInv)
@@ -74,7 +74,7 @@ predict.rfh <- function(object, ...) {
 
 }
 
-reFitCCST <- function(y, X, beta, Vu, VuSqrtInv, Ve, VeSqrtInv,
+fitReCCST <- function(y, X, beta, Vu, VuSqrtInv, Ve, VeSqrtInv,
                       psi = Curry(psiOne, k = 1.345),
                       convCrit = convCritAbsolute()) {
     # y: (numeric) response

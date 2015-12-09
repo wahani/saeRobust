@@ -78,7 +78,7 @@ solutionNR <- newtonRaphson(
 y0Pred <- solutionNR %*% X %>% as.numeric
 y0Pred - y
 
-solutionRFH <- saeRobustTools:::rfhfit(y, X[, -1], rep(dirVar, nrow(y)))
+solutionRFH <- saeRobustTools:::fitrfh(y, X[, -1], rep(dirVar, nrow(y)))
 
 fhModel <- sae::eblupFH(
     y ~ X2 + X3 + X4 + X5 + X6 - 1,

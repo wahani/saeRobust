@@ -20,6 +20,7 @@ scoreRobustBeta(y, X, V, Vinv = solve(V), psi, resid = NULL)
 \item{resid}{function to compute residuals (optional)}
 }
 \description{
-Constructs a list of functions with \code{f} as the score and \code{f1} as its derivative. Both are functions of the beta coefficients.
+Constructs a list of functions with \code{f} as the score and \code{f1} as
+its derivative. Both are functions of the beta coefficients.
 }
 
