@@ -133,3 +133,15 @@ matAConst <- function(y, X, V, Vinv = solve(V), psi) {
     }
 }
 
+#' @details \code{matW} returns a matrix containing the weights as they are
+#'   defined in the CCST pseudo linearization. \code{matW \%*\% y} is the
+#'   REBLUP.
+#'
+#' @rdname varianceMatrices
+#' @export
+matW <- function(y, X, beta, u, V, Vinv = solve(V), VuSqrtInv, VeSqrtInv, psi) {
+    A <- matA(y, X, beta, V, Vinv, psi)
+    B <- matB(y, X, beta, u, VuSqrtInv, VeSqrtInv, psi)
+    XA <- X %*% A
+    XA + B %*% (Diagonal(length(y), 1) - XA)
+}

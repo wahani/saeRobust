@@ -8,6 +8,7 @@
 \alias{matTrace}
 \alias{matU}
 \alias{matVFH}
+\alias{matW}
 \title{Helper functions operating on matrices and matrix constructors}
 \usage{
 matU(V)
@@ -23,6 +24,8 @@ matBConst(y, X, beta, VuSqrtInv, VeSqrtInv, psi)
 matA(y, X, beta, V, Vinv = solve(V), psi)
 
 matAConst(y, X, V, Vinv = solve(V), psi)
+
+matW(y, X, beta, u, V, Vinv = solve(V), VuSqrtInv, VeSqrtInv, psi)
 }
 \arguments{
 \item{V}{(Matrix) variance matrix}
@@ -74,5 +77,9 @@ Helper functions operating on matrices and matrix constructors
 \code{matAConst} returns a function with one argument, beta, to
   compute the matrix A. This function is used internally to compute A in the
   fixed point algorithm for beta (see \link{fixedPointRobustBeta}).
+
+\code{matW} returns a matrix containing the weights as they are
+  defined in the CCST pseudo linearization. \code{matW \%*\% y} is the
+  REBLUP.
 }
 
