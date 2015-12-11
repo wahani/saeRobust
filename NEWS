@@ -1,3 +1,10 @@
+Version 0.0.4
+- Fixed point Algorithm for robust random effects. Resolves dependency with
+saedevel.
+- predict function for rfh.
+- weights function to compute weights used to compute the rfh in pseudo linear
+form.
+
 Version 0.0.3
 - New function rfh; is an exported interface to fit a robust Fay Herriot model.
 - New function makeXY to derive design matrix and response vector from formula

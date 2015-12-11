@@ -3,7 +3,8 @@
 #' @import functional
 #' @import methods
 #' @import Matrix
-#' @import magrittr
+#' @importFrom magrittr %>% %<>%
+#' @importFrom stats weights
 NULL
 
-globalVariables(".")
+globalVariables(c(".", ".self"))

@@ -1,6 +1,6 @@
 Package: saeRobustTools
 Title: Tools for Fitting Robust Mixed Models in Small Area Estimation
-Version: 0.0.3
+Version: 0.0.4
 Authors@R: person("Sebastian", "Warnholz", , "Sebastian.Warnholz@fu-berlin.de", role = c("aut", "cre"))
 Description: This package provides tools to program the algorithms used to fit
     robust mixed models in the context of small area estimation.

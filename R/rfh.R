@@ -24,7 +24,7 @@ rfh(formula ~ formula, data ~ data.frame, samplingVar ~ character, ...) %m% {
 
 }
 
-fitrfh <- function(y, X, samplingVar, theta0 = c(rep(1, ncol(X)), 1), convCrit = convCritAbsolute()) {
+fitrfh <- function(y, X, samplingVar, theta0 = c(rep(1, ncol(X)), 1), convCrit = convCritAbsolute(), psi = psiOne) {
     # Non interactive fitting function for robust FH
     # y: (numeric) response
     # X: ((M|m)atrix) design matrix
@@ -37,12 +37,12 @@ fitrfh <- function(y, X, samplingVar, theta0 = c(rep(1, ncol(X)), 1), convCrit =
         sigma2 <- param[length(param)]
 
         fpBeta <- fixedPointRobustBeta(
-            y, X, matVFH(sigma2, samplingVar)$V, psi = psiOne
+            y, X, matVFH(sigma2, samplingVar)$V, psi = psi
         )
         beta <- fixedPoint(fpBeta, beta, convCrit)
 
         fpSigma2 <- fixedPointRobustVarianceFH(
-            y, X, samplingVar, psiOne, getK(1.345), beta = beta
+            y, X, samplingVar, psi, getK(1.345), beta = beta
         )
         sigma2 <- fixedPoint(averageDamp(fpSigma2), sigma2, convCrit)
 
@@ -53,29 +53,42 @@ fitrfh <- function(y, X, samplingVar, theta0 = c(rep(1, ncol(X)), 1), convCrit =
 
     beta <- out[-length(out)]
     variance <- out[length(out)]
-    retList("rfh", c("beta", "variance")) %>% stripSelf
+    retList("rfh", c("beta", "variance", "psi")) %>% stripSelf
 
 }
 
 #' @param object (rfh) an object of class rfh
+#' @param mse (character) which type of mse you want to compute for the
+#'   predictions. Default in none. One in \code{c("none", "pseudo")}
+#'
 #' @rdname rfh
 #' @export
-predict.rfh <- function(object, ...) {
-    vC <- matVFH(object$variance, object$samplingVar)
+predict.rfh <- function(object, mse = "none", ...) {
+
+    V <- variance(object)
+
     re <- fitReCCST(
         object$xy$y, object$xy$x, object$beta,
-        vC$G, sqrt(vC$gInv),
-        vC$R, sqrt(vC$rInv)
+        V$Vu(), V$VuSqrtInv(),
+        V$Ve(), V$VeSqrtInv()
     )
 
-    out <- as.numeric(object$xy$x %*% object$beta + re)
+    Xb <- object$xy$x %*% object$beta
+    W <- weights(object, re)$W
+
+    out <- as.numeric(Xb + re)
     attr(out, "re") <- as.numeric(re)
+    if (mse == "pseudo") {
+        attr(out, "pseudoMSE") <-
+            as.numeric(W^2 %*% object$samplingVar + (W %*% Xb - Xb)^2)
+    }
+
     out
 
 }
 
 fitReCCST <- function(y, X, beta, Vu, VuSqrtInv, Ve, VeSqrtInv,
-                      psi = Curry(psiOne, k = 1.345),
+                      psi = psiOne,
                       convCrit = convCritAbsolute()) {
     # y: (numeric) response
     # X: (Matrix) Design-Matrix

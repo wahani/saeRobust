@@ -11,7 +11,7 @@ rfh(formula, data, samplingVar, ...)
 
 \S4method{rfh}{formula,data.frame,character}(formula, data, samplingVar, ...)
 
-\method{predict}{rfh}(object, ...)
+\method{predict}{rfh}(object, mse = "none", ...)
 }
 \arguments{
 \item{formula}{(formula)}
@@ -23,6 +23,9 @@ rfh(formula, data, samplingVar, ...)
 \item{...}{arguments passed to methods}
 
 \item{object}{(rfh) an object of class rfh}
+
+\item{mse}{(character) which type of mse you want to compute for the
+predictions. Default in none. One in \code{c("none", "pseudo")}}
 }
 \description{
 Robust Fay Herriot Model

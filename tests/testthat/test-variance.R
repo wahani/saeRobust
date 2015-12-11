@@ -21,16 +21,7 @@ test_that("matW", {
     out <- predict(modelFit)
 
     # This should be the same as Xb + u which is used in predict:
-    W <-  matW(
-        y = modelFit$xy$y,
-        X = modelFit$xy$x,
-        beta = modelFit$beta,
-        u = attr(out, "re"),
-        Diagonal(10, x = modelFit$variance + 1),
-        VuSqrtInv = sqrt(solve(Diagonal(10, modelFit$variance))),
-        VeSqrtInv = Diagonal(10, 1),
-        psi = psiOne
-    )
+    W <-  weights(modelFit)$W
 
     prediction <- W %*% modelFit$xy$y
 
@@ -42,6 +33,14 @@ test_that("matW", {
     expectEqual(
         as.numeric(rowSums(W)),
         rep(1, 10)
+    )
+
+    expectEqual(
+        modelFit$xy$x %*% weights(modelFit)$A + # XA
+            weights(modelFit)$B %*% ( # B
+                Diagonal(length(modelFit$xy$y)) - # I -
+                    modelFit$xy$x %*% weights(modelFit)$A), # XA
+        weights(modelFit)$W
     )
 
 })
