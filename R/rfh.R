@@ -18,7 +18,7 @@ rfh(formula ~ formula, data ~ data.frame, samplingVar ~ character, ...) %m% {
     samplingVar <- data[[samplingVar]]
 
     retList(
-        public = c("call", "xy", "samplingVar"),
+        public = c("call"),
         super = fitrfh(xy$y, xy$x, samplingVar)
     )
 
@@ -53,7 +53,9 @@ fitrfh <- function(y, X, samplingVar, theta0 = c(rep(1, ncol(X)), 1), convCrit =
 
     beta <- out[-length(out)]
     variance <- out[length(out)]
-    retList("rfh", c("beta", "variance", "psi")) %>% stripSelf
+    xy <- list(y = y, x = X)
+
+    retList("rfh", c("beta", "variance", "psi", "samplingVar", "xy")) %>% stripSelf
 
 }
 
@@ -70,6 +72,11 @@ predict.rfh <- function(object, type = "REBLUP", mse = "none", ...) {
         # out: the data.frame with predictions
         # isTrue: (logical(1))
         if (isTrue) cbind(out, mse(object, "pseudo", re, V)["pseudo"])
+        else out
+    }
+
+    addBoot <- function(out, isTrue, object, re, V, ...) {
+        if (isTrue) cbind(out, mse(object, "boot", re, V, ...)["boot"])
         else out
     }
 
@@ -92,6 +99,7 @@ predict.rfh <- function(object, type = "REBLUP", mse = "none", ...) {
     names(out) <- type
     out$re <- re
     out <- addPseudo(out, "pseudo" %in% mse, object, re, V)
+    out <- addBoot(out, "boot" %in% mse, object, re, V, ...)
 
     out
 

@@ -59,9 +59,9 @@ test_that("predict.rfh", {
     library("saeSim")
     set.seed(1)
     dat <- base_id(10, 1) %>%
-        sim_gen_e() %>%
+        sim_gen_e(sd = 1) %>%
         sim_gen_x() %>%
-        sim_gen_v() %>%
+        sim_gen_v(sd = 1) %>%
         sim_resp_eq(y = 100 + 2 * x + v + e) %>%
         as.data.frame
 
@@ -83,4 +83,9 @@ test_that("predict.rfh", {
     out <- predict(modelFit, "linear", "pseudo")
     expectEqual(names(out), c("linear", "re"))
 
+    out <- predict(modelFit, mse = c("boot", "pseudo"), B = 2)
+    expectEqual(names(out), c("REBLUP", "re", "pseudo", "boot"))
+
 })
+
+

@@ -12,7 +12,8 @@ Imports:
     assertthat,
     functional,
     Matrix,
-    magrittr
+    magrittr,
+    MASS
 License: GPL-3 | file LICENSE
 LazyData: true
 Suggests:

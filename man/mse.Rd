@@ -7,7 +7,8 @@
 \usage{
 mse(object, ...)
 
-\method{mse}{rfh}(object, type = "pseudo", re = NULL, V = NULL, ...)
+\method{mse}{rfh}(object, type = "pseudo", re = NULL, V = NULL, B = 100,
+  ...)
 }
 \arguments{
 \item{object}{(see methods) an object containing the estimation result, e.g.
@@ -16,11 +17,13 @@ mse(object, ...)
 \item{...}{arguments passed to methods}
 
 \item{type}{(character) the type of the MSE. Available are 'pseudo' and
-'boot'.}
+'boot'}
 
 \item{re}{(NULL | numeric) optionally provide the estimated random effects}
 
 \item{V}{(NULL | list) optionally provide the variance using \link{variance}}
+
+\item{B}{(numeric) number of bootstrap repetitions}
 }
 \description{
 A generic function to compute the mean squared error of the predicted values
