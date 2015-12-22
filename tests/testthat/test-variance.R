@@ -26,7 +26,7 @@ test_that("matW", {
     prediction <- W %*% modelFit$xy$y
 
     expectEqual(
-        as.numeric(out),
+        as.numeric(out$REBLUP),
         as.numeric(prediction)
     )
 

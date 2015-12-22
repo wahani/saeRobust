@@ -56,7 +56,7 @@ variance.rfh <- function(.object, ...) {
 weights.rfh <- function(object, re = NULL, ...) {
 
     V <- variance(object)
-    re <- if (is.null(re)) attr(predict(object), "re") else re
+    re <- if (is.null(re)) predict(object)[["re"]] else re
 
     W <-  matW(
         y = object$xy$y,

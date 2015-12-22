@@ -70,10 +70,17 @@ test_that("predict.rfh", {
     modelFit <- rfh(y ~ x, dat, "samplingVar")
     out <- predict(modelFit)
 
-    expectIs(out, "numeric")
-    expectIs(attr(out, "re"), "numeric")
+    expectIs(out, "data.frame")
+    expectIs(out$re, "numeric")
     expectEqual(
-        as.numeric(out - attr(out, "re")),
+        as.numeric(out$REBLUP - out$re),
         as.numeric(modelFit$xy$x %*% modelFit$beta)
     )
+
+    out <- predict(modelFit, mse = "pseudo")
+    expectEqual(names(out), c("REBLUP", "re", "pseudo"))
+
+    out <- predict(modelFit, "linear", "pseudo")
+    expectEqual(names(out), c("linear", "re"))
+
 })

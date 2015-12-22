@@ -58,51 +58,46 @@ fitrfh <- function(y, X, samplingVar, theta0 = c(rep(1, ncol(X)), 1), convCrit =
 }
 
 #' @param object (rfh) an object of class rfh
+#' @param type (character) one in \code{c("linear", "REBLUP")}
 #' @param mse (character) which type of mse you want to compute for the
-#'   predictions. Default in none. One in \code{c("none", "pseudo")}
+#'   predictions. See \link{mse} for available options.
 #'
 #' @rdname rfh
 #' @export
-predict.rfh <- function(object, mse = "none", ...) {
+predict.rfh <- function(object, type = "REBLUP", mse = "none", ...) {
 
-    V <- variance(object)
+    addPseudo <- function(out, isTrue, object, re, V) {
+        # out: the data.frame with predictions
+        # isTrue: (logical(1))
+        if (isTrue) cbind(out, mse(object, "pseudo", re, V)["pseudo"])
+        else out
+    }
 
-    re <- fitReCCST(
-        object$xy$y, object$xy$x, object$beta,
-        V$Vu(), V$VuSqrtInv(),
-        V$Ve(), V$VeSqrtInv()
-    )
+    if ("linear" == type) {
+        mse <- "none" # no mse then
+        re <- 0
+    }
+
+    if ("REBLUP" == type) {
+        V <- variance(object)
+        re <- fitReCCST(
+            object$xy$y, object$xy$x, object$beta,
+            V$Vu(), V$VuSqrtInv(),
+            V$Ve(), V$VeSqrtInv()
+        )
+    }
 
     Xb <- object$xy$x %*% object$beta
-    W <- weights(object, re)$W
-
-    out <- as.numeric(Xb + re)
-
-    addRe <- function(out) {
-        addAttr(out, as.numeric(re), "re")
-    }
-
-    addPseudo <- function(out, add) {
-        # out: the vector with predictions
-        # add: (logical(1))
-        if (add) {
-            addAttr(
-                out,
-                as.numeric(W^2 %*% (object$samplingVar + object$variance) +
-                               (W %*% out - out)^2),
-                "pseudo"
-            )
-        } else {
-            out
-        }
-    }
-
-    out <- addRe(out)
-    out <- addPseudo(out, "pseudo" %in% mse)
+    out <- data.frame(prediction = as.numeric(Xb + re))
+    names(out) <- type
+    out$re <- re
+    out <- addPseudo(out, "pseudo" %in% mse, object, re, V)
 
     out
 
 }
+
+
 
 fitReCCST <- function(y, X, beta, Vu, VuSqrtInv, Ve, VeSqrtInv,
                       psi = psiOne,
@@ -126,6 +121,7 @@ fitReCCST <- function(y, X, beta, Vu, VuSqrtInv, Ve, VeSqrtInv,
     fixedPoint(fpFun, startingValues, convCrit)
 }
 
+# TODO:
 # this is my old version. It uses a Newton-Raphson algorithm which has a
 # potential bug. I need to reimpement and test that algorithm within this
 # package

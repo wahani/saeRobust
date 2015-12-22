@@ -11,7 +11,7 @@ rfh(formula, data, samplingVar, ...)
 
 \S4method{rfh}{formula,data.frame,character}(formula, data, samplingVar, ...)
 
-\method{predict}{rfh}(object, mse = "none", ...)
+\method{predict}{rfh}(object, type = "REBLUP", mse = "none", ...)
 }
 \arguments{
 \item{formula}{(formula)}
@@ -24,8 +24,10 @@ rfh(formula, data, samplingVar, ...)
 
 \item{object}{(rfh) an object of class rfh}
 
+\item{type}{(character) one in \code{c("linear", "REBLUP")}}
+
 \item{mse}{(character) which type of mse you want to compute for the
-predictions. Default in none. One in \code{c("none", "pseudo")}}
+predictions. See \link{mse} for available options.}
 }
 \description{
 Robust Fay Herriot Model
