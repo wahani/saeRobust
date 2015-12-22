@@ -77,11 +77,28 @@ predict.rfh <- function(object, mse = "none", ...) {
     W <- weights(object, re)$W
 
     out <- as.numeric(Xb + re)
-    attr(out, "re") <- as.numeric(re)
-    if (mse == "pseudo") {
-        attr(out, "pseudoMSE") <-
-            as.numeric(W^2 %*% object$samplingVar + (W %*% Xb - Xb)^2)
+
+    addRe <- function(out) {
+        addAttr(out, as.numeric(re), "re")
     }
+
+    addPseudo <- function(out, add) {
+        # out: the vector with predictions
+        # add: (logical(1))
+        if (add) {
+            addAttr(
+                out,
+                as.numeric(W^2 %*% (object$samplingVar + object$variance) +
+                               (W %*% out - out)^2),
+                "pseudo"
+            )
+        } else {
+            out
+        }
+    }
+
+    out <- addRe(out)
+    out <- addPseudo(out, "pseudo" %in% mse)
 
     out
 
@@ -93,11 +110,11 @@ fitReCCST <- function(y, X, beta, Vu, VuSqrtInv, Ve, VeSqrtInv,
     # y: (numeric) response
     # X: (Matrix) Design-Matrix
     # beta: (numeric) estimated fixed effects
-    # Vu: (Matrix) estimated variance-covariance of the random effect part
+    # Vu: (Matrix) estimated variance-covariance of the random effect part Z'GZ
     # VuSqrtInv: (Matrix)
     # Ve: (Matrix) given sampling error Matrix
-    # VeSqrtInv (Matrix)
-    # psi (function) influence function
+    # VeSqrtInv: (Matrix)
+    # psi: (function) influence function
 
     # Non-robust random effects as starting values:
     startingValues <- as.numeric(Vu %*% solve(Ve + Vu) %*% (y - X %*% beta))
