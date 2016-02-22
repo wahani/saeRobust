@@ -10,7 +10,7 @@ fixedPointRobustBeta(y, X, V, Vinv = solve(V), psi, resid = NULL)
 
 fixedPointRobustVarianceFH(y, X, samplingVar, psi, K, beta)
 
-fixedPointRobustRandomEffect(y, X, beta, VuSqrtInv, VeSqrtInv, psi)
+fixedPointRobustRandomEffect(y, X, beta, matV, psi)
 }
 \arguments{
 \item{y}{vector of response}

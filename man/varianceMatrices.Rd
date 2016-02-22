@@ -17,15 +17,15 @@ matTrace(x)
 
 matVFH(.sigma2, .samplingVar)
 
-matB(y, X, beta, u, VuSqrtInv, VeSqrtInv, psi)
+matB(y, X, beta, u, matV, psi)
 
-matBConst(y, X, beta, VuSqrtInv, VeSqrtInv, psi, Z = Diagonal(length(y)))
+matBConst(y, X, beta, matV, psi)
 
 matA(y, X, beta, V, Vinv = solve(V), psi)
 
 matAConst(y, X, V, Vinv = solve(V), psi)
 
-matW(y, X, beta, u, V, Vinv = solve(V), VuSqrtInv, VeSqrtInv, psi)
+matW(y, X, beta, u, matV, psi)
 }
 \arguments{
 \item{V}{(Matrix) variance matrix}
@@ -40,10 +40,6 @@ matW(y, X, beta, u, V, Vinv = solve(V), VuSqrtInv, VeSqrtInv, psi)
 
 \item{u}{(numeric)}
 
-\item{VuSqrtInv}{(Matrix)}
-
-\item{VeSqrtInv}{(Matrix)}
-
 \item{psi}{(function)}
 
 \item{Vinv}{(Matrix) inverse of V}
@@ -51,6 +47,10 @@ matW(y, X, beta, u, V, Vinv = solve(V), VuSqrtInv, VeSqrtInv, psi)
 \item{sigma2}{a scalar. The variance parameter of the random effects.}
 
 \item{samplingVar}{the vector of sampling variances of the direct estimator.}
+
+\item{VuSqrtInv}{(Matrix)}
+
+\item{VeSqrtInv}{(Matrix)}
 }
 \description{
 Helper functions operating on matrices

@@ -1,7 +1,8 @@
 context("rfh")
 
-# Note that I do not test the correctness of the estimators. I rely on the tests
-# implementing for the objective functions and the algorithms.
+# Note that I do not test the correctness of the estimators. Here I only check
+# if the public representation of the model object looks how I want them to. You
+# can find some tests on the correctness of the estimation equations.
 
 test_that("rfhfit is working", {
     library("saeSim")

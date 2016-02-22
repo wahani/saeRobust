@@ -35,12 +35,13 @@ matVFH <- function(.sigma2, .samplingVar) {
 
     .diag <- function(x) Diagonal(x = x)
 
-    G <- getter(rep(.sigma2, length(.samplingVar)), .diag)
-    gInv <- getter(1 / rep(.sigma2, length(.samplingVar)), .diag)
-    R <- getter(.samplingVar, .diag)
-    rInv <- getter(1 / .samplingVar, .diag)
-    V <- getter(G() + R())
-    vInv <- getter(solve(V()))
+    Vu <- getter(rep(.sigma2, length(.samplingVar)), .diag)
+    VuInv <- getter(1 / rep(.sigma2, length(.samplingVar)), .diag)
+    Ve <- getter(.samplingVar, .diag)
+    VeInv <- getter(1 / .samplingVar, .diag)
+    V <- getter(Vu() + Ve())
+    VInv <- getter(solve(V()))
+    Z <- getter(Diagonal(length(.samplingVar)))
 
     retList()
 
@@ -60,8 +61,8 @@ matVFH <- function(.sigma2, .samplingVar) {
 #'
 #' @rdname varianceMatrices
 #' @export
-matB <- function(y, X, beta, u, VuSqrtInv, VeSqrtInv, psi) {
-    matBConst(y, X, beta, VuSqrtInv, VeSqrtInv, psi)(u)
+matB <- function(y, X, beta, u, matV, psi) {
+    matBConst(y, X, beta, matV, psi)(u)
 }
 
 #' @details \code{matBConst} returns a function with one argument, u, to compute
@@ -70,33 +71,36 @@ matB <- function(y, X, beta, u, VuSqrtInv, VeSqrtInv, psi) {
 #'
 #' @rdname varianceMatrices
 #' @export
-matBConst <- function(y, X, beta, VuSqrtInv, VeSqrtInv, psi, Z = Diagonal(length(y))) {
-    force(psi); force(VuSqrtInv); force(VeSqrtInv)
+matBConst <- function(y, X, beta, matV, psi) {
+
+    Ue <- matU(matV$Ve())
+    Uu <- matU(matV$Vu())
 
     # Helper functions
     resid <- function(u) as.numeric(memResid - u)
 
     w2 <- function(u) {
-        resids <- resid(u) * diag(VeSqrtInv)
+        resids <- resid(u) * diag(Ue$sqrtInv)
         psi(resids) / resids
     }
 
     w3 <- function(u) {
-        resids <- u * diag(VuSqrtInv)
+        resids <- u * diag(Uu$sqrtInv)
         psi(resids) / resids
     }
 
     # Precalculations - they only have to be done once
     memXB <- X %*% beta
     memResid <- y - memXB
-    memZxVe <- crossprod(Z, VeSqrtInv)
+    memZVeU <- crossprod(matV$Z(), matV$VeInv()) %*% Ue$sqrt
+    memVuUu <- matV$VuInv() %*% Uu$sqrt
 
     function(u) {
         W2 <- Diagonal(x = w2(u))
         W3 <- Diagonal(x = w3(u))
-        memPart1 <- memZxVe %*% W2 %*% VeSqrtInv
-        memPart2 <- VuSqrtInv %*% W3 %*% VuSqrtInv
-        solve(memPart1 + memPart2) %*% memPart1
+        memPart1 <- memZVeU %*% W2 %*% Ue$sqrtInv
+        memPart2 <- memVuUu %*% W3 %*% Uu$sqrtInv
+        solve(memPart1 %*% matV$Z() + memPart2) %*% memPart1
     }
 }
 
@@ -145,9 +149,9 @@ matAConst <- function(y, X, V, Vinv = solve(V), psi) {
 #'
 #' @rdname varianceMatrices
 #' @export
-matW <- function(y, X, beta, u, V, Vinv = solve(V), VuSqrtInv, VeSqrtInv, psi) {
-    A <- matA(y, X, beta, V, Vinv, psi)
-    B <- matB(y, X, beta, u, VuSqrtInv, VeSqrtInv, psi)
+matW <- function(y, X, beta, u, matV, psi) {
+    A <- matA(y, X, beta, matV$V(), matV$VInv(), psi)
+    B <- matB(y, X, beta, u, matV, psi)
     XA <- X %*% A
     XA + B %*% (Diagonal(length(y), 1) - XA)
 }

@@ -24,13 +24,20 @@ test_that("Fixed Point for Robust Random Effect is correct", {
     convCrit <- function(xn1, xn0) all(abs(xn0 - xn1) < 1e-3)
 
     fpFun <- fixedPointRobustRandomEffect(
-        y, X, beta, Vu$sqrtInv, Ve$sqrtInv, Curry(psiOne, k = Inf)
+        y, X, beta, matVFH(100, rep(4, 100)), Curry(psiOne, k = Inf)
     )
 
     # when k -> inf then this should be the estimator for u:
+
     uDirect <- as.numeric(
         Vu$mat %*% solve(Ve$mat + Vu$mat) %*% (y - X %*% beta)
     )
+
+    directBs <- diag(Vu$mat %*% solve(Ve$mat + Vu$mat))
+    robustBs <- diag(as.matrix(matBConst(y, X, beta, matVFH(100, rep(4, 100)), Curry(psiOne, k = Inf))(uDirect)))
+    summary(abs(directBs) - abs(robustBs))
+    testthat::expect_equal(directBs, robustBs)
+
     # This is the solution with the fixed point (k = Inf).
     solutionFP <- fixedPoint(fpFun, uDirect, addMaxIter(convCrit, 10000))
 

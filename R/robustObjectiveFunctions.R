@@ -70,8 +70,8 @@ fixedPointRobustVarianceFH <- function(y, X, samplingVar, psi, K, beta) {
         resid <- U$sqrtInv %*% mem1
         psiResid <- psi(resid)
 
-        D <- t(psiResid) %*% U$sqrt %*% V$vInv() %*% V$vInv() %*% U$sqrt %*% psiResid
-        C <- matTrace(K * V$vInv() %*% V$gInv())
+        D <- t(psiResid) %*% U$sqrt %*% V$VInv() %*% V$VInv() %*% U$sqrt %*% psiResid
+        C <- matTrace(K * V$VInv() %*% V$VuInv())
 
         max(0, as.numeric(D / C))
     }
@@ -84,8 +84,8 @@ fixedPointRobustVarianceFH <- function(y, X, samplingVar, psi, K, beta) {
 #'
 #' @rdname fixedPointFunctions
 #' @export
-fixedPointRobustRandomEffect <- function(y, X, beta, VuSqrtInv, VeSqrtInv, psi) {
-    makeMatB <- matBConst(y, X, beta, VuSqrtInv, VeSqrtInv, psi)
+fixedPointRobustRandomEffect <- function(y, X, beta, matV, psi) {
+    makeMatB <- matBConst(y, X, beta, matV, psi)
     memResid <- y - X %*% beta
     function(u) as.numeric(makeMatB(u) %*% memResid)
 }

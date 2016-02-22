@@ -16,37 +16,7 @@ variance <- function(.object, ...) UseMethod("variance")
 #' @rdname variance
 variance.rfh <- function(.object, ...) {
 
-    V <- function() {
-        Diagonal(x = .object$samplingVar + .object$variance)
-    }
-
-    Vinv <- function() {
-        solve(.self$V())
-    }
-
-    Vu <- function() {
-        Diagonal(length(.object$samplingVar), .object$variance)
-    }
-
-    Ve <- function() {
-        Diagonal(x = .object$samplingVar)
-    }
-
-    VuInv <- function() {
-        solve(.self$Vu())
-    }
-
-    VeInv <- function() {
-        solve(.self$Ve())
-    }
-
-    VuSqrtInv <- function() {
-        sqrt(.self$VuInv())
-    }
-
-    VeSqrtInv <- function() {
-        sqrt(.self$VeInv())
-    }
+    expose(matVFH(.object$variance, .object$samplingVar))
 
     retList("rfhVariance")
 }
@@ -63,10 +33,7 @@ weights.rfh <- function(object, re = NULL, ...) {
         X = object$xy$x,
         beta = object$beta,
         u = re,
-        V = V$V(),
-        Vinv = V$Vinv(),
-        VuSqrtInv = V$VuSqrtInv(),
-        VeSqrtInv = V$VeSqrtInv(),
+        matV = V,
         psi = object$psi
     )
 
@@ -75,7 +42,7 @@ weights.rfh <- function(object, re = NULL, ...) {
         X = object$xy$x,
         beta = object$beta,
         V = V$V(),
-        Vinv = V$Vinv(),
+        Vinv = V$VInv(),
         psi = object$psi
     )
 
@@ -84,8 +51,7 @@ weights.rfh <- function(object, re = NULL, ...) {
         X = object$xy$x,
         beta = object$beta,
         u = re,
-        VuSqrtInv = V$VuSqrtInv(),
-        VeSqrtInv = V$VeSqrtInv(),
+        V,
         psi = object$psi
     )
 

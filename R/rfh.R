@@ -89,8 +89,7 @@ predict.rfh <- function(object, type = "REBLUP", mse = "none", ...) {
         V <- variance(object)
         re <- fitReCCST(
             object$xy$y, object$xy$x, object$beta,
-            V$Vu(), V$VuSqrtInv(),
-            V$Ve(), V$VeSqrtInv()
+            variance(object)
         )
     }
 
@@ -105,51 +104,22 @@ predict.rfh <- function(object, type = "REBLUP", mse = "none", ...) {
 
 }
 
-
-
-fitReCCST <- function(y, X, beta, Vu, VuSqrtInv, Ve, VeSqrtInv,
+fitReCCST <- function(y, X, beta, matV,
                       psi = psiOne,
                       convCrit = convCritAbsolute()) {
     # y: (numeric) response
     # X: (Matrix) Design-Matrix
     # beta: (numeric) estimated fixed effects
-    # Vu: (Matrix) estimated variance-covariance of the random effect part Z'GZ
-    # VuSqrtInv: (Matrix)
-    # Ve: (Matrix) given sampling error Matrix
-    # VeSqrtInv: (Matrix)
+    # matV: (list) list of functions see e.g. matVFH
     # psi: (function) influence function
 
     # Non-robust random effects as starting values:
-    startingValues <- as.numeric(Vu %*% solve(Ve + Vu) %*% (y - X %*% beta))
+    startingValues <- as.numeric(tcrossprod(matV$Vu(), matV$Z()) %*% matV$VInv() %*%
+                                     (y - X %*% beta))
 
     fpFun <- fixedPointRobustRandomEffect(
-        y, X, beta, VuSqrtInv, VeSqrtInv, psi
+        y, X, beta, matV, psi
     )
 
     fixedPoint(fpFun, startingValues, convCrit)
 }
-
-# TODO:
-# this is my old version. It uses a Newton-Raphson algorithm which has a
-# potential bug. I need to reimpement and test that algorithm within this
-# package
-#
-# predict.rfh <- function(object, ...) {
-#     # This interface should be replaced in time.
-#     interfaceList <- list(
-#         reVar = object$variance,
-#         vardir = object$samplingVar,
-#         y = object$xy$y,
-#         X = as.matrix(object$xy$x),
-#         beta = object$beta,
-#         k = 1.345,
-#         tol = 1e-6,
-#         maxIter = 10000
-#     )
-#
-#     re <- saedevel:::optimizeRE.MSRFH(interfaceList)$fitre$x
-#     out <- as.numeric(object$xy$x %*% object$beta + re)
-#     attr(out, "re") <- as.numeric(re)
-#     out
-#
-# }
