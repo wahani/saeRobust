@@ -13,7 +13,8 @@ Imports:
     functional,
     Matrix,
     magrittr,
-    MASS
+    MASS,
+    modules
 License: GPL-3 | file LICENSE
 LazyData: true
 Suggests:
