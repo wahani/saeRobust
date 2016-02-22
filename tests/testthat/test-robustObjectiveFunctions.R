@@ -36,7 +36,7 @@ test_that("Fixed Point for Robust Random Effect is correct", {
 
     # They roughly the same:
     summary(abs(uDirect) - abs(solutionFP))
-    expect_equal(uDirect, solutionFP)
+    testthat::expect_equal(uDirect, solutionFP)
 
 })
 

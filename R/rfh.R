@@ -37,7 +37,7 @@ fitrfh <- function(y, X, samplingVar, theta0 = c(rep(1, ncol(X)), 1), convCrit =
         sigma2 <- param[length(param)]
 
         fpBeta <- fixedPointRobustBeta(
-            y, X, matVFH(sigma2, samplingVar)$V, psi = psi
+            y, X, matVFH(sigma2, samplingVar)$V(), psi = psi
         )
         beta <- fixedPoint(fpBeta, beta, convCrit)
 

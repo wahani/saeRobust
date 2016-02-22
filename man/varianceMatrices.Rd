@@ -9,17 +9,17 @@
 \alias{matU}
 \alias{matVFH}
 \alias{matW}
-\title{Helper functions operating on matrices and matrix constructors}
+\title{Helper functions operating on matrices}
 \usage{
 matU(V)
 
-matVFH(sigma2, samplingVar)
-
 matTrace(x)
+
+matVFH(.sigma2, .samplingVar)
 
 matB(y, X, beta, u, VuSqrtInv, VeSqrtInv, psi)
 
-matBConst(y, X, beta, VuSqrtInv, VeSqrtInv, psi)
+matBConst(y, X, beta, VuSqrtInv, VeSqrtInv, psi, Z = Diagonal(length(y)))
 
 matA(y, X, beta, V, Vinv = solve(V), psi)
 
@@ -29,10 +29,6 @@ matW(y, X, beta, u, V, Vinv = solve(V), VuSqrtInv, VeSqrtInv, psi)
 }
 \arguments{
 \item{V}{(Matrix) variance matrix}
-
-\item{sigma2}{a scalar. The variance parameter of the random effects.}
-
-\item{samplingVar}{the vector of sampling variances of the direct estimator.}
 
 \item{x}{a matrix}
 
@@ -51,16 +47,20 @@ matW(y, X, beta, u, V, Vinv = solve(V), VuSqrtInv, VeSqrtInv, psi)
 \item{psi}{(function)}
 
 \item{Vinv}{(Matrix) inverse of V}
+
+\item{sigma2}{a scalar. The variance parameter of the random effects.}
+
+\item{samplingVar}{the vector of sampling variances of the direct estimator.}
 }
 \description{
-Helper functions operating on matrices and matrix constructors
+Helper functions operating on matrices
 }
 \details{
 \code{matU} computes U. U is the matrix containing only the diagonal elements of V. See Sinha & Rao (2009): page 386 for the def of U.
 
-\code{matVFH} constructs variance-covariance matrix for a FH-model. Returns a list with the matrix and its inverse.
-
 \code{matTrace} computes the trace of a matrix.
+
+\code{matVFH} constructs variance-covariance matrix for a FH-model. Returns a list with the matrix and its inverse.
 
 \code{matB} computes the matrix B from the CCST paper which is used
   to compute the weights in the pseudo linearized representation of the

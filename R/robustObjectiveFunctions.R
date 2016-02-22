@@ -66,14 +66,14 @@ fixedPointRobustVarianceFH <- function(y, X, samplingVar, psi, K, beta) {
 
     function(sigma2) {
         V <- matVFH(sigma2, samplingVar)
-        U <- matU(V$V)
+        U <- matU(V$V())
         resid <- U$sqrtInv %*% mem1
         psiResid <- psi(resid)
 
-        a <- t(psiResid) %*% U$sqrt %*% V$vInv %*% V$vInv %*% U$sqrt %*% psiResid
-        A <- matTrace(K * V$vInv %*% V$gInv)
+        D <- t(psiResid) %*% U$sqrt %*% V$vInv() %*% V$vInv() %*% U$sqrt %*% psiResid
+        C <- matTrace(K * V$vInv() %*% V$gInv())
 
-        max(0, as.numeric(a / A))
+        max(0, as.numeric(D / C))
     }
 }
 

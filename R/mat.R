@@ -1,4 +1,4 @@
-#' Helper functions operating on matrices and matrix constructors
+#' Helper functions operating on matrices
 #'
 #' @param V (Matrix) variance matrix
 #' @param Vinv (Matrix) inverse of V
@@ -10,25 +10,8 @@
 matU <- function(V) {
     U <- Diagonal(x = diag(V))
     sqrt <- Diagonal(x = sqrt(diag(V)))
-    sqrtInv <- solve(sqrt)
-    retList()
-}
-
-#' @param sigma2 a scalar. The variance parameter of the random effects.
-#' @param samplingVar the vector of sampling variances of the direct estimator.
-#'
-#' @details \code{matVFH} constructs variance-covariance matrix for a FH-model. Returns a list with the matrix and its inverse.
-#'
-#' @rdname varianceMatrices
-#' @export
-matVFH <- function(sigma2, samplingVar) {
-    G <- Diagonal(length(samplingVar), sigma2)
-    gInv <- solve(G)
-    R <- Diagonal(x = samplingVar)
-    rInv <- solve(R)
-    V <- G + R
-    vInv <- solve(V)
-    retList()
+    sqrtInv <- Diagonal(x = 1 / sqrt(diag(V)))
+    retList() %>% stripSelf
 }
 
 #' @param x a matrix
@@ -39,6 +22,28 @@ matVFH <- function(sigma2, samplingVar) {
 #' @export
 matTrace <- function(x) {
     sum(diag(x))
+}
+
+#' @param sigma2 a scalar. The variance parameter of the random effects.
+#' @param samplingVar the vector of sampling variances of the direct estimator.
+#'
+#' @details \code{matVFH} constructs variance-covariance matrix for a FH-model. Returns a list with the matrix and its inverse.
+#'
+#' @rdname varianceMatrices
+#' @export
+matVFH <- function(.sigma2, .samplingVar) {
+
+    .diag <- function(x) Diagonal(x = x)
+
+    G <- getter(rep(.sigma2, length(.samplingVar)), .diag)
+    gInv <- getter(1 / rep(.sigma2, length(.samplingVar)), .diag)
+    R <- getter(.samplingVar, .diag)
+    rInv <- getter(1 / .samplingVar, .diag)
+    V <- getter(G() + R())
+    vInv <- getter(solve(V()))
+
+    retList()
+
 }
 
 #' @param y (numeric)
@@ -65,7 +70,7 @@ matB <- function(y, X, beta, u, VuSqrtInv, VeSqrtInv, psi) {
 #'
 #' @rdname varianceMatrices
 #' @export
-matBConst <- function(y, X, beta, VuSqrtInv, VeSqrtInv, psi) {
+matBConst <- function(y, X, beta, VuSqrtInv, VeSqrtInv, psi, Z = Diagonal(length(y))) {
     force(psi); force(VuSqrtInv); force(VeSqrtInv)
 
     # Helper functions
@@ -84,11 +89,12 @@ matBConst <- function(y, X, beta, VuSqrtInv, VeSqrtInv, psi) {
     # Precalculations - they only have to be done once
     memXB <- X %*% beta
     memResid <- y - memXB
+    memZxVe <- crossprod(Z, VeSqrtInv)
 
     function(u) {
         W2 <- Diagonal(x = w2(u))
         W3 <- Diagonal(x = w3(u))
-        memPart1 <- VeSqrtInv %*% W2 %*% VeSqrtInv
+        memPart1 <- memZxVe %*% W2 %*% VeSqrtInv
         memPart2 <- VuSqrtInv %*% W3 %*% VuSqrtInv
         solve(memPart1 + memPart2) %*% memPart1
     }
