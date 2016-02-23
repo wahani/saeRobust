@@ -11,7 +11,7 @@
 \alias{matW}
 \title{Helper functions operating on matrices}
 \usage{
-matU(V)
+matU(.V)
 
 matTrace(x)
 
@@ -28,8 +28,6 @@ matAConst(y, X, V, Vinv = solve(V), psi)
 matW(y, X, beta, u, matV, psi)
 }
 \arguments{
-\item{V}{(Matrix) variance matrix}
-
 \item{x}{a matrix}
 
 \item{y}{(numeric)}
@@ -41,6 +39,8 @@ matW(y, X, beta, u, matV, psi)
 \item{u}{(numeric)}
 
 \item{psi}{(function)}
+
+\item{V}{(Matrix) variance matrix}
 
 \item{Vinv}{(Matrix) inverse of V}
 

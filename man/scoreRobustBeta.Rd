@@ -4,7 +4,7 @@
 \alias{scoreRobustBeta}
 \title{Robust score function (ML) for beta}
 \usage{
-scoreRobustBeta(y, X, V, Vinv = solve(V), psi, resid = NULL)
+scoreRobustBeta(y, X, V, Vinv = solve(V), psi)
 }
 \arguments{
 \item{y}{vector of response}

@@ -11,17 +11,17 @@
 #' @param resid function to compute residuals (optional)
 #'
 #' @export
-scoreRobustBeta <- function(y, X, V, Vinv = solve(V), psi, resid = NULL) {
+scoreRobustBeta <- function(y, X, V, Vinv = solve(V), psi) {
     force(y); force(psi)
 
     # Helper functions
-    if (is.null(resid)) resid <- function(beta) U$sqrtInv %*% (y - X %*% beta)
+    resid <- function(beta) U$sqrtInv() %*% (y - X %*% beta)
     D <- function(beta) Diagonal(x = psi(resid(beta), deriv = TRUE))
 
     # Precalculations - they only have to be done once
     U <- matU(V)
     memP0 <- crossprod(X, Vinv)
-    memP1 <- memP0 %*% U$sqrt
+    memP1 <- memP0 %*% U$sqrt()
 
     f <- function(beta) memP1 %*% psi(resid(beta))
     f1 <- function(beta) - memP0 %*% D(beta) %*% X
@@ -67,10 +67,10 @@ fixedPointRobustVarianceFH <- function(y, X, samplingVar, psi, K, beta) {
     function(sigma2) {
         V <- matVFH(sigma2, samplingVar)
         U <- matU(V$V())
-        resid <- U$sqrtInv %*% mem1
+        resid <- U$sqrtInv() %*% mem1
         psiResid <- psi(resid)
 
-        D <- t(psiResid) %*% U$sqrt %*% V$VInv() %*% V$VInv() %*% U$sqrt %*% psiResid
+        D <- t(psiResid) %*% U$sqrt() %*% V$VInv() %*% V$VInv() %*% U$sqrt() %*% psiResid
         C <- matTrace(K * V$VInv() %*% V$VuInv())
 
         max(0, as.numeric(D / C))

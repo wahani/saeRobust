@@ -7,11 +7,15 @@
 #'
 #' @rdname varianceMatrices
 #' @export
-matU <- function(V) {
-    U <- Diagonal(x = diag(V))
-    sqrt <- Diagonal(x = sqrt(diag(V)))
-    sqrtInv <- Diagonal(x = 1 / sqrt(diag(V)))
-    retList() %>% stripSelf
+matU <- function(.V) {
+
+    .diag <- function(x) Diagonal(x = x)
+
+    U <- getter(diag(.V), .diag)
+    sqrt <- getter(base::sqrt(diag(.V)), .diag)
+    sqrtInv <- getter(1 / base::sqrt(diag(.V)), .diag)
+    retList()
+
 }
 
 #' @param x a matrix
@@ -80,26 +84,26 @@ matBConst <- function(y, X, beta, matV, psi) {
     resid <- function(u) as.numeric(memResid - u)
 
     w2 <- function(u) {
-        resids <- resid(u) * diag(Ue$sqrtInv)
+        resids <- resid(u) * diag(Ue$sqrtInv())
         psi(resids) / resids
     }
 
     w3 <- function(u) {
-        resids <- u * diag(Uu$sqrtInv)
+        resids <- u * diag(Uu$sqrtInv())
         psi(resids) / resids
     }
 
     # Precalculations - they only have to be done once
     memXB <- X %*% beta
     memResid <- y - memXB
-    memZVeU <- crossprod(matV$Z(), matV$VeInv()) %*% Ue$sqrt
-    memVuUu <- matV$VuInv() %*% Uu$sqrt
+    memZVeU <- crossprod(matV$Z(), matV$VeInv()) %*% Ue$sqrt()
+    memVuUu <- matV$VuInv() %*% Uu$sqrt()
 
     function(u) {
         W2 <- Diagonal(x = w2(u))
         W3 <- Diagonal(x = w3(u))
-        memPart1 <- memZVeU %*% W2 %*% Ue$sqrtInv
-        memPart2 <- memVuUu %*% W3 %*% Uu$sqrtInv
+        memPart1 <- memZVeU %*% W2 %*% Ue$sqrtInv()
+        memPart2 <- memVuUu %*% W3 %*% Uu$sqrtInv()
         solve(memPart1 %*% matV$Z() + memPart2) %*% memPart1
     }
 }
@@ -124,7 +128,7 @@ matAConst <- function(y, X, V, Vinv = solve(V), psi) {
     force(y); force(psi)
 
     # Helper functions
-    resid <- function(beta) as.numeric(U$sqrtInv %*% (y - X %*% beta))
+    resid <- function(beta) as.numeric(U$sqrtInv() %*% (y - X %*% beta))
 
     wj <- function(beta) {
         resids <- resid(beta)
@@ -134,12 +138,12 @@ matAConst <- function(y, X, V, Vinv = solve(V), psi) {
     # Precalculations - they only have to be done once
     U <- matU(V)
     memP0 <- crossprod(X, Vinv)
-    memP1 <- memP0 %*% U$sqrt
-    memP2 <- U$sqrtInv %*% X
+    memP1 <- memP0 %*% U$sqrt()
+    memP2 <- U$sqrtInv() %*% X
 
     function(beta) {
         W <- Diagonal(x = wj(beta))
-        solve(memP1 %*% W %*% memP2) %*% memP1 %*% W %*% U$sqrtInv
+        solve(memP1 %*% W %*% memP2) %*% memP1 %*% W %*% U$sqrtInv()
     }
 }
 
@@ -153,5 +157,5 @@ matW <- function(y, X, beta, u, matV, psi) {
     A <- matA(y, X, beta, matV$V(), matV$VInv(), psi)
     B <- matB(y, X, beta, u, matV, psi)
     XA <- X %*% A
-    XA + B %*% (Diagonal(length(y), 1) - XA)
+    XA + B %*% (Diagonal(length(y)) - XA)
 }
