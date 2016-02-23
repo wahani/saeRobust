@@ -58,18 +58,18 @@ test_that("Fixed Point for Robust Beta is correct", {
     convCrit <- function(xn1, xn0) all(abs(xn0 - xn1) < 0.001)
 
     # Equivalence to Newton-Raphson
-    scoreFuns <- scoreRobustBeta(y, X, V, Vinv, psiOne)
-    fpFun <- fixedPointRobustBeta(y, X, V, Vinv, psiOne)
+    scoreFuns <- scoreRobustBeta(y, X, matVFH(0, rep(1, 100)), psiOne)
+    fpFun <- fixedPointRobustBeta(y, X, matVFH(0, rep(1, 100)), psiOne)
 
     solutionNR <- newtonRaphson(scoreFuns, x0 = c(0, 2), convCrit = convCrit)
     solutionFP <- fixedPoint(fpFun, c(0, 2), addMaxIter(convCrit, 2))
 
-    expect_equal(solutionNR, solutionFP, tolerance = 1e-3)
+    testthat::expect_equal(solutionNR, solutionFP, tolerance = 1e-3)
 
     # equivalence to OLS
-    fpFun <- fixedPointRobustBeta(y, X, V, Vinv, Curry(psiOne, k = 100))
+    fpFun <- fixedPointRobustBeta(y, X, matVFH(0, rep(1, 100)), Curry(psiOne, k = 100))
     solutionFP <- fixedPoint(fpFun, c(0, 2), addMaxIter(convCrit, 2))
-    expect_equal(solutionFP, as.numeric(solve(crossprod(X), crossprod(X, y))))
+    testthat::expect_equal(solutionFP, as.numeric(solve(crossprod(X), crossprod(X, y))))
 })
 
 test_that("Fixed Point for Robust Variance is correct", {
@@ -152,16 +152,21 @@ test_that("NR for robust betas", {
     V <- diag(1, 5)
     Vinv <- solve(V)
 
-    score <- scoreRobustBeta(y, X, V, Vinv, psiOne)
+    score <- scoreRobustBeta(y, X, matVFH(0, rep(1, 5)), psiOne)
     # as.numeric, because score uses Matrix classes.
-    expect_equal(as.numeric(score$f1(c(0, 2))), as.numeric(-crossprod(X, Vinv) %*% X))
+    testthat::expect_equal(
+        as.numeric(score$f1(c(0, 2))),
+        as.numeric(-crossprod(X, Vinv) %*% X)
+    )
 
     # one outlier
     set.seed(1)
     y <- 2 * 1:5 + rnorm(5)
-    score <- scoreRobustBeta(y, X, V, Vinv, psiOne)
-    expect_equal(as.numeric(score$f1(c(0, 2))),
-                 as.numeric(-crossprod(X, Vinv) %*% diag(c(1, 1, 1, 0, 1)) %*% X))
+    score <- scoreRobustBeta(y, X, matVFH(0, rep(1, 5)), psiOne)
+    testthat::expect_equal(
+        as.numeric(score$f1(c(0, 2))),
+        as.numeric(-crossprod(X, Vinv) %*% diag(c(1, 1, 1, 0, 1)) %*% X)
+    )
 
     # Equivalence to OLS
     set.seed(1)
@@ -170,9 +175,9 @@ test_that("NR for robust betas", {
     V <- diag(1, 100)
     Vinv <- solve(V)
 
-    funs <- scoreRobustBeta(y, X, V, Vinv, function(...) psiOne(..., k = 100))
+    funs <- scoreRobustBeta(y, X, matVFH(0, rep(1, 100)), function(...) psiOne(..., k = 100))
 
-    expect_equal(
+    testthat::expect_equal(
         newtonRaphson(
             funs,
             x0 = c(0, 2),

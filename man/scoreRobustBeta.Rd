@@ -4,20 +4,16 @@
 \alias{scoreRobustBeta}
 \title{Robust score function (ML) for beta}
 \usage{
-scoreRobustBeta(y, X, V, Vinv = solve(V), psi)
+scoreRobustBeta(y, X, matV, psi)
 }
 \arguments{
 \item{y}{vector of response}
 
 \item{X}{design matrix}
 
-\item{V}{variance matrix}
-
-\item{Vinv}{inverse of V (optional)}
+\item{matV}{(list of functions) see \link{matVFH}}
 
 \item{psi}{influence function}
-
-\item{resid}{function to compute residuals (optional)}
 }
 \description{
 Constructs a list of functions with \code{f} as the score and \code{f1} as

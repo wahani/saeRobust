@@ -23,12 +23,12 @@ lmModel <- lm(
 tmp <- summary(lmModel)
 tmp$residuals
 
-fpBeta <- fixedPointRobustBeta(y, X, Diagonal(ncol(X)), psi = . %>% psiOne)
+fpBeta <- fixedPointRobustBeta(y, X, matVFH(0, rep(1, length(y))), psi = . %>% psiOne)
 solutionFP <- fixedPoint(fpBeta, rep(1, ncol(X)), addMaxIter(convCritRelative(), 100))
 y0Pred <- solutionFP %*% X %>% as.numeric
 y0Pred - y
 
-scoreFuns <- scoreRobustBeta(y, X, Diagonal(nrow(y)), psi = psiOne)
+scoreFuns <- scoreRobustBeta(y, X, matVFH(0, rep(1, length(y))), psi = psiOne)
 solutionNR <- newtonRaphson(
     scoreFuns, 
     x0 = rep(1, ncol(X)), 

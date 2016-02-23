@@ -1,9 +1,9 @@
 #' Helper functions operating on matrices
 #'
-#' @param V (Matrix) variance matrix
-#' @param Vinv (Matrix) inverse of V
+#' @param .V (Matrix) variance matrix
 #'
-#' @details \code{matU} computes U. U is the matrix containing only the diagonal elements of V. See Sinha & Rao (2009): page 386 for the def of U.
+#' @details \code{matU} computes U. U is the matrix containing only the diagonal
+#'   elements of V. See Sinha & Rao (2009): page 386 for the def of U.
 #'
 #' @rdname varianceMatrices
 #' @export
@@ -18,7 +18,7 @@ matU <- function(.V) {
 
 }
 
-#' @param x a matrix
+#' @param x ([m|M]atrix) a matrix
 #'
 #' @details \code{matTrace} computes the trace of a matrix.
 #'
@@ -28,10 +28,13 @@ matTrace <- function(x) {
     sum(diag(x))
 }
 
-#' @param sigma2 a scalar. The variance parameter of the random effects.
-#' @param samplingVar the vector of sampling variances of the direct estimator.
+#' @param .sigma2 (numeric) a scalar. The variance parameter of the random
+#'   effects.
+#' @param .samplingVar (numeric) the vector of sampling variances of the direct
+#'   estimator.
 #'
-#' @details \code{matVFH} constructs variance-covariance matrix for a FH-model. Returns a list with the matrix and its inverse.
+#' @details \code{matVFH} constructs variance-covariance matrix for a FH-model.
+#'   Returns a list with the matrix and its inverse.
 #'
 #' @rdname varianceMatrices
 #' @export
@@ -51,13 +54,12 @@ matVFH <- function(.sigma2, .samplingVar) {
 
 }
 
-#' @param y (numeric)
-#' @param X (Matrix)
-#' @param beta (numeric)
-#' @param u (numeric)
-#' @param VuSqrtInv (Matrix)
-#' @param VeSqrtInv (Matrix)
-#' @param psi (function)
+#' @param y (numeric) response
+#' @param X (Matrix) design matrix
+#' @param beta (numeric) vector of regression coefficients
+#' @param u (numeric) vector of random effects
+#' @param matV (list of functions) see \code{matVFH} as an example
+#' @param psi (function) the influence function
 #'
 #' @details \code{matB} computes the matrix B from the CCST paper which is used
 #'   to compute the weights in the pseudo linearized representation of the
@@ -114,8 +116,8 @@ matBConst <- function(y, X, beta, matV, psi) {
 #'
 #' @rdname varianceMatrices
 #' @export
-matA <- function(y, X, beta, V, Vinv = solve(V), psi) {
-    matAConst(y, X, V, Vinv, psi)(beta)
+matA <- function(y, X, beta, matV, psi) {
+    matAConst(y, X, matV, psi)(beta)
 }
 
 #' @details \code{matAConst} returns a function with one argument, beta, to
@@ -124,25 +126,25 @@ matA <- function(y, X, beta, V, Vinv = solve(V), psi) {
 #'
 #' @rdname varianceMatrices
 #' @export
-matAConst <- function(y, X, V, Vinv = solve(V), psi) {
+matAConst <- function(y, X, matV, psi) {
     force(y); force(psi)
 
     # Helper functions
     resid <- function(beta) as.numeric(U$sqrtInv() %*% (y - X %*% beta))
 
-    wj <- function(beta) {
+    w <- function(beta) {
         resids <- resid(beta)
         psi(resids) / resids
     }
 
     # Precalculations - they only have to be done once
-    U <- matU(V)
-    memP0 <- crossprod(X, Vinv)
+    U <- matU(matV$V())
+    memP0 <- crossprod(X, matV$VInv())
     memP1 <- memP0 %*% U$sqrt()
     memP2 <- U$sqrtInv() %*% X
 
     function(beta) {
-        W <- Diagonal(x = wj(beta))
+        W <- Diagonal(x = w(beta))
         solve(memP1 %*% W %*% memP2) %*% memP1 %*% W %*% U$sqrtInv()
     }
 }
@@ -154,7 +156,7 @@ matAConst <- function(y, X, V, Vinv = solve(V), psi) {
 #' @rdname varianceMatrices
 #' @export
 matW <- function(y, X, beta, u, matV, psi) {
-    A <- matA(y, X, beta, matV$V(), matV$VInv(), psi)
+    A <- matA(y, X, beta, matV, psi)
     B <- matB(y, X, beta, u, matV, psi)
     XA <- X %*% A
     XA + B %*% (Diagonal(length(y)) - XA)

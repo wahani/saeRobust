@@ -14,7 +14,8 @@ Imports:
     Matrix,
     magrittr,
     MASS,
-    modules
+    modules,
+    memoise
 License: GPL-3 | file LICENSE
 LazyData: true
 Suggests:

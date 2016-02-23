@@ -41,8 +41,7 @@ weights.rfh <- function(object, re = NULL, ...) {
         y = object$xy$y,
         X = object$xy$x,
         beta = object$beta,
-        V = V$V(),
-        Vinv = V$VInv(),
+        matV = V,
         psi = object$psi
     )
 

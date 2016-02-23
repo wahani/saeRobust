@@ -21,46 +21,46 @@ matB(y, X, beta, u, matV, psi)
 
 matBConst(y, X, beta, matV, psi)
 
-matA(y, X, beta, V, Vinv = solve(V), psi)
+matA(y, X, beta, matV, psi)
 
-matAConst(y, X, V, Vinv = solve(V), psi)
+matAConst(y, X, matV, psi)
 
 matW(y, X, beta, u, matV, psi)
 }
 \arguments{
-\item{x}{a matrix}
+\item{.V}{(Matrix) variance matrix}
 
-\item{y}{(numeric)}
+\item{x}{([m|M]atrix) a matrix}
 
-\item{X}{(Matrix)}
+\item{.sigma2}{(numeric) a scalar. The variance parameter of the random
+effects.}
 
-\item{beta}{(numeric)}
+\item{.samplingVar}{(numeric) the vector of sampling variances of the direct
+estimator.}
 
-\item{u}{(numeric)}
+\item{y}{(numeric) response}
 
-\item{psi}{(function)}
+\item{X}{(Matrix) design matrix}
 
-\item{V}{(Matrix) variance matrix}
+\item{beta}{(numeric) vector of regression coefficients}
 
-\item{Vinv}{(Matrix) inverse of V}
+\item{u}{(numeric) vector of random effects}
 
-\item{sigma2}{a scalar. The variance parameter of the random effects.}
+\item{matV}{(list of functions) see \code{matVFH} as an example}
 
-\item{samplingVar}{the vector of sampling variances of the direct estimator.}
-
-\item{VuSqrtInv}{(Matrix)}
-
-\item{VeSqrtInv}{(Matrix)}
+\item{psi}{(function) the influence function}
 }
 \description{
 Helper functions operating on matrices
 }
 \details{
-\code{matU} computes U. U is the matrix containing only the diagonal elements of V. See Sinha & Rao (2009): page 386 for the def of U.
+\code{matU} computes U. U is the matrix containing only the diagonal
+  elements of V. See Sinha & Rao (2009): page 386 for the def of U.
 
 \code{matTrace} computes the trace of a matrix.
 
-\code{matVFH} constructs variance-covariance matrix for a FH-model. Returns a list with the matrix and its inverse.
+\code{matVFH} constructs variance-covariance matrix for a FH-model.
+  Returns a list with the matrix and its inverse.
 
 \code{matB} computes the matrix B from the CCST paper which is used
   to compute the weights in the pseudo linearized representation of the

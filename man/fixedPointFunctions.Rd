@@ -6,7 +6,7 @@
 \alias{fixedPointRobustVarianceFH}
 \title{Fixed Point Functions}
 \usage{
-fixedPointRobustBeta(y, X, V, Vinv = solve(V), psi, resid = NULL)
+fixedPointRobustBeta(y, X, matV, psi)
 
 fixedPointRobustVarianceFH(y, X, samplingVar, psi, K, beta)
 
@@ -17,25 +17,15 @@ fixedPointRobustRandomEffect(y, X, beta, matV, psi)
 
 \item{X}{design matrix}
 
-\item{V}{variance matrix}
-
-\item{Vinv}{inverse of V (optional)}
+\item{matV}{(list of functions) see \link{matVFH}}
 
 \item{psi}{influence function}
-
-\item{resid}{function to compute residuals (optional)}
 
 \item{samplingVar}{the sampling variance of the direct estimator.}
 
 \item{K}{constant, see \link{getK}. \code{length(beta) == ncols(X)}}
 
 \item{beta}{beta coefficients to be used.}
-
-\item{VuSqrtInv}{(Matrix) n times n matrix of the variance structure of the
-random effects part to the power of -1/2}
-
-\item{VeSqrtInv}{(Matrix) n times n matrix of the variance structure of the
-model error part to the power of -1/2}
 }
 \description{
 This is an implementation of a robustified fixed point function to identify

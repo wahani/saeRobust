@@ -5,13 +5,11 @@
 #'
 #' @param y vector of response
 #' @param X design matrix
-#' @param V variance matrix
-#' @param Vinv inverse of V (optional)
+#' @param matV (list of functions) see \link{matVFH}
 #' @param psi influence function
-#' @param resid function to compute residuals (optional)
 #'
 #' @export
-scoreRobustBeta <- function(y, X, V, Vinv = solve(V), psi) {
+scoreRobustBeta <- function(y, X, matV, psi) {
     force(y); force(psi)
 
     # Helper functions
@@ -19,8 +17,8 @@ scoreRobustBeta <- function(y, X, V, Vinv = solve(V), psi) {
     D <- function(beta) Diagonal(x = psi(resid(beta), deriv = TRUE))
 
     # Precalculations - they only have to be done once
-    U <- matU(V)
-    memP0 <- crossprod(X, Vinv)
+    U <- matU(matV$V())
+    memP0 <- crossprod(X, matV$VInv())
     memP1 <- memP0 %*% U$sqrt()
 
     f <- function(beta) memP1 %*% psi(resid(beta))
@@ -37,16 +35,14 @@ scoreRobustBeta <- function(y, X, V, Vinv = solve(V), psi) {
 #'
 #' @param y vector of response
 #' @param X design matrix
-#' @param V variance matrix
-#' @param Vinv inverse of V (optional)
+#' @param matV (list of functions) see \link{matVFH}
 #' @param psi influence function
-#' @param resid function to compute residuals (optional)
 #'
 #' @rdname fixedPointFunctions
 #' @export
-fixedPointRobustBeta <- function(y, X, V, Vinv = solve(V), psi, resid = NULL) {
+fixedPointRobustBeta <- function(y, X, matV, psi) {
     force(y)
-    makeMatA <- matAConst(y, X, V, Vinv, psi)
+    makeMatA <- matAConst(y, X, matV, psi)
     function(beta) {
         as.numeric(makeMatA(beta) %*% y)
     }
@@ -77,11 +73,6 @@ fixedPointRobustVarianceFH <- function(y, X, samplingVar, psi, K, beta) {
     }
 }
 
-#' @param VuSqrtInv (Matrix) n times n matrix of the variance structure of the
-#'   random effects part to the power of -1/2
-#' @param VeSqrtInv (Matrix) n times n matrix of the variance structure of the
-#'   model error part to the power of -1/2
-#'
 #' @rdname fixedPointFunctions
 #' @export
 fixedPointRobustRandomEffect <- function(y, X, beta, matV, psi) {
