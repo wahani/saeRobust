@@ -18,6 +18,8 @@
 #' vignette("fixedPoint", "saeRobustTools")
 #' }
 fixedPoint <- function(fun, x0, convCrit) {
+    assert_that(is.function(fun))
+    assert_that(is.function(convCrit))
     x1 <- NULL
     repeat {
         x1 <- fun(x0)
@@ -35,7 +37,7 @@ fixedPoint <- function(fun, x0, convCrit) {
 #' @export
 #' @rdname fixedPoint
 averageDamp <- function(fun) {
-    force(fun)
+    assert_that(is.function(fun))
     function(x) (x + fun(x)) / 2
 }
 
@@ -65,7 +67,8 @@ convCritRelative <- function(tolerance = 1e-5) {
 #'
 #' @export
 addMaxIter <- function(fun, maxIter) {
-    force(fun); force(maxIter)
+    assert_that(is.function(fun))
+    assert_that(maxIter > 0)
     count <- 0
     function(...) {
         count <<- count + 1
@@ -78,7 +81,7 @@ addMaxIter <- function(fun, maxIter) {
 #' @export
 #' @rdname fixedPoint
 countCalls <- function(fun) {
-    force(fun)
+    assert_that(is.function(fun))
     count <- 0
     function(...) {
         count <<- count + 1
