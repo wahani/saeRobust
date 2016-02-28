@@ -98,14 +98,13 @@ matBConst <- function(y, X, beta, matV, psi) {
     # Precalculations - they only have to be done once
     memXB <- X %*% beta
     memResid <- y - memXB
-    memZVeU <- crossprod(matV$Z(), matV$VeInv()) %*% Ue$sqrt()
-    memVuUu <- matV$VuInv() %*% Uu$sqrt()
+    memZVeU <- crossprod(matV$Z(), matV$VeInv())
 
     function(u) {
         W2 <- Diagonal(x = w2(u))
         W3 <- Diagonal(x = w3(u))
-        memPart1 <- memZVeU %*% W2 %*% Ue$sqrtInv()
-        memPart2 <- memVuUu %*% W3 %*% Uu$sqrtInv()
+        memPart1 <- memZVeU %*% W2
+        memPart2 <- matV$VuInv() %*% W3
         solve(memPart1 %*% matV$Z() + memPart2) %*% memPart1
     }
 }
@@ -140,12 +139,10 @@ matAConst <- function(y, X, matV, psi) {
     # Precalculations - they only have to be done once
     U <- matU(matV$V())
     memP0 <- crossprod(X, matV$VInv())
-    memP1 <- memP0 %*% U$sqrt()
-    memP2 <- U$sqrtInv() %*% X
 
     function(beta) {
-        W <- Diagonal(x = w(beta))
-        solve(memP1 %*% W %*% memP2) %*% memP1 %*% W %*% U$sqrtInv()
+        W1 <- Diagonal(x = w(beta))
+        solve(memP0 %*% W1 %*% X) %*% memP0 %*% W1
     }
 }
 
