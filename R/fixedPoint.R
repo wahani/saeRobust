@@ -1,7 +1,7 @@
 #' Fixed Point Algorithm Infrastructure
 #'
 #' @description A fixed-point function supplied by the user is iteratively
-#'   evaluated. \code{averageDamp} can be used to add average damping to the
+#'   evaluated. \code{addAverageDamp} can be used to add average damping to the
 #'   function - this may have a positive effect on the speed of convergence.
 #'
 #' @param fun the function to be evaluated in the algorithm
@@ -33,11 +33,11 @@ fixedPoint <- function(fun, x0, convCrit) {
     x1
 }
 
-#' @details \code{averageDamp} adds average damping to an arbitrary fixed point
+#' @details \code{addAverageDamp} adds average damping to an arbitrary fixed point
 #'   function.
 #' @export
 #' @rdname fixedPoint
-averageDamp <- function(fun) {
+addAverageDamp <- function(fun) {
     assert_that(is.function(fun))
     function(x) (x + fun(x)) / 2
 }
@@ -95,11 +95,11 @@ addMaxIter <- function(fun, maxIter) {
     }
 }
 
-#' @details \code{countCalls} can be used to count the number of calls of a function.
+#' @details \code{addCounter} can be used to count the number of calls of a function.
 #'
 #' @export
 #' @rdname fixedPoint
-countCalls <- function(fun) {
+addCounter <- function(fun) {
     assert_that(is.function(fun))
     count <- 0
     function(...) {
@@ -108,13 +108,13 @@ countCalls <- function(fun) {
     }
 }
 
-#' @details \code{saveHistory} can be used to save a history of results of a
+#' @details \code{addHistory} can be used to save a history of results of a
 #'   function. The history is stored as a matrix, so this works best if the
 #'   return value of \code{fun} is numeric.
 #'
 #' @export
 #' @rdname fixedPoint
-saveHistory <- function(fun) {
+addHistory <- function(fun) {
     force(fun)
     history <- NULL
     function(...) {

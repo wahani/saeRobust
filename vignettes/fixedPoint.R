@@ -13,10 +13,10 @@ sqrtFp <- function(p) {
 fixedPoint(sqrtFp(2), 2, addMaxIter(convCrit, 10))
 
 ## ------------------------------------------------------------------------
-fixedPoint(saveHistory(sqrtFp(2)), 2, addMaxIter(convCrit, 10))
+fixedPoint(addHistory(sqrtFp(2)), 2, addMaxIter(convCrit, 10))
 
 ## ------------------------------------------------------------------------
-fixedPoint(saveHistory(averageDamp(sqrtFp(2))), 2, addMaxIter(convCrit, 10))
+fixedPoint(addHistory(addAverageDamp(sqrtFp(2))), 2, addMaxIter(convCrit, 10))
 
 ## ------------------------------------------------------------------------
 sqrtNr <- function(.p) {
