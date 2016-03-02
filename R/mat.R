@@ -1,9 +1,12 @@
-#' Helper functions operating on matrices
+#' Matrix constructor functions
 #'
 #' @param .V (Matrix) variance matrix
 #'
-#' @details \code{matU} computes U. U is the matrix containing only the diagonal
-#'   elements of V. See Sinha & Rao (2009): page 386 for the def of U.
+#' @details
+#'
+#' \code{matU} computes U. U is the matrix containing only the diagonal
+#'   elements of V. This function returns a list of functions which can be
+#'   called to compute specific transformations of U.
 #'
 #' @rdname varianceMatrices
 #' @export
@@ -34,7 +37,7 @@ matTrace <- function(x) {
 #'   estimator.
 #'
 #' @details \code{matVFH} constructs variance-covariance matrix for a FH-model.
-#'   Returns a list with the matrix and its inverse.
+#'   Returns a list of functions to compute various transformations.
 #'
 #' @rdname varianceMatrices
 #' @export
@@ -62,12 +65,11 @@ matVFH <- function(.sigma2, .samplingVar) {
 #' @param X (Matrix) design matrix
 #' @param beta (numeric) vector of regression coefficients
 #' @param u (numeric) vector of random effects
-#' @param matV (list of functions) see \code{matVFH} as an example
+#' @param matV (list of functions) see \code{matVFH} for an example
 #' @param psi (function) the influence function
 #'
-#' @details \code{matB} computes the matrix B from the CCST paper which is used
-#'   to compute the weights in the pseudo linearized representation of the
-#'   REBLUP.
+#' @details \code{matB} computes the matrix B which is used to compute the
+#'   weights in the pseudo linearised representation of the REBLUP.
 #'
 #' @rdname varianceMatrices
 #' @export
@@ -113,9 +115,8 @@ matBConst <- function(y, X, beta, matV, psi) {
     }
 }
 
-#' @details \code{matA} computes the matrix A from the CCST paper which is used
-#'   to compute the weights in the pseudo linearized representation of the
-#'   REBLUP.
+#' @details \code{matA} computes the matrix A which is used to compute the
+#'   weights in the pseudo linearized representation of the REBLUP.
 #'
 #' @rdname varianceMatrices
 #' @export
@@ -151,7 +152,7 @@ matAConst <- function(y, X, matV, psi) {
 }
 
 #' @details \code{matW} returns a matrix containing the weights as they are
-#'   defined in the CCST pseudo linearization. \code{matW \%*\% y} is the
+#'   defined for the pseudo linear form, such that \code{matW \%*\% y} is the
 #'   REBLUP.
 #'
 #' @rdname varianceMatrices
