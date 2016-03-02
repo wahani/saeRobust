@@ -1,6 +1,9 @@
 context("Fixed Point")
 
 test_that("Fixed Point Framework", {
+
+    expect_equal <- testthat::expect_equal
+
     sqrtFp <- function(p) {
         force(p)
         function(x) p / x
@@ -22,5 +25,11 @@ test_that("Fixed Point Framework", {
     res <- fp(saveHistory(fpsqrt2Damped), 2)
     expect_equal(nrow(slot(res, "history")), 4)
     expect_equal(res@.Data, sqrt(2))
+
+    res <- fp(addConstraintMin(fpsqrt2Damped, 1.5), 2)
+    expect_equal(res, 1.5)
+
+    res <- fp(addConstraintMax(fpsqrt2Damped, 1.2), 1)
+    expect_equal(res, 1.2)
 
 })

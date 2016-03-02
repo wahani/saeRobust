@@ -30,7 +30,6 @@ fixedPointRobustRandomEffect(y, X, beta, matV, psi)
 }
 \description{
 This is an implementation of a robustified fixed point function to identify
-beta coefficients in any mixed linear model. The function is derived from the
-pseudo linear form of robust mixed models in CCST (2015) and CCT (2011).
+beta coefficients in any mixed linear model.
 }
 

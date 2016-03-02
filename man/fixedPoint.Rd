@@ -5,6 +5,8 @@
 \alias{AnyType-class}
 \alias{DataWithCount-class}
 \alias{DataWithHistory-class}
+\alias{addConstraintMax}
+\alias{addConstraintMin}
 \alias{addMaxIter}
 \alias{averageDamp}
 \alias{convCritAbsolute}
@@ -19,6 +21,10 @@
 fixedPoint(fun, x0, convCrit)
 
 averageDamp(fun)
+
+addConstraintMin(fun, value)
+
+addConstraintMax(fun, value)
 
 convCritAbsolute(tolerance = 1e-05)
 
@@ -43,6 +49,8 @@ newtonRaphsonFunction(funList)
 arguments; the first is the value from iteration n; the second is the value
 from iteration n-1}
 
+\item{value}{(numeric)}
+
 \item{tolerance}{a numeric value > 0}
 
 \item{maxIter}{maximum number of iterations}
@@ -61,6 +69,12 @@ A fixed-point function supplied by the user is iteratively
 \details{
 \code{averageDamp} adds average damping to an arbitrary fixed point
   function.
+
+\code{addConstraintMin} takes care that values are not below a
+  minimum value.
+
+\code{addConstraintMax} takes care that values are not larger than
+  maximum value.
 
 \code{convCritAbsolute} absolute difference as convergence criterion.
 

@@ -10,6 +10,7 @@
 #'   arguments; the first is the value from iteration n; the second is the value
 #'   from iteration n-1
 #' @param tolerance a numeric value > 0
+#' @param value (numeric)
 #'
 #' @export
 #' @rdname fixedPoint
@@ -39,6 +40,24 @@ fixedPoint <- function(fun, x0, convCrit) {
 averageDamp <- function(fun) {
     assert_that(is.function(fun))
     function(x) (x + fun(x)) / 2
+}
+
+#' @details \code{addConstraintMin} takes care that values are not below a
+#'   minimum value.
+#' @export
+#' @rdname fixedPoint
+addConstraintMin <- function(fun, value) {
+    assert_that(is.function(fun))
+    function(x) pmax(value, fun(x))
+}
+
+#' @details \code{addConstraintMax} takes care that values are not larger than
+#'   maximum value.
+#' @export
+#' @rdname fixedPoint
+addConstraintMax <- function(fun, value) {
+    assert_that(is.function(fun))
+    function(x) pmin(value, fun(x))
 }
 
 #' @details \code{convCritAbsolute} absolute difference as convergence criterion.
