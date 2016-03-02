@@ -104,22 +104,8 @@ countCalls <- function(fun) {
     count <- 0
     function(...) {
         count <<- count + 1
-        DataWithCount(fun(...), count = count)
+        addAttr(fun(...), count, "count")
     }
-}
-
-#' @details \code{AnyType} is a virtual class which contains any type.
-#' @export
-#' @rdname fixedPoint
-setClass("AnyType", slots = c(.Data = "ANY"))
-
-#' @details \code{DataWithCount} is a class containing any type and a slot with
-#'   a number.
-#' @export
-#' @rdname fixedPoint
-AnyType : DataWithCount(count = numeric()) %type% {
-    stopifnot(.Object@count > 0)
-    .Object
 }
 
 #' @details \code{saveHistory} can be used to save a history of results of a
@@ -133,16 +119,10 @@ saveHistory <- function(fun) {
     history <- NULL
     function(...) {
         res <- fun(...)
-        history <<- rbind(history, res) # this can be expensive! What to do?
-        DataWithHistory(res, history = history)
+        history <<- rbind(history, res)
+        addAttr(res, history, "history")
     }
 }
-
-#' @details \code{DataWithHistory} is a class containing any type and a slot with
-#'   a number.
-#' @export
-#' @rdname fixedPoint
-AnyType : DataWithHistory(history = matrix()) %type% .Object
 
 #' @details \code{newtonRaphson} finds zeroes of a function. The user can supply the function and its first derivative. Note that the Newton Raphson Algorithm is a special case of a fixed point algorithm thus it is implemented using \code{\link{fixedPoint}} and is only a convenience.
 #'

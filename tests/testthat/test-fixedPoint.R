@@ -15,16 +15,16 @@ test_that("Fixed Point Framework", {
     expect_equal(sqrtFp(2)(sqrt(2)), sqrt(2))
     expect_equal(fpsqrt2Damped(2), 1.5)
     funWithCounter <- countCalls(function() 1)
-    funWithCounter(); funWithCounter()
+    for (i in 1:2) funWithCounter()
     expect_equal(slot(funWithCounter(), "count"), 3)
 
     res <- fp(countCalls(fpsqrt2Damped), 2)
     expect_equal(slot(res, "count"), 4)
-    expect_equal(res@.Data, sqrt(2))
+    expect_equal(res, sqrt(2), check.attributes = FALSE)
 
     res <- fp(saveHistory(fpsqrt2Damped), 2)
     expect_equal(nrow(slot(res, "history")), 4)
-    expect_equal(res@.Data, sqrt(2))
+    expect_equal(res, sqrt(2), check.attributes = FALSE)
 
     res <- fp(addConstraintMin(fpsqrt2Damped, 1.5), 2)
     expect_equal(res, 1.5)

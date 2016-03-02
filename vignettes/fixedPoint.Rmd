@@ -8,19 +8,23 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-In this vignette you can find some notes and examples on the use of the fixed point function and associated tools. The function itself is simple enough; it evaluates:
+In this vignette you can find some notes and examples on the use of the fixed
+point function and associated tools. The function itself is simple enough; it
+evaluates:
 
 $$
 x_{n + 1} = f(x_{n})
 $$
 
-until a convergence criterion is reached. A convergence criterion is defined as a function:
+until a convergence criterion is reached. A convergence criterion is defined as
+a function:
 
 $$
 convCrit(x_{n + 1}, x_{n}) = TRUE
 $$
 
-if convergence is reached and `FALSE` otherwise. As a simple example consider the function
+if convergence is reached and `FALSE` otherwise. As a simple example consider
+the function
 
 $$
 f(x) = 1 + \frac{1}{x}
@@ -38,13 +42,16 @@ fp(function(x) 1 + 1 / x, rnorm(1))
 
 # Square Root
 
-Another example which can be used is to find the square root. The square root of $p$ is the fixed point of the function
+Another example which can be used is to find the square root. The square root of
+$p$ is the fixed point of the function
 
 $$
 f(x) = \frac{p}{x}
 $$
 
-In this example, however, the function does not necessarily converge. To show this we modify our `convCrit` function to stop the algorithm after 10 iterations:
+In this example, however, the function does not necessarily converge. To show
+this we modify our `convCrit` function to stop the algorithm after 10
+iterations:
 
 ```{r}
 sqrtFp <- function(p) {
@@ -54,13 +61,17 @@ sqrtFp <- function(p) {
 fixedPoint(sqrtFp(2), 2, addMaxIter(convCrit, 10))
 ```
 
-Surprisingly we are not even close to the actual value. To check the values in each iteration you can modify your fp function such that it saves the history of values in all iterations:
+Surprisingly we are not even close to the actual value. To check the values in
+each iteration you can modify your fp function such that it saves the history of
+values in all iterations:
 
 ```{r}
 fixedPoint(saveHistory(sqrtFp(2)), 2, addMaxIter(convCrit, 10))
 ```
 
-What happens is that the functions oscillates between 1 and 2. To overcome this average damping can be applied, which can also be beneficial with regards to the speed of convergence:
+What happens is that the functions oscillates between 1 and 2. To overcome this
+average damping can be applied, which can also be beneficial with regards to the
+speed of convergence:
 
 ```{r}
 fixedPoint(saveHistory(averageDamp(sqrtFp(2))), 2, addMaxIter(convCrit, 10))
@@ -68,7 +79,9 @@ fixedPoint(saveHistory(averageDamp(sqrtFp(2))), 2, addMaxIter(convCrit, 10))
 
 ## Square root solved with Newton-Raphson
 
-The Newton Raphson is frequently used to fit statistical models. It is a special case of the fixed point algorithm and exists as a convenience in this package. The algorithm is defined as:
+The Newton Raphson is frequently used to fit statistical models. It is a special
+case of the fixed point algorithm and exists as a convenience in this package.
+The algorithm is defined as:
 
 $$
 x_{n + 1} = x_n + (f'(x_n))^{-1} f(x_n)
@@ -93,6 +106,3 @@ sqrtNr <- function(.p) {
 nr <- Curry(newtonRaphson, convCrit = convCrit)
 nr(sqrtNr(2), 2)
 ```
-
-
-
