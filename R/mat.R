@@ -50,6 +50,10 @@ matVFH <- function(.sigma2, .samplingVar) {
     VInv <- getter(solve(V()))
     Z <- getter(Diagonal(length(.samplingVar)))
 
+    deriv <- list(
+        getter(Diagonal(length(.samplingVar)))
+    )
+
     retList()
 
 }
