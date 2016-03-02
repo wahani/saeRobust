@@ -2,13 +2,13 @@
 % Please edit documentation in R/robustObjectiveFunctions.R
 \name{fixedPointRobustBeta}
 \alias{fixedPointRobustBeta}
+\alias{fixedPointRobustDelta}
 \alias{fixedPointRobustRandomEffect}
-\alias{fixedPointRobustVarianceFH}
 \title{Fixed Point Functions}
 \usage{
 fixedPointRobustBeta(y, X, matV, psi)
 
-fixedPointRobustVarianceFH(y, X, samplingVar, psi, K, beta)
+fixedPointRobustDelta(y, X, beta, matVFun, psi, K)
 
 fixedPointRobustRandomEffect(y, X, beta, matV, psi)
 }
@@ -21,11 +21,12 @@ fixedPointRobustRandomEffect(y, X, beta, matV, psi)
 
 \item{psi}{influence function}
 
-\item{samplingVar}{the sampling variance of the direct estimator.}
+\item{beta}{beta coefficients to be used}
 
-\item{K}{constant, see \link{getK}. \code{length(beta) == ncols(X)}}
+\item{matVFun}{a function with one argument constructing something similar to
+\link{matVFH}: e.g. \code{. \%>\% matVFH(c(1, 1))}}
 
-\item{beta}{beta coefficients to be used.}
+\item{K}{constant, see \link{getK}}
 }
 \description{
 This is an implementation of a robustified fixed point function to identify

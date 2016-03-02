@@ -10,8 +10,6 @@
 #'
 #' @export
 scoreRobustBeta <- function(y, X, matV, psi) {
-    force(y); force(psi)
-
     # Helper functions
     resid <- function(beta) U$sqrtInv() %*% (y - X %*% beta)
     D <- function(beta) Diagonal(x = psi(resid(beta), deriv = TRUE))
@@ -30,8 +28,7 @@ scoreRobustBeta <- function(y, X, matV, psi) {
 #' Fixed Point Functions
 #'
 #' This is an implementation of a robustified fixed point function to identify
-#' beta coefficients in any mixed linear model. The function is derived from the
-#' pseudo linear form of robust mixed models in CCST (2015) and CCT (2011).
+#' beta coefficients in any mixed linear model.
 #'
 #' @param y vector of response
 #' @param X design matrix
@@ -41,35 +38,33 @@ scoreRobustBeta <- function(y, X, matV, psi) {
 #' @rdname fixedPointFunctions
 #' @export
 fixedPointRobustBeta <- function(y, X, matV, psi) {
-    force(y)
     makeMatA <- matAConst(y, X, matV, psi)
     function(beta) {
         as.numeric(makeMatA(beta) %*% y)
     }
 }
 
-#' @param samplingVar the sampling variance of the direct estimator.
-#' @param K constant, see \link{getK}. \code{length(beta) == ncols(X)}
-#' @param beta beta coefficients to be used.
+#' @param matVFun a function with one argument constructing something similar to
+#'   \link{matVFH}: e.g. \code{. \%>\% matVFH(c(1, 1))}
+#' @param K constant, see \link{getK}
+#' @param beta beta coefficients to be used
 #'
 #' @rdname fixedPointFunctions
 #' @export
-fixedPointRobustVarianceFH <- function(y, X, samplingVar, psi, K, beta) {
-    force(samplingVar); force(psi); force(K)
-
+fixedPointRobustDelta <- function(y, X, beta, matVFun, psi, K) {
     # Precalculations - they only have to be done once
     mem1 <- (y - X %*% beta)
 
-    function(sigma2) {
-        V <- matVFH(sigma2, samplingVar)
-        U <- matU(V$V())
+    function(param) {
+        matV <- matVFun(param)
+        U <- matU(matV$V())
         resid <- U$sqrtInv() %*% mem1
         psiResid <- psi(resid)
+        c1 <- matTrace(K / param * matV$VInv() %*% matV$deriv[[1]]())
+        c2 <- crossprod(psiResid, U$sqrt()) %*% matV$VInv() %*%
+            matV$deriv[[1]]() %*% matV$VInv() %*% U$sqrt() %*% psiResid
 
-        D <- t(psiResid) %*% U$sqrt() %*% V$VInv() %*% V$VInv() %*% U$sqrt() %*% psiResid
-        C <- matTrace(K * V$VInv() %*% V$VuInv())
-
-        max(0, as.numeric(D / C))
+        as.numeric(c2 / c1)
     }
 }
 

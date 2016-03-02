@@ -41,8 +41,8 @@ fitrfh <- function(y, X, samplingVar, theta0 = c(rep(1, ncol(X)), 1), convCrit =
         )
         beta <- fixedPoint(fpBeta, beta, convCrit)
 
-        fpSigma2 <- fixedPointRobustVarianceFH(
-            y, X, samplingVar, psi, getK(1.345), beta = beta
+        fpSigma2 <- fixedPointRobustDelta(
+            y, X, beta, . %>% matVFH(samplingVar), psi, getK(1.345)
         )
         sigma2 <- fixedPoint(averageDamp(fpSigma2), sigma2, convCrit)
 

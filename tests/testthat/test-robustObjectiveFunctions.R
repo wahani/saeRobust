@@ -89,7 +89,7 @@ test_that("Fixed Point for Robust Variance is correct", {
     convCrit <- function(xn1, xn0) all(abs(xn0 - xn1) < 1e-5)
 
     # Sanity checks
-    fpFun <- fixedPointRobustVarianceFH(y, X, rep(1, 100), psiOne, K = getK(1.345), c(0, 2))
+    fpFun <- fixedPointRobustDelta(y, X, c(0, 2), . %>% matVFH(rep(1, 100)), psiOne, K = getK(1.345))
     estVarRobust <- fixedPoint(fpFun, 1, convCrit)
     estVarFH <- sae::eblupFH(y ~ x, dirVar, method = "FH", data = df)$fit$refvar
 
@@ -99,31 +99,25 @@ test_that("Fixed Point for Robust Variance is correct", {
     # Approximately equal to non robust FH? Not at the moment. It is not clear
     # if this implementation has some bug or if there is something in sae - or
     # if they are both correct but different.
-    fpFun <- fixedPointRobustVarianceFH(
-        y, X, rep(1, 100), Curry(psiOne, k = 10000), K = getK(10000),
-        sae::eblupFH(y ~ x, dirVar, method = "FH", data = df)$fit$estcoef[,"beta"]
-        )
-
-    estVarRobust <- fixedPoint(fpFun, 1, convCrit)
-    # expect_equal(estVarRobust, estVarFH) # Not yet true
-
-    data(milk, package = "sae", envir = environment())
-
-    # Fit FH model using REML method with indicators of 4 Major Areas as
-    # explanatory variables.
-    milk$dirVar <- milk$SD^2
-    resultREML <- sae::eblupFH(yi ~ 1, dirVar, data = milk)
-
-    y <- milk$yi
-    X <- matrix(1, nrow = length(y), ncol = 1)
-    fpFun <- fixedPointRobustVarianceFH(
-        y, X, milk$dirVar, Curry(psiOne, k = 10000), K = getK(10000),
-        beta = resultREML$fit$estcoef[, "beta"]
+    fpFun <- fixedPointRobustDelta(
+        y, X,
+        # to have the same parameter estimates beta:
+        sae::eblupFH(y ~ x, dirVar, method = "FH", data = df)$fit$estcoef[,"beta"],
+        . %>% matVFH(rep(1, 100)),
+        . %>% psiOne(., k = 10000), K = getK(10000)
     )
-    estVarRobust <- fixedPoint(fpFun, 1, convCrit)
 
-    # Not satisfying but on the same scale.
-    expect_equal(round(estVarRobust, 2), round(resultREML$fit$refvar, 2))
+    estVarRobust <- fixedPoint(fpFun, 1, convCrit)
+    ee <- robEstEqu(
+        y, X,
+        sae::eblupFH(y ~ x, dirVar, method = "FH", data = df)$fit$estcoef[,"beta"],
+        NULL, # don't need this value at this time
+        matVFH(estVarRobust, rep(1, 100)),
+        . %>% psiOne(., k = 10000),
+        getK(10000)
+    )
+    testthat::expect_equal(ee$delta(), 0)
+
 })
 
 test_that("Newton Raphson basics", {

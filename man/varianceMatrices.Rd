@@ -9,7 +9,7 @@
 \alias{matU}
 \alias{matVFH}
 \alias{matW}
-\title{Helper functions operating on matrices}
+\title{Matrix constructor functions}
 \usage{
 matU(.V)
 
@@ -46,40 +46,39 @@ estimator.}
 
 \item{u}{(numeric) vector of random effects}
 
-\item{matV}{(list of functions) see \code{matVFH} as an example}
+\item{matV}{(list of functions) see \code{matVFH} for an example}
 
 \item{psi}{(function) the influence function}
 }
 \description{
-Helper functions operating on matrices
+Matrix constructor functions
 }
 \details{
 \code{matU} computes U. U is the matrix containing only the diagonal
-  elements of V. See Sinha & Rao (2009): page 386 for the def of U.
+  elements of V. This function returns a list of functions which can be
+  called to compute specific transformations of U.
 
 \code{matTrace} computes the trace of a matrix.
 
 \code{matVFH} constructs variance-covariance matrix for a FH-model.
-  Returns a list with the matrix and its inverse.
+  Returns a list of functions to compute various transformations.
 
-\code{matB} computes the matrix B from the CCST paper which is used
-  to compute the weights in the pseudo linearized representation of the
-  REBLUP.
+\code{matB} computes the matrix B which is used to compute the
+  weights in the pseudo linearised representation of the REBLUP.
 
 \code{matBConst} returns a function with one argument, u, to compute
   the matrix B. This function is used internally to compute B in the fixed
   point algorithm (see \link{fixedPointRobustRandomEffect}).
 
-\code{matA} computes the matrix A from the CCST paper which is used
-  to compute the weights in the pseudo linearized representation of the
-  REBLUP.
+\code{matA} computes the matrix A which is used to compute the
+  weights in the pseudo linearized representation of the REBLUP.
 
 \code{matAConst} returns a function with one argument, beta, to
   compute the matrix A. This function is used internally to compute A in the
   fixed point algorithm for beta (see \link{fixedPointRobustBeta}).
 
 \code{matW} returns a matrix containing the weights as they are
-  defined in the CCST pseudo linearization. \code{matW \%*\% y} is the
+  defined for the pseudo linear form, such that \code{matW \%*\% y} is the
   REBLUP.
 }
 
