@@ -31,7 +31,7 @@ rfh(formula ~ formula, data ~ data.frame, samplingVar ~ character, ...) %m% {
 
 #' @rdname rfh
 #' @export
-fitrfh <- function(y, X, samplingVar, x0 = c(rep(1, ncol(X)), 1), k = 1.345, tol = 1e-6) {
+fitrfh <- function(y, X, samplingVar, x0 = c(rep(1, ncol(X)), 1), k = 1.345, tol = 1e-6, maxIter = 100) {
     # Non interactive fitting function for robust FH
     # y: (numeric) response
     # X: ((M|m)atrix) design matrix
@@ -55,19 +55,19 @@ fitrfh <- function(y, X, samplingVar, x0 = c(rep(1, ncol(X)), 1), k = 1.345, tol
             y, X, matVFH(sigma2, samplingVar), psi = psi
         ) %>% addHistory
 
-        beta <- fixedPoint(fpBeta, beta, convCrit)
+        beta <- fixedPoint(fpBeta, beta, addMaxIter(convCrit, maxIter))
 
         fpSigma2 <- fixedPointRobustDelta(
             y, X, beta, . %>% matVFH(samplingVar), psi, K
         ) %>% addConstraintMin(0) %>% addHistory
 
-        sigma2 <- fixedPoint(fpSigma2, sigma2, convCrit)
+        sigma2 <- fixedPoint(fpSigma2, sigma2, addMaxIter(convCrit, maxIter))
 
         list(beta, sigma2)
     }
 
     # Fitting Model Parameter:
-    out <- fixedPoint(addStorage(oneIter), x0, convCrit)
+    out <- fixedPoint(addStorage(oneIter), x0, addMaxIter(convCrit, maxIter))
 
     beta <- out[-length(out)]
     variance <- out[length(out)]
@@ -108,12 +108,12 @@ predict.rfh <- function(object, type = "REBLUP", mse = "none", ...) {
     }
 
     if ("REBLUP" == type) {
-        V <- variance(object)
         re <- fitReCCST(
             object$xy$y, object$xy$x, object$beta,
             variance(object)
         )
     }
+
 
     Xb <- object$xy$x %*% object$beta
     out <- data.frame(prediction = as.numeric(Xb + re))
@@ -126,7 +126,7 @@ predict.rfh <- function(object, type = "REBLUP", mse = "none", ...) {
 
 }
 
-fitReCCST <- function(y, X, beta, matV, psi = psiOne, convCrit = convCritAbsolute()) {
+fitReCCST <- function(y, X, beta, matV, psi = psiOne, convCrit = convCritRelative()) {
     # y: (numeric) response
     # X: (Matrix) Design-Matrix
     # beta: (numeric) estimated fixed effects
@@ -134,8 +134,9 @@ fitReCCST <- function(y, X, beta, matV, psi = psiOne, convCrit = convCritAbsolut
     # psi: (function) influence function
 
     # Non-robust random effects as starting values:
-    startingValues <- as.numeric(tcrossprod(matV$Vu(), matV$Z()) %*% matV$VInv() %*%
-                                     (y - X %*% beta))
+    startingValues <- as.numeric(
+        tcrossprod(matV$Vu(), matV$Z()) %*% matV$VInv() %*% (y - X %*% beta)
+    )
 
     fpFun <- fixedPointRobustRandomEffect(
         y, X, beta, matV, psi

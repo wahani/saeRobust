@@ -92,7 +92,7 @@ f(x) = 1 + \frac{1}{x}
 convCrit &lt;-<span class="st"> </span>function(xn1, xn0) <span class="kw">abs</span>(xn0 -<span class="st"> </span>xn1) &lt;<span class="st"> </span><span class="fl">0.001</span>
 fp &lt;-<span class="st"> </span><span class="kw">Curry</span>(fixedPoint, <span class="dt">convCrit =</span> convCrit)
 <span class="kw">fp</span>(function(x) <span class="dv">1</span> +<span class="st"> </span><span class="dv">1</span> /<span class="st"> </span>x, <span class="kw">rnorm</span>(<span class="dv">1</span>))</code></pre></div>
-<pre><code>## [1] 1.617894</code></pre>
+<pre><code>## [1] 1.617829</code></pre>
 <div id="square-root" class="section level1">
 <h1>Square Root</h1>
 <p>Another example which can be used is to find the square root. The square root of <span class="math inline">\(p\)</span> is the fixed point of the function</p>
