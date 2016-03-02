@@ -4,6 +4,11 @@
 #' @param data (data.frame)
 #' @param samplingVar (character)
 #' @param ... arguments passed to methods
+#' @param x0 (numeric) starting values
+#' @param k (numeric) tuning constant
+#' @param tol (numeric) numerical toloerance to be used during optimisation
+#' @param y (numeric) response vector
+#' @param X ([m|M]atrix) the design matrix
 #'
 #' @rdname rfh
 #'
@@ -19,43 +24,60 @@ rfh(formula ~ formula, data ~ data.frame, samplingVar ~ character, ...) %m% {
 
     retList(
         public = c("call"),
-        super = fitrfh(xy$y, xy$x, samplingVar)
+        super = fitrfh(xy$y, xy$x, samplingVar, ...)
     )
 
 }
 
-fitrfh <- function(y, X, samplingVar, theta0 = c(rep(1, ncol(X)), 1), convCrit = convCritAbsolute(), psi = psiOne) {
+#' @rdname rfh
+#' @export
+fitrfh <- function(y, X, samplingVar, x0 = c(rep(1, ncol(X)), 1), k = 1.345, tol = 1e-6) {
     # Non interactive fitting function for robust FH
     # y: (numeric) response
     # X: ((M|m)atrix) design matrix
     # samplingVar: (numeric) the sampling variances
-    # theta0: (numeric) starting values
-    # convCrit: (function) conversion criterion
+    # x0: (numeric) starting values
+    # k: (numeric) tuning constant
+
+    # robust settings:
+    psi <- . %>% psiOne(k)
+    K <- getK(k)
+
+    # Algorithm settings
+    convCrit <- convCritRelative(tol)
 
     oneIter <- function(param) {
+        param <- as.numeric(param)
         beta <- param[-length(param)]
         sigma2 <- param[length(param)]
 
         fpBeta <- fixedPointRobustBeta(
             y, X, matVFH(sigma2, samplingVar), psi = psi
-        )
+        ) %>% addHistory
+
         beta <- fixedPoint(fpBeta, beta, convCrit)
 
         fpSigma2 <- fixedPointRobustDelta(
-            y, X, beta, . %>% matVFH(samplingVar), psi, getK(1.345)
-        )
-        sigma2 <- fixedPoint(averageDamp(fpSigma2), sigma2, convCrit)
+            y, X, beta, . %>% matVFH(samplingVar), psi, K
+        ) %>% addConstraintMin(0) %>% addHistory
 
-        as.numeric(c(beta, sigma2))
+        sigma2 <- fixedPoint(fpSigma2, sigma2, convCrit)
+
+        list(beta, sigma2)
     }
 
-    out <- fixedPoint(oneIter, theta0, convCrit)
+    # Fitting Model Parameter:
+    out <- fixedPoint(addStorage(oneIter), x0, convCrit)
 
     beta <- out[-length(out)]
     variance <- out[length(out)]
     xy <- list(y = y, x = X)
+    optimisationProgress <- storage$reformat(attr(out, "storage"))
 
-    retList("rfh", c("beta", "variance", "psi", "samplingVar", "xy")) %>% stripSelf
+    stripSelf(retList(
+        "rfh",
+        c("beta", "variance", "psi", "samplingVar", "xy", "optimisationProgress",
+          "k", "tol", "K")))
 
 }
 
@@ -104,9 +126,7 @@ predict.rfh <- function(object, type = "REBLUP", mse = "none", ...) {
 
 }
 
-fitReCCST <- function(y, X, beta, matV,
-                      psi = psiOne,
-                      convCrit = convCritAbsolute()) {
+fitReCCST <- function(y, X, beta, matV, psi = psiOne, convCrit = convCritAbsolute()) {
     # y: (numeric) response
     # X: (Matrix) Design-Matrix
     # beta: (numeric) estimated fixed effects

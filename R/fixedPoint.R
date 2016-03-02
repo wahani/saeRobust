@@ -124,6 +124,22 @@ addHistory <- function(fun) {
     }
 }
 
+#' @details \code{addStorage} will add a storage to a function. The storage is a
+#'   list in which each result is stored. The function will coerce the return
+#'   value into a numeric.
+#'
+#' @export
+#' @rdname fixedPoint
+addStorage <- function(fun) {
+    force(fun)
+    storage <- list()
+    function(...) {
+        res <- fun(...)
+        storage <<- c(storage, list(res))
+        addAttr(as.numeric(unlist(res)), storage, "storage")
+    }
+}
+
 #' @details \code{newtonRaphson} finds zeroes of a function. The user can supply the function and its first derivative. Note that the Newton Raphson Algorithm is a special case of a fixed point algorithm thus it is implemented using \code{\link{fixedPoint}} and is only a convenience.
 #'
 #' @param funList (list) the functions to be evaluated in the algorithm. First

@@ -36,8 +36,9 @@ mse.rfh <- function(object, type = "pseudo", re = NULL, V = NULL, B = 100, ...) 
                 y = y,
                 X = object$xy$x,
                 samplingVar = object$samplingVar,
-                theta0 = c(object$beta, object$variance),
-                psi = object$psi
+                x0 = c(object$beta, object$variance),
+                k = object$k,
+                tol = object$tol
             )
             (predict(fit)$REBLUP - trueVal)^2
         })

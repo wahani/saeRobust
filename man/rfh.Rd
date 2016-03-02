@@ -2,6 +2,7 @@
 % Please edit documentation in R/rfh.R
 \docType{methods}
 \name{rfh}
+\alias{fitrfh}
 \alias{predict.rfh}
 \alias{rfh}
 \alias{rfh,formula,data.frame,character-method}
@@ -10,6 +11,9 @@
 rfh(formula, data, samplingVar, ...)
 
 \S4method{rfh}{formula,data.frame,character}(formula, data, samplingVar, ...)
+
+fitrfh(y, X, samplingVar, x0 = c(rep(1, ncol(X)), 1), k = 1.345,
+  tol = 1e-06)
 
 \method{predict}{rfh}(object, type = "REBLUP", mse = "none", ...)
 }
@@ -21,6 +25,16 @@ rfh(formula, data, samplingVar, ...)
 \item{samplingVar}{(character)}
 
 \item{...}{arguments passed to methods}
+
+\item{y}{(numeric) response vector}
+
+\item{X}{([m|M]atrix) the design matrix}
+
+\item{x0}{(numeric) starting values}
+
+\item{k}{(numeric) tuning constant}
+
+\item{tol}{(numeric) numerical toloerance to be used during optimisation}
 
 \item{object}{(rfh) an object of class rfh}
 

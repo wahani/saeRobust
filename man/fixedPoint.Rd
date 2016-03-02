@@ -7,6 +7,7 @@
 \alias{addCounter}
 \alias{addHistory}
 \alias{addMaxIter}
+\alias{addStorage}
 \alias{convCritAbsolute}
 \alias{convCritRelative}
 \alias{fixedPoint}
@@ -31,6 +32,8 @@ addMaxIter(fun, maxIter)
 addCounter(fun)
 
 addHistory(fun)
+
+addStorage(fun)
 
 newtonRaphson(funList, ...)
 
@@ -85,6 +88,10 @@ A fixed-point function supplied by the user is iteratively
 \code{addHistory} can be used to save a history of results of a
   function. The history is stored as a matrix, so this works best if the
   return value of \code{fun} is numeric.
+
+\code{addStorage} will add a storage to a function. The storage is a
+  list in which each result is stored. The function will coerce the return
+  value into a numeric.
 
 \code{newtonRaphson} finds zeroes of a function. The user can supply the function and its first derivative. Note that the Newton Raphson Algorithm is a special case of a fixed point algorithm thus it is implemented using \code{\link{fixedPoint}} and is only a convenience.
 }
