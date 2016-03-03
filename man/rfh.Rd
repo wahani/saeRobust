@@ -3,7 +3,7 @@
 \docType{methods}
 \name{rfh}
 \alias{fitrfh}
-\alias{predict.rfh}
+\alias{predict.fitrfh}
 \alias{rfh}
 \alias{rfh,formula,data.frame,character-method}
 \title{Robust Fay Herriot Model}
@@ -14,7 +14,7 @@ rfh(formula, data, samplingVar, ...)
 
 fitrfh(y, x, samplingVar, x0 = 1, k = 1.345, tol = 1e-06, maxIter = 100)
 
-\method{predict}{rfh}(object, type = "REBLUP", ...)
+\method{predict}{fitrfh}(object, type = "REBLUP", ...)
 }
 \arguments{
 \item{formula}{(formula)}

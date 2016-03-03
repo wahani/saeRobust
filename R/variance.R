@@ -12,7 +12,7 @@ variance <- function(.object, ...) UseMethod("variance")
 
 #' @export
 #' @rdname variance
-variance.rfh <- function(.object, ...) {
+variance.fitrfh <- function(.object, ...) {
 
     expose(matVFH(.object$variance, .object$samplingVar))
 
@@ -21,7 +21,7 @@ variance.rfh <- function(.object, ...) {
 
 #' @export
 #' @rdname variance
-weights.rfh <- function(object, ...) {
+weights.fitrfh <- function(object, ...) {
 
     V <- variance(object)
 

@@ -17,7 +17,7 @@ mse <- function(object, ...) UseMethod("mse")
 
 #' @export
 #' @rdname mse
-mse.rfh <- function(object, type = "pseudo", B = 100, ...) {
+mse.fitrfh <- function(object, type = "pseudo", B = 100, ...) {
 
     pseudo <- function(Xb, matV) {
         W <- weights(object)$W

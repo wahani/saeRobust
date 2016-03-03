@@ -2,15 +2,15 @@
 % Please edit documentation in R/variance.R
 \name{variance}
 \alias{variance}
-\alias{variance.rfh}
-\alias{weights.rfh}
+\alias{variance.fitrfh}
+\alias{weights.fitrfh}
 \title{Construct variance}
 \usage{
 variance(.object, ...)
 
-\method{variance}{rfh}(.object, ...)
+\method{variance}{fitrfh}(.object, ...)
 
-\method{weights}{rfh}(object, ...)
+\method{weights}{fitrfh}(object, ...)
 }
 \arguments{
 \item{.object, object}{an object}

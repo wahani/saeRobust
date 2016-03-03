@@ -24,6 +24,7 @@ rfh(formula ~ formula, data ~ data.frame, samplingVar ~ character, ...) %m% {
   samplingVar <- data[[samplingVar]]
 
   retList(
+    "rfh",
     public = c("call"),
     super = fitrfh(xy$y, xy$x, samplingVar, ...)
   )
@@ -82,7 +83,7 @@ fitrfh <- function(y, x, samplingVar, x0 = 1, k = 1.345, tol = 1e-6, maxIter = 1
   re <- as.numeric(re)
   names(iterations) <- c("coefficients", "variance", "re")
 
-  stripSelf(retList("rfh", public = c(
+  stripSelf(retList("fitrfh", public = c(
     "coefficients", "variance", "psi", "samplingVar", "y", "x", "iterations",
     "k", "tol", "K", "re"
   )))
@@ -94,7 +95,7 @@ fitrfh <- function(y, x, samplingVar, x0 = 1, k = 1.345, tol = 1e-6, maxIter = 1
 #'
 #' @rdname rfh
 #' @export
-predict.rfh <- function(object, type = "REBLUP", ...) {
+predict.fitrfh <- function(object, type = "REBLUP", ...) {
 
   re <- if ("linear" == type) {
     0

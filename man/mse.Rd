@@ -2,12 +2,12 @@
 % Please edit documentation in R/mse.R
 \name{mse}
 \alias{mse}
-\alias{mse.rfh}
+\alias{mse.fitrfh}
 \title{Compute the Mean Squared Error of an Estimator}
 \usage{
 mse(object, ...)
 
-\method{mse}{rfh}(object, type = "pseudo", B = 100, ...)
+\method{mse}{fitrfh}(object, type = "pseudo", B = 100, ...)
 }
 \arguments{
 \item{object}{(see methods) an object containing the estimation result, e.g.
