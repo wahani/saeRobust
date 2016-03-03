@@ -12,8 +12,7 @@ rfh(formula, data, samplingVar, ...)
 
 \S4method{rfh}{formula,data.frame,character}(formula, data, samplingVar, ...)
 
-fitrfh(y, x, samplingVar, x0 = c(rep(1, ncol(x)), 1), k = 1.345,
-  tol = 1e-06, maxIter = 100)
+fitrfh(y, x, samplingVar, x0 = 1, k = 1.345, tol = 1e-06, maxIter = 100)
 
 \method{predict}{rfh}(object, type = "REBLUP", ...)
 }
@@ -30,7 +29,7 @@ fitrfh(y, x, samplingVar, x0 = c(rep(1, ncol(x)), 1), k = 1.345,
 
 \item{x}{([m|M]atrix) the design matrix}
 
-\item{x0}{(numeric) starting values}
+\item{x0}{(numeric) starting values for variance parameters}
 
 \item{k}{(numeric) tuning constant}
 

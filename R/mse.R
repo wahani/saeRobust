@@ -34,7 +34,7 @@ mse.rfh <- function(object, type = "pseudo", B = 100, ...) {
                 y = y,
                 x = object$x,
                 samplingVar = object$samplingVar,
-                x0 = c(object$coefficients, object$variance),
+                x0 = object$variance,
                 k = object$k,
                 tol = object$tol
             )

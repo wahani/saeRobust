@@ -4,7 +4,7 @@
 #' @param data (data.frame)
 #' @param samplingVar (character)
 #' @param ... arguments passed to methods
-#' @param x0 (numeric) starting values
+#' @param x0 (numeric) starting values for variance parameters
 #' @param k (numeric) tuning constant
 #' @param tol (numeric) numerical toloerance to be used during optimisation
 #' @param y (numeric) response vector
@@ -32,7 +32,7 @@ rfh(formula ~ formula, data ~ data.frame, samplingVar ~ character, ...) %m% {
 
 #' @rdname rfh
 #' @export
-fitrfh <- function(y, x, samplingVar, x0 = c(rep(1, ncol(x)), 1), k = 1.345, tol = 1e-6, maxIter = 100) {
+fitrfh <- function(y, x, samplingVar, x0 = 1, k = 1.345, tol = 1e-6, maxIter = 100) {
   # Non interactive fitting function for robust FH
   # y: (numeric) response
   # x: ((M|m)atrix) design matrix
@@ -68,19 +68,24 @@ fitrfh <- function(y, x, samplingVar, x0 = c(rep(1, ncol(x)), 1), k = 1.345, tol
   }
 
   # Fitting Model Parameter:
+  x0 <- c(lm.fit(as.matrix(x), as.numeric(y))$coefficients, x0)
   out <- fixedPoint(addStorage(oneIter), x0, addMaxIter(convCrit, maxIter))
-  optimisationProgress <- storage$reformat(attr(out, "storage"))
+  iterations <- storage$reformat(attr(out, "storage"))
   coefficients <- out[-length(out)]
+  names(coefficients) <- colnames(x)
   variance <- out[length(out)]
+  names(variance) <- "var"
 
   # Fitting Random Effects
   re <- fitRe(y, x, coefficients, matVFH(variance, samplingVar), psi, convCrit)
+  iterations <- c(iterations, list(attr(re, "history")))
+  re <- as.numeric(re)
+  names(iterations) <- c("coefficients", "variance", "re")
 
-  stripSelf(retList(
-    "rfh",
-    c("coefficients", "variance", "psi", "samplingVar", "y", "x", "optimisationProgress",
-      "k", "tol", "K", "re")
-  ))
+  stripSelf(retList("rfh", public = c(
+    "coefficients", "variance", "psi", "samplingVar", "y", "x", "iterations",
+    "k", "tol", "K", "re"
+  )))
 
 }
 
