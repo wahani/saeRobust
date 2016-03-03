@@ -1,4 +1,4 @@
-context("mat")
+context("variance")
 test_that("matW", {
 
     expectEqual <- function(x, y) {
@@ -23,7 +23,7 @@ test_that("matW", {
     # This should be the same as Xb + u which is used in predict:
     W <-  weights(modelFit)$W
 
-    prediction <- W %*% modelFit$xy$y
+    prediction <- W %*% modelFit$y
 
     expectEqual(
         as.numeric(out$REBLUP),
@@ -36,10 +36,10 @@ test_that("matW", {
     )
 
     expectEqual(
-        modelFit$xy$x %*% weights(modelFit)$A + # XA
+        modelFit$x %*% weights(modelFit)$A + # XA
             weights(modelFit)$B %*% ( # B
-                Diagonal(length(modelFit$xy$y)) - # I -
-                    modelFit$xy$x %*% weights(modelFit)$A), # XA
+                Diagonal(length(modelFit$y)) - # I -
+                    modelFit$x %*% weights(modelFit)$A), # XA
         weights(modelFit)$W
     )
 

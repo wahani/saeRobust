@@ -4,8 +4,6 @@
 #' object.
 #'
 #' @param .object,object an object
-#' @param re (numeric | NULL) if NULL then the random effects have to be
-#'   computet.
 #' @param ... arguments passed to method
 #'
 #' @export
@@ -23,38 +21,37 @@ variance.rfh <- function(.object, ...) {
 
 #' @export
 #' @rdname variance
-weights.rfh <- function(object, re = NULL, ...) {
+weights.rfh <- function(object, ...) {
 
     V <- variance(object)
-    re <- if (is.null(re)) predict(object)[["re"]] else re
 
     W <-  matW(
-        y = object$xy$y,
-        X = object$xy$x,
-        beta = object$beta,
-        u = re,
+        y = object$y,
+        X = object$x,
+        beta = object$coefficients,
+        u = object$re,
         matV = V,
         psi = object$psi
     )
 
     A <- matA(
-        y = object$xy$y,
-        X = object$xy$x,
-        beta = object$beta,
+        y = object$y,
+        X = object$x,
+        beta = object$coefficients,
         matV = V,
         psi = object$psi
     )
 
     B <- matB(
-        y = object$xy$y,
-        X = object$xy$x,
-        beta = object$beta,
-        u = re,
+        y = object$y,
+        X = object$x,
+        beta = object$coefficients,
+        u = object$re,
         V,
         psi = object$psi
     )
 
-    retList("rfhWeights", c("W", "A", "B")) %>% stripSelf
+    stripSelf(retList("rfhWeights", c("W", "A", "B")))
 
 }
 

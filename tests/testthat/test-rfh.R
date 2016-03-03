@@ -20,7 +20,7 @@ test_that("rfhfit is working", {
 
     out <- saeRobustTools:::fitrfh(y, X, samplingVar)
     expect_is(out, "list")
-    expect_is(out$beta, "numeric")
+    expect_is(out$coefficients, "numeric")
     expect_is(out$variance, "numeric")
 })
 
@@ -40,10 +40,10 @@ test_that("rfh is working", {
 
     out <- rfh(y ~ x, dat, "samplingVar")
     expect_is(out, "list")
-    expect_is(out$beta, "numeric")
+    expect_is(out$coefficients, "numeric")
     expect_is(out$variance, "numeric")
     expect_is(out$samplingVar, "numeric")
-    expect_is(out$xy, "list")
+    expect_is(out$y, "numeric")
 
 })
 
@@ -75,17 +75,17 @@ test_that("predict.rfh", {
     expectIs(out$re, "numeric")
     expectEqual(
         as.numeric(out$REBLUP - out$re),
-        as.numeric(modelFit$xy$x %*% modelFit$beta)
+        as.numeric(modelFit$x %*% modelFit$coefficients)
     )
 
-    out <- predict(modelFit, mse = "pseudo")
-    expectEqual(names(out), c("REBLUP", "re", "pseudo"))
+    out <- predict(modelFit)
+    expectEqual(names(out), c("REBLUP", "re"))
 
-    out <- predict(modelFit, "linear", "pseudo")
+    out <- predict(modelFit, "linear")
     expectEqual(names(out), c("linear", "re"))
 
-    out <- predict(modelFit, mse = c("boot", "pseudo"), B = 2)
-    expectEqual(names(out), c("REBLUP", "re", "pseudo", "boot"))
+    out <- predict(modelFit)
+    expectEqual(names(out), c("REBLUP", "re"))
 
 })
 

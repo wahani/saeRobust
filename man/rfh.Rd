@@ -12,10 +12,10 @@ rfh(formula, data, samplingVar, ...)
 
 \S4method{rfh}{formula,data.frame,character}(formula, data, samplingVar, ...)
 
-fitrfh(y, X, samplingVar, x0 = c(rep(1, ncol(X)), 1), k = 1.345,
+fitrfh(y, x, samplingVar, x0 = c(rep(1, ncol(x)), 1), k = 1.345,
   tol = 1e-06, maxIter = 100)
 
-\method{predict}{rfh}(object, type = "REBLUP", mse = "none", ...)
+\method{predict}{rfh}(object, type = "REBLUP", ...)
 }
 \arguments{
 \item{formula}{(formula)}
@@ -28,7 +28,7 @@ fitrfh(y, X, samplingVar, x0 = c(rep(1, ncol(X)), 1), k = 1.345,
 
 \item{y}{(numeric) response vector}
 
-\item{X}{([m|M]atrix) the design matrix}
+\item{x}{([m|M]atrix) the design matrix}
 
 \item{x0}{(numeric) starting values}
 
@@ -36,12 +36,11 @@ fitrfh(y, X, samplingVar, x0 = c(rep(1, ncol(X)), 1), k = 1.345,
 
 \item{tol}{(numeric) numerical toloerance to be used during optimisation}
 
+\item{maxIter}{(integer) the maximum number of iterations}
+
 \item{object}{(rfh) an object of class rfh}
 
 \item{type}{(character) one in \code{c("linear", "REBLUP")}}
-
-\item{mse}{(character) which type of mse you want to compute for the
-predictions. See \link{mse} for available options.}
 }
 \description{
 Robust Fay Herriot Model

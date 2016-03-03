@@ -1,3 +1,4 @@
+context("robust ee")
 test_that("estimation equations are computed correctly", {
 
     set.seed(1)

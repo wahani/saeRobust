@@ -1,3 +1,4 @@
+context("Zielke")
 test_that("Test Matrices", {
     Z1 <- Matrix(998)
     Z2 <- Matrix(c(998, 0, 0, 0), 2, 2)

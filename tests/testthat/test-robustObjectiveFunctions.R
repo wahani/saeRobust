@@ -2,6 +2,7 @@ context("Objective Functions")
 
 test_that("Fixed Point for Robust Random Effect is correct", {
     # Test Data
+    library("magrittr")
     set.seed(1)
     u <- rnorm(100, sd = 10)
     y <- 2 * 1:5 + u + rnorm(100, sd = 2)
@@ -18,13 +19,12 @@ test_that("Fixed Point for Robust Random Effect is correct", {
     )
 
     fhFit <- rfh(y ~ x, data.frame(y = y, x = X[, 2], dirVar = 4), "dirVar")
-    beta <- fhFit$beta
-    # re <- attr(saeRobustTools:::predict.rfh(fhFit), "re")
+    beta <- fhFit$coefficients
 
     convCrit <- function(xn1, xn0) all(abs(xn0 - xn1) < 1e-3)
 
     fpFun <- fixedPointRobustRandomEffect(
-        y, X, beta, matVFH(100, rep(4, 100)), Curry(psiOne, k = Inf)
+        y, X, beta, matVFH(100, rep(4, 100)), . %>% psiOne(k = Inf)
     )
 
     # when k -> inf then this should be the estimator for u:
@@ -34,7 +34,7 @@ test_that("Fixed Point for Robust Random Effect is correct", {
     )
 
     directBs <- diag(Vu$mat %*% solve(Ve$mat + Vu$mat))
-    robustBs <- diag(as.matrix(matBConst(y, X, beta, matVFH(100, rep(4, 100)), Curry(psiOne, k = Inf))(uDirect)))
+    robustBs <- diag(as.matrix(matBConst(y, X, beta, matVFH(100, rep(4, 100)), . %>% psiOne(k = Inf))(uDirect)))
     summary(abs(directBs) - abs(robustBs))
     testthat::expect_equal(directBs, robustBs)
 

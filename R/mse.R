@@ -8,8 +8,6 @@
 #'   \link{rfh}
 #' @param type (character) the type of the MSE. Available are 'pseudo' and
 #'   'boot'
-#' @param re (NULL | numeric) optionally provide the estimated random effects
-#' @param V (NULL | list) optionally provide the variance using \link{variance}
 #' @param B (numeric) number of bootstrap repetitions
 #' @param ... arguments passed to methods
 #'
@@ -19,39 +17,39 @@ mse <- function(object, ...) UseMethod("mse")
 
 #' @export
 #' @rdname mse
-mse.rfh <- function(object, type = "pseudo", re = NULL, V = NULL, B = 100, ...) {
+mse.rfh <- function(object, type = "pseudo", B = 100, ...) {
 
-    pseudo <- function() {
-        W <- weights(object, re)$W
-        as.numeric(W^2 %*% diag(V$V()) + (W %*% Xb - Xb)^2)
+    pseudo <- function(Xb, matV) {
+        W <- weights(object)$W
+        as.numeric(W^2 %*% diag(matV$V()) + (W %*% Xb - Xb)^2)
     }
 
-    boot <- function(B) {
+    boot <- function(B, Xb, matV) {
         bootSamples <- replicate(B, {
-            re <- MASS::mvrnorm(1, mu = rep(0, length(Xb)), V$Vu())
-            e <- rnorm(length(Xb), mean = 0, sd = sqrt(object$samplingVar))
-            trueVal <- Xb + re
+            re <- MASS::mvrnorm(1, mu = rep(0, length(Xb)), matV$Vu())
+            e <- MASS::mvrnorm(1, mu = rep(0, length(Xb)), matV$Ve())
+            trueVal <- Xb + matV$Z() %*% re
             y <- trueVal + e
             fit <- fitrfh(
                 y = y,
-                X = object$xy$x,
+                x = object$x,
                 samplingVar = object$samplingVar,
-                x0 = c(object$beta, object$variance),
+                x0 = c(object$coefficients, object$variance),
                 k = object$k,
                 tol = object$tol
             )
-            (predict(fit)$REBLUP - trueVal)^2
+            (predict(fit)$REBLUP - as.numeric(trueVal))^2
         })
         rowMeans(bootSamples)
     }
 
-    re <- if (is.null(re)) predict(object)$re else re
-    V <- if (is.null(V)) variance(object) else V
-    Xb <- as.numeric(object$xy$x %*% object$beta)
+    matV <- variance(object)
 
-    out <- data.frame(REBLUP = Xb + re)
-    if ("pseudo" %in% type) out$pseudo <- pseudo()
-    if ("boot" %in% type) out$boot <- boot(B)
+    out <- predict(object)["REBLUP"]
+    Xb <- as.numeric(object$x %*% object$coefficients)
+
+    if ("pseudo" %in% type) out$pseudo <- pseudo(Xb, matV)
+    if ("boot" %in% type) out$boot <- boot(B, Xb, matV)
     out
 
 }

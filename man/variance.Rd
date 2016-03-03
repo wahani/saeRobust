@@ -10,15 +10,12 @@ variance(.object, ...)
 
 \method{variance}{rfh}(.object, ...)
 
-\method{weights}{rfh}(object, re = NULL, ...)
+\method{weights}{rfh}(object, ...)
 }
 \arguments{
 \item{.object, object}{an object}
 
 \item{...}{arguments passed to method}
-
-\item{re}{(numeric | NULL) if NULL then the random effects have to be
-computet.}
 }
 \description{
 A generic function to construct the different variance components of an
