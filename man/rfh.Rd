@@ -12,7 +12,8 @@ rfh(formula, data, samplingVar, ...)
 
 \S4method{rfh}{formula,data.frame,character}(formula, data, samplingVar, ...)
 
-fitrfh(y, x, samplingVar, x0 = 1, k = 1.345, tol = 1e-06, maxIter = 100)
+fitrfh(y, x, samplingVar, x0 = 1, k = 1.345, tol = 1e-06, maxIter = 100,
+  maxIterRe = 100)
 
 \method{predict}{fitrfh}(object, type = "REBLUP", ...)
 }

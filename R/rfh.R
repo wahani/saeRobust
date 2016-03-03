@@ -33,7 +33,7 @@ rfh(formula ~ formula, data ~ data.frame, samplingVar ~ character, ...) %m% {
 
 #' @rdname rfh
 #' @export
-fitrfh <- function(y, x, samplingVar, x0 = 1, k = 1.345, tol = 1e-6, maxIter = 100) {
+fitrfh <- function(y, x, samplingVar, x0 = 1, k = 1.345, tol = 1e-6, maxIter = 100, maxIterRe = 100) {
   # Non interactive fitting function for robust FH
   # y: (numeric) response
   # x: ((M|m)atrix) design matrix
@@ -78,7 +78,7 @@ fitrfh <- function(y, x, samplingVar, x0 = 1, k = 1.345, tol = 1e-6, maxIter = 1
   names(variance) <- "var"
 
   # Fitting Random Effects
-  re <- fitRe(y, x, coefficients, matVFH(variance, samplingVar), psi, convCrit)
+  re <- fitRe(y, x, coefficients, matVFH(variance, samplingVar), psi, addMaxIter(convCrit, maxIterRe))
   iterations <- c(iterations, list(attr(re, "history")))
   re <- as.numeric(re)
   names(iterations) <- c("coefficients", "variance", "re")
