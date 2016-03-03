@@ -67,7 +67,7 @@ test_that("Fixed Point for Robust Beta is correct", {
     testthat::expect_equal(solutionNR, solutionFP, tolerance = 1e-3)
 
     # equivalence to OLS
-    fpFun <- fixedPointRobustBeta(y, X, matVFH(0, rep(1, 100)), Curry(psiOne, k = 100))
+    fpFun <- fixedPointRobustBeta(y, X, matVFH(0, rep(1, 100)), . %>% psiOne(k = 100))
     solutionFP <- fixedPoint(fpFun, c(0, 2), addMaxIter(convCrit, 2))
     testthat::expect_equal(solutionFP, as.numeric(solve(crossprod(X), crossprod(X, y))))
 })
