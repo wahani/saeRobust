@@ -31,3 +31,30 @@ robEstEqu <- function(y, X, .beta, u, matV, psi, K) {
 
     retList(public = c("beta", "delta", "re"))
 }
+
+#' Compute values of robust score functions
+#'
+#' These values should be close to zero for a model fit.
+#'
+#' @param object a fitted object
+#' @param filter (character) a selection of values to be computed
+#' @param ... arguments passed to methods
+#'
+#' @export
+#' @rdname score
+score <- function(object, filter, ...) UseMethod("score")
+
+#' @export
+score.default <- function(object, filter = c("beta", "delta", "re"), ...) {
+  scores <- robEstEqu(
+    object$y,
+    object$x,
+    object$coefficients,
+    object$re,
+    variance(object),
+    object$psi,
+    object$K)
+  out <- lapply(filter, function(f) scores[[f]]())
+  names(out) <- filter
+  out
+}

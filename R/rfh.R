@@ -10,6 +10,8 @@
 #' @param y (numeric) response vector
 #' @param x ([m|M]atrix) the design matrix
 #' @param maxIter (integer) the maximum number of iterations
+#' @param maxIterRe (integer) the maximum number of iterations for fitting the
+#'   random effects
 #'
 #' @rdname rfh
 #'

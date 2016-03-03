@@ -25,3 +25,25 @@ test_that("estimation equations are computed correctly", {
 
 })
 
+test_that("score interface", {
+
+  library("saeSim")
+  set.seed(1)
+  dat <- base_id(10, 1) %>%
+    sim_gen_e() %>%
+    sim_gen_x() %>%
+    sim_gen_v(sd = 2) %>%
+    sim_resp_eq(y = 100 + 2 * x + v + e) %>%
+    as.data.frame
+
+  y <- dat$y
+  X <- cbind(1, dat$x)
+  samplingVar <- rep(1, nrow(dat))
+
+  out <- saeRobustTools:::fitrfh(y, X, samplingVar)
+  scores <- score(out)
+
+  testthat::expect_equal(unlist(scores), rep(0, 13), tolerance = 10, check.attributes = FALSE)
+
+})
+
