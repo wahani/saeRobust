@@ -81,7 +81,8 @@ fitrfh <- function(y, x, samplingVar, x0 = 1, k = 1.345, tol = 1e-6, maxIter = 1
 
   # Fitting Random Effects
   re <- fitRe(y, x, coefficients, matVFH(variance, samplingVar), psi, addMaxIter(convCrit, maxIterRe))
-  iterations <- c(iterations, list(attr(re, "history")))
+  iterRe <- attr(re, "history")
+  iterations <- c(iterations, list(cbind(iterRe, i = 1:NROW(iterRe))))
   re <- as.numeric(re)
   names(iterations) <- c("coefficients", "variance", "re")
 

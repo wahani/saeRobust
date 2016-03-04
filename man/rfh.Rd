@@ -38,6 +38,9 @@ fitrfh(y, x, samplingVar, x0 = 1, k = 1.345, tol = 1e-06, maxIter = 100,
 
 \item{maxIter}{(integer) the maximum number of iterations}
 
+\item{maxIterRe}{(integer) the maximum number of iterations for fitting the
+random effects}
+
 \item{object}{(rfh) an object of class rfh}
 
 \item{type}{(character) one in \code{c("linear", "REBLUP")}}
