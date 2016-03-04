@@ -8,7 +8,7 @@ using namespace Rcpp;
 
 // matOmega1
 arma::mat matOmega1(arma::mat W, double rho);
-RcppExport SEXP saeRobustTools_matOmega1(SEXP WSEXP, SEXP rhoSEXP) {
+RcppExport SEXP saeRobust_matOmega1(SEXP WSEXP, SEXP rhoSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -20,7 +20,7 @@ END_RCPP
 }
 // matOmega2
 arma::mat matOmega2(int nTime, double rho);
-RcppExport SEXP saeRobustTools_matOmega2(SEXP nTimeSEXP, SEXP rhoSEXP) {
+RcppExport SEXP saeRobust_matOmega2(SEXP nTimeSEXP, SEXP rhoSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -32,7 +32,7 @@ END_RCPP
 }
 // matBlockDiagonal
 arma::mat matBlockDiagonal(arma::mat X, int n);
-RcppExport SEXP saeRobustTools_matBlockDiagonal(SEXP XSEXP, SEXP nSEXP) {
+RcppExport SEXP saeRobust_matBlockDiagonal(SEXP XSEXP, SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -44,7 +44,7 @@ END_RCPP
 }
 // matA
 arma::mat matA(double sigma2, arma::mat Ome2, int nDomains, arma::colvec sigmaSamplingError);
-RcppExport SEXP saeRobustTools_matA(SEXP sigma2SEXP, SEXP Ome2SEXP, SEXP nDomainsSEXP, SEXP sigmaSamplingErrorSEXP) {
+RcppExport SEXP saeRobust_matA(SEXP sigma2SEXP, SEXP Ome2SEXP, SEXP nDomainsSEXP, SEXP sigmaSamplingErrorSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -58,7 +58,7 @@ END_RCPP
 }
 // matVInvST
 Rcpp::List matVInvST(arma::mat W, double rho1, double sigma1, double rho2, double sigma2, arma::mat Z1, arma::colvec sigmaSamplingError);
-RcppExport SEXP saeRobustTools_matVInvST(SEXP WSEXP, SEXP rho1SEXP, SEXP sigma1SEXP, SEXP rho2SEXP, SEXP sigma2SEXP, SEXP Z1SEXP, SEXP sigmaSamplingErrorSEXP) {
+RcppExport SEXP saeRobust_matVInvST(SEXP WSEXP, SEXP rho1SEXP, SEXP sigma1SEXP, SEXP rho2SEXP, SEXP sigma2SEXP, SEXP Z1SEXP, SEXP sigmaSamplingErrorSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -75,7 +75,7 @@ END_RCPP
 }
 // matVST
 arma::mat matVST(arma::mat W, double rho1, double sigma1, double rho2, double sigma2, arma::mat Z1, arma::colvec sigmaSamplingError);
-RcppExport SEXP saeRobustTools_matVST(SEXP WSEXP, SEXP rho1SEXP, SEXP sigma1SEXP, SEXP rho2SEXP, SEXP sigma2SEXP, SEXP Z1SEXP, SEXP sigmaSamplingErrorSEXP) {
+RcppExport SEXP saeRobust_matVST(SEXP WSEXP, SEXP rho1SEXP, SEXP sigma1SEXP, SEXP rho2SEXP, SEXP sigma2SEXP, SEXP Z1SEXP, SEXP sigmaSamplingErrorSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -92,7 +92,7 @@ END_RCPP
 }
 // matVDerS1
 arma::mat matVDerS1(arma::mat Ome1, arma::mat Z1);
-RcppExport SEXP saeRobustTools_matVDerS1(SEXP Ome1SEXP, SEXP Z1SEXP) {
+RcppExport SEXP saeRobust_matVDerS1(SEXP Ome1SEXP, SEXP Z1SEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -104,7 +104,7 @@ END_RCPP
 }
 // matVDerS2
 arma::mat matVDerS2(arma::mat Ome2, int nDomains);
-RcppExport SEXP saeRobustTools_matVDerS2(SEXP Ome2SEXP, SEXP nDomainsSEXP) {
+RcppExport SEXP saeRobust_matVDerS2(SEXP Ome2SEXP, SEXP nDomainsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -116,7 +116,7 @@ END_RCPP
 }
 // matVDerR1
 arma::mat matVDerR1(double rho1, double sigma1, arma::mat Z1, arma::mat Ome1, arma::mat W);
-RcppExport SEXP saeRobustTools_matVDerR1(SEXP rho1SEXP, SEXP sigma1SEXP, SEXP Z1SEXP, SEXP Ome1SEXP, SEXP WSEXP) {
+RcppExport SEXP saeRobust_matVDerR1(SEXP rho1SEXP, SEXP sigma1SEXP, SEXP Z1SEXP, SEXP Ome1SEXP, SEXP WSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -131,7 +131,7 @@ END_RCPP
 }
 // matVDerR2
 arma::mat matVDerR2(double rho2, double sigma2, arma::mat Ome2, int nDomains);
-RcppExport SEXP saeRobustTools_matVDerR2(SEXP rho2SEXP, SEXP sigma2SEXP, SEXP Ome2SEXP, SEXP nDomainsSEXP) {
+RcppExport SEXP saeRobust_matVDerR2(SEXP rho2SEXP, SEXP sigma2SEXP, SEXP Ome2SEXP, SEXP nDomainsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;

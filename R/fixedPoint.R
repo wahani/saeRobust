@@ -16,7 +16,7 @@
 #' @rdname fixedPoint
 #' @examples
 #' \dontrun{
-#' vignette("fixedPoint", "saeRobustTools")
+#' vignette("fixedPoint", "saeRobust")
 #' }
 fixedPoint <- function(fun, x0, convCrit) {
     assert_that(is.function(fun))

@@ -2,42 +2,42 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 matOmega1 <- function(W, rho) {
-    .Call('saeRobustTools_matOmega1', PACKAGE = 'saeRobustTools', W, rho)
+    .Call('saeRobust_matOmega1', PACKAGE = 'saeRobust', W, rho)
 }
 
 matOmega2 <- function(nTime, rho) {
-    .Call('saeRobustTools_matOmega2', PACKAGE = 'saeRobustTools', nTime, rho)
+    .Call('saeRobust_matOmega2', PACKAGE = 'saeRobust', nTime, rho)
 }
 
 matBlockDiagonal <- function(X, n) {
-    .Call('saeRobustTools_matBlockDiagonal', PACKAGE = 'saeRobustTools', X, n)
+    .Call('saeRobust_matBlockDiagonal', PACKAGE = 'saeRobust', X, n)
 }
 
 matA <- function(sigma2, Ome2, nDomains, sigmaSamplingError) {
-    .Call('saeRobustTools_matA', PACKAGE = 'saeRobustTools', sigma2, Ome2, nDomains, sigmaSamplingError)
+    .Call('saeRobust_matA', PACKAGE = 'saeRobust', sigma2, Ome2, nDomains, sigmaSamplingError)
 }
 
 matVInvST <- function(W, rho1, sigma1, rho2, sigma2, Z1, sigmaSamplingError) {
-    .Call('saeRobustTools_matVInvST', PACKAGE = 'saeRobustTools', W, rho1, sigma1, rho2, sigma2, Z1, sigmaSamplingError)
+    .Call('saeRobust_matVInvST', PACKAGE = 'saeRobust', W, rho1, sigma1, rho2, sigma2, Z1, sigmaSamplingError)
 }
 
 matVST <- function(W, rho1, sigma1, rho2, sigma2, Z1, sigmaSamplingError) {
-    .Call('saeRobustTools_matVST', PACKAGE = 'saeRobustTools', W, rho1, sigma1, rho2, sigma2, Z1, sigmaSamplingError)
+    .Call('saeRobust_matVST', PACKAGE = 'saeRobust', W, rho1, sigma1, rho2, sigma2, Z1, sigmaSamplingError)
 }
 
 matVDerS1 <- function(Ome1, Z1) {
-    .Call('saeRobustTools_matVDerS1', PACKAGE = 'saeRobustTools', Ome1, Z1)
+    .Call('saeRobust_matVDerS1', PACKAGE = 'saeRobust', Ome1, Z1)
 }
 
 matVDerS2 <- function(Ome2, nDomains) {
-    .Call('saeRobustTools_matVDerS2', PACKAGE = 'saeRobustTools', Ome2, nDomains)
+    .Call('saeRobust_matVDerS2', PACKAGE = 'saeRobust', Ome2, nDomains)
 }
 
 matVDerR1 <- function(rho1, sigma1, Z1, Ome1, W) {
-    .Call('saeRobustTools_matVDerR1', PACKAGE = 'saeRobustTools', rho1, sigma1, Z1, Ome1, W)
+    .Call('saeRobust_matVDerR1', PACKAGE = 'saeRobust', rho1, sigma1, Z1, Ome1, W)
 }
 
 matVDerR2 <- function(rho2, sigma2, Ome2, nDomains) {
-    .Call('saeRobustTools_matVDerR2', PACKAGE = 'saeRobustTools', rho2, sigma2, Ome2, nDomains)
+    .Call('saeRobust_matVDerR2', PACKAGE = 'saeRobust', rho2, sigma2, Ome2, nDomains)
 }
 

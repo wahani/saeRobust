@@ -97,7 +97,7 @@ A fixed-point function supplied by the user is iteratively
 }
 \examples{
 \dontrun{
-vignette("fixedPoint", "saeRobustTools")
+vignette("fixedPoint", "saeRobust")
 }
 }
 

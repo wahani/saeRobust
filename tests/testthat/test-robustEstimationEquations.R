@@ -40,7 +40,7 @@ test_that("score interface", {
   X <- cbind(1, dat$x)
   samplingVar <- rep(1, nrow(dat))
 
-  out <- saeRobustTools:::fitrfh(y, X, samplingVar)
+  out <- saeRobust:::fitrfh(y, X, samplingVar)
   scores <- score(out)
 
   testthat::expect_equal(unlist(scores), rep(0, 13), tolerance = 10, check.attributes = FALSE)

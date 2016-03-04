@@ -1,4 +1,4 @@
 library("testthat")
-library("saeRobustTools")
+library("saeRobust")
 
-test_check("saeRobustTools")
+test_check("saeRobust")

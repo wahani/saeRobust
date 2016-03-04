@@ -7,7 +7,7 @@
 #' @importFrom stats weights
 #' @import modules
 #' @import Rcpp
-#' @useDynLib saeRobustTools
+#' @useDynLib saeRobust
 NULL
 
 globalVariables(c(".", ".self"))

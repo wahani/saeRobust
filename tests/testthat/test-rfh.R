@@ -18,7 +18,7 @@ test_that("rfhfit is working", {
     X <- cbind(1, dat$x)
     samplingVar <- rep(16, nrow(dat))
 
-    out <- saeRobustTools:::fitrfh(y, X, samplingVar)
+    out <- saeRobust:::fitrfh(y, X, samplingVar)
     expect_is(out, "list")
     expect_is(out$coefficients, "numeric")
     expect_is(out$variance, "numeric")
