@@ -63,9 +63,9 @@ addConstraintMax <- function(fun, value) {
 #' @details \code{convCritAbsolute} absolute difference as convergence criterion.
 #' @export
 #' @rdname fixedPoint
-convCritAbsolute <- function(tolerance = 1e-5) {
+convCritAbsolute <- function(tolerance = 1e-6) {
     assert_that(tolerance > 0)
-    function(xn1, xn0) all(abs(xn0 - xn1) < tolerance)
+    function(xn1, xn0) sum(abs(xn0 - xn1)) < tolerance
 }
 
 #' @details \code{convCritRelative} relative (to previous iteration) absolute
@@ -73,9 +73,9 @@ convCritAbsolute <- function(tolerance = 1e-5) {
 #'   difference is used.
 #' @export
 #' @rdname fixedPoint
-convCritRelative <- function(tolerance = 1e-5) {
+convCritRelative <- function(tolerance = 1e-6) {
     assert_that(tolerance > 0)
-    function(xn1, xn0) all((abs(xn0 - xn1) / max(1, abs(xn0))) < tolerance)
+    function(xn1, xn0) sum(abs(xn0 - xn1) / max(1, abs(xn0))) < tolerance
 }
 
 #' @details \code{addMaxIter} can be used to modify convergence criterion functions.

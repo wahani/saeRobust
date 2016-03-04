@@ -23,9 +23,9 @@ addConstraintMin(fun, value)
 
 addConstraintMax(fun, value)
 
-convCritAbsolute(tolerance = 1e-05)
+convCritAbsolute(tolerance = 1e-06)
 
-convCritRelative(tolerance = 1e-05)
+convCritRelative(tolerance = 1e-06)
 
 addMaxIter(fun, maxIter)
 
