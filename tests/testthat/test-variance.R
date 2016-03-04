@@ -2,7 +2,7 @@ context("variance")
 test_that("matW", {
 
     expectEqual <- function(x, y) {
-        testthat::expect_equal(x, y)
+        testthat::expect_equal(x, y, tolerance = 1e-06)
     }
 
     library(saeSim)
