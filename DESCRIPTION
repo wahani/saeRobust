@@ -15,7 +15,9 @@ Imports:
     magrittr,
     MASS,
     modules,
-    memoise
+    memoise,
+    Rcpp,
+    RcppArmadillo
 License: GPL-3 | file LICENSE
 LazyData: true
 Suggests:
@@ -27,3 +29,4 @@ VignetteBuilder: knitr
 Encoding: UTF-8
 ByteCompile: true
 RoxygenNote: 5.0.1
+LinkingTo: Rcpp, RcppArmadillo

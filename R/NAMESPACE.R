@@ -6,6 +6,8 @@
 #' @importFrom magrittr %>% %<>%
 #' @importFrom stats weights
 #' @import modules
+#' @import Rcpp
+#' @useDynLib saeRobustTools
 NULL
 
 globalVariables(c(".", ".self"))
