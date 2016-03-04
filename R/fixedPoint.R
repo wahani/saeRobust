@@ -88,7 +88,7 @@ convCritRelative <- function(tolerance = 1e-5) {
 addMaxIter <- function(fun, maxIter) {
     assert_that(is.function(fun))
     assert_that(maxIter > 0)
-    count <- 0
+    count <- 1
     function(...) {
         count <<- count + 1
         if (count > maxIter) TRUE else fun(...)
