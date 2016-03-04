@@ -31,36 +31,6 @@ matTrace <- function(x) {
     sum(diag(x))
 }
 
-#' @param .sigma2 (numeric) a scalar. The variance parameter of the random
-#'   effects.
-#' @param .samplingVar (numeric) the vector of sampling variances of the direct
-#'   estimator.
-#'
-#' @details \code{matVFH} constructs variance-covariance matrix for a FH-model.
-#'   Returns a list of functions to compute various transformations.
-#'
-#' @rdname varianceMatrices
-#' @export
-matVFH <- function(.sigma2, .samplingVar) {
-
-    .diag <- function(x) Diagonal(x = x)
-
-    Vu <- getter(rep(.sigma2, length(.samplingVar)), .diag)
-    VuInv <- getter(1 / rep(.sigma2, length(.samplingVar)), .diag)
-    Ve <- getter(.samplingVar, .diag)
-    VeInv <- getter(1 / .samplingVar, .diag)
-    V <- getter(Vu() + Ve())
-    VInv <- getter(solve(V()))
-    Z <- getter(Diagonal(length(.samplingVar)))
-
-    deriv <- list(
-        getter(Diagonal(length(.samplingVar)))
-    )
-
-    retList()
-
-}
-
 #' @param y (numeric) response
 #' @param X (Matrix) design matrix
 #' @param beta (numeric) vector of regression coefficients

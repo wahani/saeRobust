@@ -7,15 +7,12 @@
 \alias{matBConst}
 \alias{matTrace}
 \alias{matU}
-\alias{matVFH}
 \alias{matW}
 \title{Matrix constructor functions}
 \usage{
 matU(.V)
 
 matTrace(x)
-
-matVFH(.sigma2, .samplingVar)
 
 matB(y, X, beta, u, matV, psi)
 
@@ -31,12 +28,6 @@ matW(y, X, beta, u, matV, psi)
 \item{.V}{(Matrix) variance matrix}
 
 \item{x}{([m|M]atrix) a matrix}
-
-\item{.sigma2}{(numeric) a scalar. The variance parameter of the random
-effects.}
-
-\item{.samplingVar}{(numeric) the vector of sampling variances of the direct
-estimator.}
 
 \item{y}{(numeric) response}
 
@@ -59,9 +50,6 @@ Matrix constructor functions
   called to compute specific transformations of U.
 
 \code{matTrace} computes the trace of a matrix.
-
-\code{matVFH} constructs variance-covariance matrix for a FH-model.
-  Returns a list of functions to compute various transformations.
 
 \code{matB} computes the matrix B which is used to compute the
   weights in the pseudo linearised representation of the REBLUP.
