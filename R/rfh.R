@@ -124,8 +124,10 @@ fitRe <- function(y, x, beta, matV, psi, convCrit) {
   # convCrit: (function) convergence criterion
 
   # Non-robust random effects as starting values:
+  U <- matU(matV$V())
+  resids <- psi(U$sqrtInv() %*% (y - x %*% beta))
   startingValues <- as.numeric(
-    tcrossprod(matV$Vu(), matV$Z()) %*% matV$VInv() %*% (y - x %*% beta)
+    tcrossprod(matV$Vu(), matV$Z()) %*% matV$VInv() %*% U$sqrt() %*% psi(resids)
   )
 
   fpFun <- fixedPointRobustRandomEffect(
