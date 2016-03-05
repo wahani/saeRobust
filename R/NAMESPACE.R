@@ -10,4 +10,4 @@
 #' @useDynLib saeRobust
 NULL
 
-globalVariables(c(".", ".self"))
+globalVariables(c(".", ".self", "psi", "convCrit", "maxIter", "K"))

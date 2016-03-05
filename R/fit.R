@@ -1,4 +1,29 @@
-#' @rdname rfh
+#' Fitting Precedures
+#'
+#' Several fitting procedures. Not intended for interactive use.
+#'
+#' @param y (numeric) response vector
+#' @param x ([m|M]atrix) the design matrix
+#' @param samplingVar (numeric) vector with sampling variances
+#' @param ... arguments passed to \code{fitGenericModel}
+#' @param matVFun (function) a function with one argument - the variance
+#'   parameters - constructing something like \link{matVFH}
+#' @param fixedPointParam (function) a function with one argument. The vector of
+#'   model parameters. Returns a list of results of the next iteration in the
+#'   overall algorithm.
+#' @param k (numeric) tuning constant
+#' @param K (numeric) scaling constant
+#' @param psi (function) influence function
+#' @param x0Coef (numeric) starting values for regression coefficients
+#' @param x0Var (numeric) starting values for variance parameters
+#' @param x0Re (numeric) starting values for random effects
+#' @param tol (numeric) numerical toloerance to be used during optimisation
+#' @param maxIter (integer) the maximum number of iterations
+#' @param maxIterRe (integer) the maximum number of iterations for fitting the
+#'   random effects
+#' @param convCrit (function) a function defining the stopping rule
+#'
+#' @rdname fit
 #' @export
 fitrfh <- function(y, x, samplingVar, ...) {
   # Non interactive fitting function for robust FH
@@ -38,6 +63,8 @@ fitrfh <- function(y, x, samplingVar, ...) {
 
 }
 
+#' @export
+#' @rdname fit
 fitGenericModel <- function(
   y, x, matVFun, fixedPointParam,
   k = 1.345, K = getK(k), psi = . %>% psiOne(k),
@@ -85,7 +112,6 @@ fitGenericModel <- function(
   )))
 
 }
-
 
 fitCoefStartingValue <- function(y, x, matV) {
   xPrimeV <- crossprod(x, matV$VInv())

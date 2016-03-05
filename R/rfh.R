@@ -3,15 +3,7 @@
 #' @param formula (formula)
 #' @param data (data.frame)
 #' @param samplingVar (character)
-#' @param ... arguments passed to methods
-#' @param x0 (numeric) starting values for variance parameters
-#' @param k (numeric) tuning constant
-#' @param tol (numeric) numerical toloerance to be used during optimisation
-#' @param y (numeric) response vector
-#' @param x ([m|M]atrix) the design matrix
-#' @param maxIter (integer) the maximum number of iterations
-#' @param maxIterRe (integer) the maximum number of iterations for fitting the
-#'   random effects
+#' @param ... arguments passed \link{fitGenericModel}
 #'
 #' @rdname rfh
 #'
