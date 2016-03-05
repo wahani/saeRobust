@@ -57,9 +57,64 @@ fitrfh <- function(y, x, samplingVar, ...) {
   matVFun <- . %>% matVFH(.samplingVar = samplingVar)
   out <- fitGenericModel(y, x, matVFun, fixedPointParam, ...)
   names(out$iterations) <- c("coefficients", "variance", "re")
-  names(out$variance) <- "var"
+  names(out$variance) <- "variance"
 
   stripSelf(retList("fitrfh", public = c("samplingVar"), super = out))
+
+}
+
+#' @rdname fit
+#' @export
+fitrsfh <- function(y, x, samplingVar, W, x0Var = c(0.5, 1), ...) {
+  # Non interactive fitting function for robust FH
+
+  fixedPointParam <- function(parent = parent.frame()) {
+    # To connect the returned function to the calling environment:
+    enclosingEnv <- environment()
+    parent.env(enclosingEnv) <- parent
+    function(param) {
+      # Defines one Iteration in algorithm:
+      param <- as.numeric(param)
+      beta <- param[-c(length(param)-1, length(param))]
+      sigma2 <- param[length(param)]
+      rho <- param[length(param) - 1]
+
+      fpBeta <- addHistory(fixedPointRobustBeta(
+        y, x, matVFun(c(rho, sigma2)), psi = psi
+      ))
+
+      beta <- fixedPoint(fpBeta, beta, addMaxIter(convCrit, maxIter))
+
+      fpSigma2 <- fixedPointRobustDelta(
+        y, x, beta, function(x) matVFun(c(rho, x), "sigma2"), psi, K
+        ) %>% addConstraintMin(0) %>% addHistory
+
+      sigma2 <- fixedPoint(fpSigma2, sigma2, addMaxIter(convCrit, maxIter))
+
+      fpRho <- fixedPointRobustDelta(
+        y, x, beta, function(x) matVFun(c(x, sigma2), "rho"), psi, K
+      ) %>%
+        addAverageDamp %>%
+        addConstraintMin(-0.99) %>% addConstraintMax(0.99) %>%
+        addHistory
+
+      rho <- fixedPoint(fpRho, rho, addMaxIter(convCrit, maxIter))
+
+      list(beta, rho, sigma2)
+    }
+  }
+
+  matVFun <- function(x, ...) {
+    matVSFH(.rho = x[1], .sigma2 = x[2], .W = W, .samplingVar = samplingVar, ...)
+  }
+  out <- fitGenericModel(y, x, matVFun, fixedPointParam, x0Var = x0Var, ...)
+  names(out$iterations) <- c("coefficients", "correlation", "variance", "re")
+  names(out$variance) <- c("correlation", "variance")
+
+  stripSelf(retList(
+    c("fitrsfh", "fitrfh"),
+    public = c("samplingVar", "W"), super = out)
+  )
 
 }
 

@@ -3,9 +3,12 @@
 \name{fitrfh}
 \alias{fitGenericModel}
 \alias{fitrfh}
+\alias{fitrsfh}
 \title{Fitting Precedures}
 \usage{
 fitrfh(y, x, samplingVar, ...)
+
+fitrsfh(y, x, samplingVar, W, x0Var = c(0.5, 1), ...)
 
 fitGenericModel(y, x, matVFun, fixedPointParam, k = 1.345, K = getK(k),
   psi = . \%>\% psiOne(k), x0Coef = NULL, x0Var = 1, x0Re = NULL,
@@ -21,6 +24,8 @@ fitGenericModel(y, x, matVFun, fixedPointParam, k = 1.345, K = getK(k),
 
 \item{...}{arguments passed to \code{fitGenericModel}}
 
+\item{x0Var}{(numeric) starting values for variance parameters}
+
 \item{matVFun}{(function) a function with one argument - the variance
 parameters - constructing something like \link{matVFH}}
 
@@ -35,8 +40,6 @@ overall algorithm.}
 \item{psi}{(function) influence function}
 
 \item{x0Coef}{(numeric) starting values for regression coefficients}
-
-\item{x0Var}{(numeric) starting values for variance parameters}
 
 \item{x0Re}{(numeric) starting values for random effects}
 
