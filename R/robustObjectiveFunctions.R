@@ -48,10 +48,12 @@ fixedPointRobustBeta <- function(y, X, matV, psi) {
 #'   \link{matVFH}: e.g. \code{. \%>\% matVFH(c(1, 1))}
 #' @param K constant, see \link{getK}
 #' @param beta beta coefficients to be used
+#' @param derivSelect an indicator to select the derivative in matV. Position or
+#'   name
 #'
 #' @rdname fixedPointFunctions
 #' @export
-fixedPointRobustDelta <- function(y, X, beta, matVFun, psi, K) {
+fixedPointRobustDelta <- function(y, X, beta, matVFun, psi, K, derivSelect = 1) {
     # Precalculations - they only have to be done once
     mem1 <- (y - X %*% beta)
 
@@ -60,9 +62,9 @@ fixedPointRobustDelta <- function(y, X, beta, matVFun, psi, K) {
         U <- matU(matV$V())
         resid <- U$sqrtInv() %*% mem1
         psiResid <- psi(resid)
-        c1 <- matTrace(K / param * matV$VInv() %*% matV$deriv[[1]]())
+        c1 <- matTrace(K / param * matV$VInv() %*% matV$deriv[[derivSelect]]())
         c2 <- crossprod(psiResid, U$sqrt()) %*% matV$VInv() %*%
-            matV$deriv[[1]]() %*% matV$VInv() %*% U$sqrt() %*% psiResid
+            matV$deriv[[derivSelect]]() %*% matV$VInv() %*% U$sqrt() %*% psiResid
 
         as.numeric(c2 / c1)
     }

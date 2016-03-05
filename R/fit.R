@@ -22,6 +22,7 @@
 #' @param maxIterRe (integer) the maximum number of iterations for fitting the
 #'   random effects
 #' @param convCrit (function) a function defining the stopping rule
+#' @param W (matrix) proximity matrix
 #'
 #' @rdname fit
 #' @export
@@ -86,16 +87,18 @@ fitrsfh <- function(y, x, samplingVar, W, x0Var = c(0.5, 1), ...) {
       beta <- fixedPoint(fpBeta, beta, addMaxIter(convCrit, maxIter))
 
       fpSigma2 <- fixedPointRobustDelta(
-        y, x, beta, function(x) matVFun(c(rho, x), "sigma2"), psi, K
-        ) %>% addConstraintMin(0) %>% addHistory
+        y, x, beta, function(x) matVFun(c(rho, x)), psi, K, "sigma2"
+      ) %>%
+        addConstraintMin(0) %>%
+        addHistory
 
       sigma2 <- fixedPoint(fpSigma2, sigma2, addMaxIter(convCrit, maxIter))
 
       fpRho <- fixedPointRobustDelta(
-        y, x, beta, function(x) matVFun(c(x, sigma2), "rho"), psi, K
+        y, x, beta, function(x) matVFun(c(x, sigma2)), psi, K, "rho"
       ) %>%
         addAverageDamp %>%
-        addConstraintMin(-0.99) %>% addConstraintMax(0.99) %>%
+        addConstraintMin(-0.99999) %>% addConstraintMax(0.99999) %>%
         addHistory
 
       rho <- fixedPoint(fpRho, rho, addMaxIter(convCrit, maxIter))

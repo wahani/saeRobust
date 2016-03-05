@@ -7,7 +7,7 @@
 \usage{
 matVFH(.sigma2, .samplingVar)
 
-matVSFH(.rho, .sigma2, .W, .samplingVar, .deriv = c("rho", "sigma2"))
+matVSFH(.rho, .sigma2, .W, .samplingVar)
 }
 \arguments{
 \item{.sigma2}{(numeric) a scalar. The variance parameter of the random

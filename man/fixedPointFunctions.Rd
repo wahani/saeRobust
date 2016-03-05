@@ -8,7 +8,7 @@
 \usage{
 fixedPointRobustBeta(y, X, matV, psi)
 
-fixedPointRobustDelta(y, X, beta, matVFun, psi, K)
+fixedPointRobustDelta(y, X, beta, matVFun, psi, K, derivSelect = 1)
 
 fixedPointRobustRandomEffect(y, X, beta, matV, psi)
 }
@@ -27,6 +27,9 @@ fixedPointRobustRandomEffect(y, X, beta, matV, psi)
 \link{matVFH}: e.g. \code{. \%>\% matVFH(c(1, 1))}}
 
 \item{K}{constant, see \link{getK}}
+
+\item{derivSelect}{an indicator to select the derivative in matV. Position or
+name}
 }
 \description{
 This is an implementation of a robustified fixed point function to identify

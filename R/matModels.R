@@ -40,7 +40,7 @@ matVFH <- function(.sigma2, .samplingVar) {
 
 #' @export
 #' @rdname matModels
-matVSFH <- function(.rho, .sigma2, .W, .samplingVar, .deriv = c("rho", "sigma2")) {
+matVSFH <- function(.rho, .sigma2, .W, .samplingVar) {
 
   .diag <- function(x) Diagonal(x = x)
 
@@ -60,7 +60,7 @@ matVSFH <- function(.rho, .sigma2, .W, .samplingVar, .deriv = c("rho", "sigma2")
     rho = getter(matVDerR1(
       .rho, .sigma2, as.matrix(Z()), as.matrix(Omega1()), as.matrix(.W))),
     sigma2 = getter(Omega1())
-  )[.deriv]
+  )
 
   retList()
 
