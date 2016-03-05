@@ -33,66 +33,6 @@ rfh(formula ~ formula, data ~ data.frame, samplingVar ~ character, ...) %m% {
 
 }
 
-#' @rdname rfh
-#' @export
-fitrfh <- function(y, x, samplingVar, x0 = 1, k = 1.345, tol = 1e-6, maxIter = 100, maxIterRe = 100) {
-  # Non interactive fitting function for robust FH
-  # y: (numeric) response
-  # x: ((M|m)atrix) design matrix
-  # samplingVar: (numeric) the sampling variances
-  # x0: (numeric) starting values
-  # k: (numeric) tuning constant
-
-  # robust settings:
-  psi <- . %>% psiOne(k)
-  K <- getK(k)
-
-  # Algorithm settings
-  convCrit <- convCritRelative(tol)
-
-  oneIter <- function(param) {
-    param <- as.numeric(param)
-    beta <- param[-length(param)]
-    sigma2 <- param[length(param)]
-
-    fpBeta <- fixedPointRobustBeta(
-      y, x, matVFH(sigma2, samplingVar), psi = psi
-    ) %>% addHistory
-
-    beta <- fixedPoint(fpBeta, beta, addMaxIter(convCrit, maxIter))
-
-    fpSigma2 <- fixedPointRobustDelta(
-      y, x, beta, . %>% matVFH(samplingVar), psi, K
-    ) %>% addConstraintMin(0) %>% addHistory
-
-    sigma2 <- fixedPoint(fpSigma2, sigma2, addMaxIter(convCrit, maxIter))
-
-    list(beta, sigma2)
-  }
-
-  # Fitting Model Parameter:
-  x0 <- c(lm.fit(as.matrix(x), as.numeric(y))$coefficients, x0)
-  out <- fixedPoint(addStorage(oneIter), x0, addMaxIter(convCrit, maxIter))
-  iterations <- storage$reformat(attr(out, "storage"))
-  coefficients <- out[-length(out)]
-  names(coefficients) <- colnames(x)
-  variance <- out[length(out)]
-  names(variance) <- "var"
-
-  # Fitting Random Effects
-  re <- fitRe(y, x, coefficients, matVFH(variance, samplingVar), psi, addMaxIter(convCrit, maxIterRe))
-  iterRe <- attr(re, "history")
-  iterations <- c(iterations, list(cbind(iterRe, i = 1:NROW(iterRe))))
-  re <- as.numeric(re)
-  names(iterations) <- c("coefficients", "variance", "re")
-
-  stripSelf(retList("fitrfh", public = c(
-    "coefficients", "variance", "psi", "samplingVar", "y", "x", "iterations",
-    "k", "tol", "K", "re"
-  )))
-
-}
-
 #' @param object (rfh) an object of class rfh
 #' @param type (character) one in \code{c("linear", "REBLUP")}
 #'
@@ -112,28 +52,5 @@ predict.fitrfh <- function(object, type = "REBLUP", ...) {
   out$re <- re
 
   out
-
-}
-
-fitRe <- function(y, x, beta, matV, psi, convCrit) {
-  # y: (numeric) response
-  # x: (Matrix) Design-Matrix
-  # beta: (numeric) estimated fixed effects
-  # matV: (list) list of functions see e.g. matVFH
-  # psi: (function) influence function
-  # convCrit: (function) convergence criterion
-
-  # Non-robust random effects as starting values:
-  U <- matU(matV$V())
-  resids <- psi(U$sqrtInv() %*% (y - x %*% beta))
-  startingValues <- as.numeric(
-    tcrossprod(matV$Vu(), matV$Z()) %*% matV$VInv() %*% U$sqrt() %*% psi(resids)
-  )
-
-  fpFun <- fixedPointRobustRandomEffect(
-    y, x, beta, matV, psi
-  )
-
-  fixedPoint(addHistory(fpFun), startingValues, convCrit)
 
 }
