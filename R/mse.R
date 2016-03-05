@@ -34,7 +34,8 @@ mse.fitrfh <- function(object, type = "pseudo", B = 100, ...) {
                 y = y,
                 x = object$x,
                 samplingVar = object$samplingVar,
-                x0 = object$variance,
+                x0Coef = object$coefficients,
+                x0Var = object$variance,
                 k = object$k,
                 tol = object$tol
             )

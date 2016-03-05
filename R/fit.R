@@ -1,8 +1,9 @@
 #' @rdname rfh
 #' @export
 fitrfh <- function(
-  y, x, samplingVar, x0 = 1,
+  y, x, samplingVar,
   k = 1.345, K = getK(k), psi = . %>% psiOne(k),
+  x0Coef = NULL, x0Var = 1, x0Re = NULL,
   tol = 1e-6, maxIter = 100, maxIterRe = 100, convCrit = convCritRelative(tol)) {
   # Non interactive fitting function for robust FH
   # y: (numeric) response
@@ -32,8 +33,10 @@ fitrfh <- function(
   }
 
   # Fitting Model Parameter:
-  x0Coef <- as.numeric(fitCoefStartingValue(y, x, matVFH(x0, samplingVar)))
-  out <- fixedPoint(addStorage(oneIter), c(x0Coef, x0), addMaxIter(convCrit, maxIter))
+  if (is.null(x0Coef)) {
+    x0Coef <- as.numeric(fitCoefStartingValue(y, x, matVFH(x0Var, samplingVar)))
+  }
+  out <- fixedPoint(addStorage(oneIter), c(x0Coef, x0Var), addMaxIter(convCrit, maxIter))
   coefficients <- out[-length(out)]
   names(coefficients) <- colnames(x)
   variance <- out[length(out)]
@@ -41,7 +44,9 @@ fitrfh <- function(
 
   # Fitting Random Effects
   matV <- matVFH(variance, samplingVar)
-  x0Re <- fitReStartingValues(y, x, coefficients, matV, psi)
+  if (is.null(x0Re)) {
+    x0Re <- fitReStartingValues(y, x, coefficients, matV, psi)
+  }
   re <- fitRe(
     y, x, coefficients, matV,
     x0Re, psi, addMaxIter(convCrit, maxIterRe)
@@ -54,10 +59,12 @@ fitrfh <- function(
 
   # Reformats
   re <- re$re
+  reblup <- as.numeric(x %*% coefficients + matV$Z() %*% re)
+  residuals <- y - reblup
 
   stripSelf(retList("fitrfh", public = c(
     "coefficients", "variance", "psi", "samplingVar", "y", "x", "iterations",
-    "k", "tol", "K", "re"
+    "k", "tol", "K", "re", "reblup", "residuals"
   )))
 
 }
