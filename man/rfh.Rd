@@ -8,9 +8,7 @@
 \alias{rfh,formula,data.frame,character-method}
 \title{Robust Fay Herriot Model}
 \usage{
-fitrfh(y, x, samplingVar, k = 1.345, K = getK(k), psi = . \%>\% psiOne(k),
-  x0Coef = NULL, x0Var = 1, x0Re = NULL, tol = 1e-06, maxIter = 100,
-  maxIterRe = 100, convCrit = convCritRelative(tol))
+fitrfh(y, x, samplingVar, ...)
 
 rfh(formula, data, samplingVar, ...)
 
@@ -25,6 +23,18 @@ rfh(formula, data, samplingVar, ...)
 
 \item{samplingVar}{(character)}
 
+\item{...}{arguments passed to methods}
+
+\item{formula}{(formula)}
+
+\item{data}{(data.frame)}
+
+\item{object}{(rfh) an object of class rfh}
+
+\item{type}{(character) one in \code{c("linear", "REBLUP")}}
+
+\item{x0}{(numeric) starting values for variance parameters}
+
 \item{k}{(numeric) tuning constant}
 
 \item{tol}{(numeric) numerical toloerance to be used during optimisation}
@@ -33,18 +43,6 @@ rfh(formula, data, samplingVar, ...)
 
 \item{maxIterRe}{(integer) the maximum number of iterations for fitting the
 random effects}
-
-\item{formula}{(formula)}
-
-\item{data}{(data.frame)}
-
-\item{...}{arguments passed to methods}
-
-\item{object}{(rfh) an object of class rfh}
-
-\item{type}{(character) one in \code{c("linear", "REBLUP")}}
-
-\item{x0}{(numeric) starting values for variance parameters}
 }
 \description{
 Robust Fay Herriot Model

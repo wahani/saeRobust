@@ -1,49 +1,65 @@
 #' @rdname rfh
 #' @export
-fitrfh <- function(
-  y, x, samplingVar,
+fitrfh <- function(y, x, samplingVar, ...) {
+  # Non interactive fitting function for robust FH
+
+  fixedPointParam <- function(parent = parent.frame()) {
+    # To connect the returned function to the calling environment:
+    enclosingEnv <- environment()
+    parent.env(enclosingEnv) <- parent
+    function(param) {
+      # Defines one Iteration in algorithm:
+      param <- as.numeric(param)
+      beta <- param[-length(param)]
+      sigma2 <- param[length(param)]
+
+      fpBeta <- addHistory(fixedPointRobustBeta(
+        y, x, matVFun(sigma2), psi = psi
+      ))
+
+      beta <- fixedPoint(fpBeta, beta, addMaxIter(convCrit, maxIter))
+
+      fpSigma2 <- fixedPointRobustDelta(
+        y, x, beta, matVFun, psi, K
+      ) %>% addConstraintMin(0) %>% addHistory
+
+      sigma2 <- fixedPoint(fpSigma2, sigma2, addMaxIter(convCrit, maxIter))
+
+      list(beta, sigma2)
+    }
+  }
+
+  matVFun <- . %>% matVFH(.samplingVar = samplingVar)
+  out <- fitGenericModel(y, x, matVFun, fixedPointParam, ...)
+  names(out$iterations) <- c("coefficients", "variance", "re")
+  names(out$variance) <- "var"
+
+  stripSelf(retList("fitrfh", public = c("samplingVar"), super = out))
+
+}
+
+fitGenericModel <- function(
+  y, x, matVFun, fixedPointParam,
   k = 1.345, K = getK(k), psi = . %>% psiOne(k),
   x0Coef = NULL, x0Var = 1, x0Re = NULL,
   tol = 1e-6, maxIter = 100, maxIterRe = 100, convCrit = convCritRelative(tol)) {
-  # Non interactive fitting function for robust FH
-  # y: (numeric) response
-  # x: ((M|m)atrix) design matrix
-  # samplingVar: (numeric) the sampling variances
-  # x0: (numeric) starting values
-  # k: (numeric) tuning constant
-
-  oneIter <- function(param) {
-    param <- as.numeric(param)
-    beta <- param[-length(param)]
-    sigma2 <- param[length(param)]
-
-    fpBeta <- addHistory(fixedPointRobustBeta(
-      y, x, matVFH(sigma2, samplingVar), psi = psi
-    ))
-
-    beta <- fixedPoint(fpBeta, beta, addMaxIter(convCrit, maxIter))
-
-    fpSigma2 <- fixedPointRobustDelta(
-      y, x, beta, . %>% matVFH(samplingVar), psi, K
-    ) %>% addConstraintMin(0) %>% addHistory
-
-    sigma2 <- fixedPoint(fpSigma2, sigma2, addMaxIter(convCrit, maxIter))
-
-    list(beta, sigma2)
-  }
+  # Non interactive fitting function for robust FH Models
 
   # Fitting Model Parameter:
   if (is.null(x0Coef)) {
-    x0Coef <- as.numeric(fitCoefStartingValue(y, x, matVFH(x0Var, samplingVar)))
+    x0Coef <- as.numeric(fitCoefStartingValue(y, x, matVFun(x0Var)))
   }
-  out <- fixedPoint(addStorage(oneIter), c(x0Coef, x0Var), addMaxIter(convCrit, maxIter))
-  coefficients <- out[-length(out)]
+  out <- fixedPoint(
+    addStorage(fixedPointParam()),
+    c(x0Coef, x0Var),
+    addMaxIter(convCrit, maxIter)
+  )
+  coefficients <- out[1:length(x0Coef)]
   names(coefficients) <- colnames(x)
-  variance <- out[length(out)]
-  names(variance) <- "var"
+  variance <- out[(length(x0Coef) + 1):length(out)]
 
   # Fitting Random Effects
-  matV <- matVFH(variance, samplingVar)
+  matV <- matVFun(variance)
   if (is.null(x0Re)) {
     x0Re <- fitReStartingValues(y, x, coefficients, matV, psi)
   }
@@ -55,19 +71,21 @@ fitrfh <- function(
   # Iterations
   iterations <- storage$reformat(attr(out, "storage"))
   iterations <- c(iterations, re["iterations"])
-  names(iterations) <- c("coefficients", "variance", "re")
 
   # Reformats
   re <- re$re
   reblup <- as.numeric(x %*% coefficients + matV$Z() %*% re)
   residuals <- y - reblup
 
-  stripSelf(retList("fitrfh", public = c(
-    "coefficients", "variance", "psi", "samplingVar", "y", "x", "iterations",
-    "k", "tol", "K", "re", "reblup", "residuals"
+  stripSelf(retList(public = c(
+    "coefficients", "variance", "iterations",
+    "tol", "maxIter", "maxIterRe",
+    "k", "K", "psi",
+    "y", "x", "re", "reblup", "residuals"
   )))
 
 }
+
 
 fitCoefStartingValue <- function(y, x, matV) {
   xPrimeV <- crossprod(x, matV$VInv())
