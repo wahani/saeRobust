@@ -37,21 +37,22 @@ test_that("fitrsfh is working", {
   W <- spdep::nb2mat(spdep::cell2nb(nDomains, 1, "rook"), style = "W")
 
   out <- saeRobust:::fitrsfh(
-    y, X, samplingVar, W, x0Var = c(0.5, 1),
-    maxIter = 15, maxIterRe = 1 # speed up
+    y, X, samplingVar, W, x0Var = c(0.5, 16),
+    maxIter = 100, maxIterParam = 1, maxIterRe = 1 # speed up
   )
+  # lapply(out$iterations, nrow)
   # out$variance
   # out$iterations$correlation
   # score(out)$delta
   #
   testthat::expect_equal(
-    out$variance[2], 15.27925,
-    tolerance = 1e-05, check.attributes = FALSE
+    out$variance[2], 15.28,
+    tolerance = 1e-03, check.attributes = FALSE
   )
 
   testthat::expect_equal(
-    out$variance[1], 0.74225,
-    tolerance = 1e-05, check.attributes = FALSE
+    out$variance[1], 0.742,
+    tolerance = 1e-03, check.attributes = FALSE
   )
 
   expect_is(out, "list")

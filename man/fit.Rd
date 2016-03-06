@@ -12,7 +12,7 @@ fitrsfh(y, x, samplingVar, W, x0Var = c(0.5, 1), ...)
 
 fitGenericModel(y, x, matVFun, fixedPointParam, k = 1.345, K = getK(k),
   psi = . \%>\% psiOne(k), x0Coef = NULL, x0Var = 1, x0Re = NULL,
-  tol = 1e-06, maxIter = 100, maxIterRe = 100,
+  tol = 1e-06, maxIter = 100, maxIterParam = 1, maxIterRe = 100,
   convCrit = convCritRelative(tol))
 }
 \arguments{

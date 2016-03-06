@@ -66,7 +66,7 @@ fitrfh <- function(y, x, samplingVar, ...) {
 
 #' @rdname fit
 #' @export
-fitrsfh <- function(y, x, samplingVar, W, x0Var = c(0.5, 1), ...) {
+fitrsfh <- function(y, x, samplingVar, W, x0Var = c(0.01, 1), ...) {
   # Non interactive fitting function for robust FH
 
   fixedPointParam <- function(parent = parent.frame()) {
@@ -84,7 +84,7 @@ fitrsfh <- function(y, x, samplingVar, W, x0Var = c(0.5, 1), ...) {
         y, x, matVFun(c(rho, sigma2)), psi = psi
       ))
 
-      beta <- fixedPoint(fpBeta, beta, addMaxIter(convCrit, maxIter))
+      beta <- fixedPoint(fpBeta, beta, addMaxIter(convCrit, maxIterParam))
 
       fpSigma2 <- fixedPointRobustDelta(
         y, x, beta, function(x) matVFun(c(rho, x)), psi, K, "sigma2"
@@ -92,7 +92,7 @@ fitrsfh <- function(y, x, samplingVar, W, x0Var = c(0.5, 1), ...) {
         addConstraintMin(0) %>%
         addHistory
 
-      sigma2 <- fixedPoint(fpSigma2, sigma2, addMaxIter(convCrit, maxIter))
+      sigma2 <- fixedPoint(fpSigma2, sigma2, addMaxIter(convCrit, maxIterParam))
 
       fpRho <- fixedPointRobustDelta(
         y, x, beta, function(x) matVFun(c(x, sigma2)), psi, K, "rho"
@@ -101,7 +101,7 @@ fitrsfh <- function(y, x, samplingVar, W, x0Var = c(0.5, 1), ...) {
         addConstraintMin(-0.99999) %>% addConstraintMax(0.99999) %>%
         addHistory
 
-      rho <- fixedPoint(fpRho, rho, addMaxIter(convCrit, maxIter))
+      rho <- fixedPoint(fpRho, rho, addMaxIter(convCrit, maxIterParam))
 
       list(beta, rho, sigma2)
     }
@@ -127,7 +127,7 @@ fitGenericModel <- function(
   y, x, matVFun, fixedPointParam,
   k = 1.345, K = getK(k), psi = . %>% psiOne(k),
   x0Coef = NULL, x0Var = 1, x0Re = NULL,
-  tol = 1e-6, maxIter = 100, maxIterRe = 100, convCrit = convCritRelative(tol)) {
+  tol = 1e-6, maxIter = 100, maxIterParam = 1, maxIterRe = 100, convCrit = convCritRelative(tol)) {
   # Non interactive fitting function for robust FH Models
 
   # Fitting Model Parameter:
