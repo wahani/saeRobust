@@ -13,16 +13,8 @@ matBlockDiagonal <- function(X, n) {
     .Call('saeRobust_matBlockDiagonal', PACKAGE = 'saeRobust', X, n)
 }
 
-matA <- function(sigma2, Ome2, nDomains, sigmaSamplingError) {
-    .Call('saeRobust_matA', PACKAGE = 'saeRobust', sigma2, Ome2, nDomains, sigmaSamplingError)
-}
-
-matVInvST <- function(W, rho1, sigma1, rho2, sigma2, Z1, sigmaSamplingError) {
-    .Call('saeRobust_matVInvST', PACKAGE = 'saeRobust', W, rho1, sigma1, rho2, sigma2, Z1, sigmaSamplingError)
-}
-
-matVST <- function(W, rho1, sigma1, rho2, sigma2, Z1, sigmaSamplingError) {
-    .Call('saeRobust_matVST', PACKAGE = 'saeRobust', W, rho1, sigma1, rho2, sigma2, Z1, sigmaSamplingError)
+matVInvT <- function(Ome1, sigma1, rho2, sigma2, Z1, sigmaSamplingError) {
+    .Call('saeRobust_matVInvT', PACKAGE = 'saeRobust', Ome1, sigma1, rho2, sigma2, Z1, sigmaSamplingError)
 }
 
 matVDerS1 <- function(Ome1, Z1) {

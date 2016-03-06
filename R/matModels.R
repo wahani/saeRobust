@@ -65,3 +65,42 @@ matVSFH <- function(.rho, .sigma2, .W, .samplingVar) {
   retList()
 
 }
+
+#' @export
+#' @rdname matModels
+matVTFH <- function(.rho, .sigma2, .nTime, .samplingVar) {
+
+  .diag <- function(x) Diagonal(x = x)
+  .nDomains <- length(.samplingVar) / .nTime
+
+  Ve <- getter(.samplingVar, .diag)
+  VeInv <- getter(1 / .samplingVar, .diag)
+
+  Omega1 <- getter(Diagonal(.nDomains))
+  Omega2 <- getter(matOmega2(.nTime, .rho))
+
+  Z <- getter(matTZ(.nDomains, .nTime))
+  Z1 <- getter(matTZ1(.nDomains, .nTime))
+
+  Vu <- getter(bdiag(.sigma2[1] * Omega1(), .sigma2[2] * Omega2()))
+
+  .V <- getter(matVInvT(
+    as.matrix(Omega1()),
+    .sigma2[1],
+    .rho, .sigma2[2],
+    as.matrix(Z1()),
+    .samplingVar
+  ))
+
+  V <- getter(.V()$V)
+  VInv <- getter(.V()$VInv)
+
+  deriv <- list(
+    sigma21 = getter(matVDerS1(as.matrix(Omega1()), as.matrix(Z1()))),
+    rho = getter(matVDerR2(.rho, .sigma2[2], Omega2(), .nDomains)),
+    sigma22 = getter(matVDerS2(Omega2(), .nDomains))
+  )
+
+  retList()
+
+}

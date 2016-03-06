@@ -42,3 +42,36 @@ test_that("SFH", {
   )
 
 })
+
+test_that("TFH", {
+
+  expectEqual <- function(a, b) {
+    testthat::expect_equal(a, b, check.attributes = FALSE)
+  }
+
+  matV <- matVTFH(0.5, c(2, 3), 3, rep(1, 9))
+  Omega2 <- saeRobust:::matOmega2(3, 0.5)
+
+  expectEqual(
+    dim(matV$VInv()),
+    c(9, 9)
+  )
+
+  expectEqual(
+    as.matrix(matV$deriv$sigma21()),
+    as.matrix(matTZ1(3, 3) %*% Diagonal(3) %*% t(matTZ1(3, 3)))
+  )
+
+  expectEqual(
+    as.matrix(matV$deriv$rho()),
+    saeRobust:::matVDerR2(0.5, 3, Omega2, 3)
+  )
+
+  expectEqual(
+    as.matrix(matV$deriv$sigma22()),
+    saeRobust:::matVDerS2(Omega2, 3)
+  )
+
+})
+
+

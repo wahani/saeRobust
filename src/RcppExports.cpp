@@ -42,51 +42,19 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
-// matA
-arma::mat matA(double sigma2, arma::mat Ome2, int nDomains, arma::colvec sigmaSamplingError);
-RcppExport SEXP saeRobust_matA(SEXP sigma2SEXP, SEXP Ome2SEXP, SEXP nDomainsSEXP, SEXP sigmaSamplingErrorSEXP) {
+// matVInvT
+Rcpp::List matVInvT(arma::mat Ome1, double sigma1, double rho2, double sigma2, arma::mat Z1, arma::colvec sigmaSamplingError);
+RcppExport SEXP saeRobust_matVInvT(SEXP Ome1SEXP, SEXP sigma1SEXP, SEXP rho2SEXP, SEXP sigma2SEXP, SEXP Z1SEXP, SEXP sigmaSamplingErrorSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< double >::type sigma2(sigma2SEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Ome2(Ome2SEXP);
-    Rcpp::traits::input_parameter< int >::type nDomains(nDomainsSEXP);
-    Rcpp::traits::input_parameter< arma::colvec >::type sigmaSamplingError(sigmaSamplingErrorSEXP);
-    __result = Rcpp::wrap(matA(sigma2, Ome2, nDomains, sigmaSamplingError));
-    return __result;
-END_RCPP
-}
-// matVInvST
-Rcpp::List matVInvST(arma::mat W, double rho1, double sigma1, double rho2, double sigma2, arma::mat Z1, arma::colvec sigmaSamplingError);
-RcppExport SEXP saeRobust_matVInvST(SEXP WSEXP, SEXP rho1SEXP, SEXP sigma1SEXP, SEXP rho2SEXP, SEXP sigma2SEXP, SEXP Z1SEXP, SEXP sigmaSamplingErrorSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< arma::mat >::type W(WSEXP);
-    Rcpp::traits::input_parameter< double >::type rho1(rho1SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Ome1(Ome1SEXP);
     Rcpp::traits::input_parameter< double >::type sigma1(sigma1SEXP);
     Rcpp::traits::input_parameter< double >::type rho2(rho2SEXP);
     Rcpp::traits::input_parameter< double >::type sigma2(sigma2SEXP);
     Rcpp::traits::input_parameter< arma::mat >::type Z1(Z1SEXP);
     Rcpp::traits::input_parameter< arma::colvec >::type sigmaSamplingError(sigmaSamplingErrorSEXP);
-    __result = Rcpp::wrap(matVInvST(W, rho1, sigma1, rho2, sigma2, Z1, sigmaSamplingError));
-    return __result;
-END_RCPP
-}
-// matVST
-arma::mat matVST(arma::mat W, double rho1, double sigma1, double rho2, double sigma2, arma::mat Z1, arma::colvec sigmaSamplingError);
-RcppExport SEXP saeRobust_matVST(SEXP WSEXP, SEXP rho1SEXP, SEXP sigma1SEXP, SEXP rho2SEXP, SEXP sigma2SEXP, SEXP Z1SEXP, SEXP sigmaSamplingErrorSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject __result;
-    Rcpp::RNGScope __rngScope;
-    Rcpp::traits::input_parameter< arma::mat >::type W(WSEXP);
-    Rcpp::traits::input_parameter< double >::type rho1(rho1SEXP);
-    Rcpp::traits::input_parameter< double >::type sigma1(sigma1SEXP);
-    Rcpp::traits::input_parameter< double >::type rho2(rho2SEXP);
-    Rcpp::traits::input_parameter< double >::type sigma2(sigma2SEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type Z1(Z1SEXP);
-    Rcpp::traits::input_parameter< arma::colvec >::type sigmaSamplingError(sigmaSamplingErrorSEXP);
-    __result = Rcpp::wrap(matVST(W, rho1, sigma1, rho2, sigma2, Z1, sigmaSamplingError));
+    __result = Rcpp::wrap(matVInvT(Ome1, sigma1, rho2, sigma2, Z1, sigmaSamplingError));
     return __result;
 END_RCPP
 }

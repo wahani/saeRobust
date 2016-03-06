@@ -5,6 +5,8 @@
 \alias{matAConst}
 \alias{matB}
 \alias{matBConst}
+\alias{matTZ}
+\alias{matTZ1}
 \alias{matTrace}
 \alias{matU}
 \alias{matW}
@@ -23,6 +25,10 @@ matA(y, X, beta, matV, psi)
 matAConst(y, X, matV, psi)
 
 matW(y, X, beta, u, matV, psi)
+
+matTZ(nDomains, nTime)
+
+matTZ1(nDomains = 10, nTime = 10)
 }
 \arguments{
 \item{.V}{(Matrix) variance matrix}
@@ -68,5 +74,11 @@ Matrix constructor functions
 \code{matW} returns a matrix containing the weights as they are
   defined for the pseudo linear form, such that \code{matW \%*\% y} is the
   REBLUP.
+
+\code{matTZ} constructs the Z matrix in a linear mixed model with
+  autocorrelated random effects.
+
+\code{matTZ1} constructs the Z1 matrix in a linear mixed model with
+  autocorrelated random effects.
 }
 

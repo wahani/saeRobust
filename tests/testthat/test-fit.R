@@ -44,7 +44,7 @@ test_that("fitrsfh is working", {
   # out$variance
   # out$iterations$correlation
   # score(out)$delta
-  #
+
   testthat::expect_equal(
     out$variance[2], 15.28,
     tolerance = 1e-03, check.attributes = FALSE
@@ -60,3 +60,28 @@ test_that("fitrsfh is working", {
   expect_is(out$variance, "numeric")
 
 })
+
+test_that("fitrtfh", {
+  # library("saeSim")
+  # set.seed(2)
+  # nDomains <- 40
+  # nTime <- 3
+  # dat <- base_id_temporal(nDomains, 1, nTime) %>%
+  #   sim_gen_e() %>%
+  #   sim_gen_x() %>%
+  #   sim_gen(gen_v_ar1(rho = 0.5, sd = 4, name = "v")) %>%
+  #   sim_resp_eq(y = 100 + 2 * x + v + e) %>%
+  #   as.data.frame
+  #
+  # y <- dat$y
+  # X <- cbind(1, dat$x)
+  # samplingVar <- rep(16, nrow(dat))
+  # W <- spdep::nb2mat(spdep::cell2nb(nDomains, 1, "rook"), style = "W")
+  #
+  # out <- saeRobust:::fitrsfh(
+  #   y, X, samplingVar, W, x0Var = c(0.5, 16),
+  #   maxIter = 100, maxIterParam = 1, maxIterRe = 1 # speed up
+  # )
+})
+
+

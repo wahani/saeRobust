@@ -133,3 +133,26 @@ matW <- function(y, X, beta, u, matV, psi) {
     XA <- X %*% A
     XA + B %*% (Diagonal(length(y)) - XA)
 }
+
+#' @details \code{matTZ} constructs the Z matrix in a linear mixed model with
+#'   autocorrelated random effects.
+#'
+#' @export
+#' @rdname varianceMatrices
+matTZ <- function(nDomains, nTime) {
+  #Construct Z-Matrix for temporal mixed model
+  Z1 <- matTZ1(nDomains, nTime)
+  Z2 <- Diagonal(nDomains * nTime)
+  cbind(Z1, Z2)
+}
+
+#' @details \code{matTZ1} constructs the Z1 matrix in a linear mixed model with
+#'   autocorrelated random effects.
+#'
+#' @export
+#' @rdname varianceMatrices
+matTZ1 <- function(nDomains = 10, nTime = 10) {
+  I1 <- Diagonal(nDomains)
+  I2 <- rep(1, nTime)
+  I1 %x% I2
+}
