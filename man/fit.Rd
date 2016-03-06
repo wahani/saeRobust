@@ -24,6 +24,8 @@ fitGenericModel(y, x, matVFun, fixedPointParam, k = 1.345, K = getK(k),
 
 \item{...}{arguments passed to \code{fitGenericModel}}
 
+\item{W}{(matrix) proximity matrix}
+
 \item{x0Var}{(numeric) starting values for variance parameters}
 
 \item{matVFun}{(function) a function with one argument - the variance

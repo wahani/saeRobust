@@ -4,7 +4,8 @@
 #'
 #' @export
 #'
-#' @references Weihs / Mersmann / Ligges (2014): Foundations of Statistical Algorithms: With References to R Packages
+#' @references Weihs / Mersmann / Ligges (2014): Foundations of Statistical
+#'   Algorithms: With References to R Packages
 #'
 #' @rdname constTestData
 #' @examples
@@ -72,3 +73,14 @@ testResponse <- function(y0, k = 1:4, .sd = sd(y0)) {
     y0s + r0s
 
 }
+
+#' @param n dimension
+#'
+#' @export
+#' @rdname constTestData
+testRook <- function(n) {
+  spdep::nb2mat(spdep::cell2nb(n, 1, "rook"), style = "W")
+}
+
+
+

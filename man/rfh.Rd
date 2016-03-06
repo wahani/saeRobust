@@ -4,12 +4,20 @@
 \name{rfh}
 \alias{predict.fitrfh}
 \alias{rfh}
-\alias{rfh,formula,data.frame,character-method}
+\alias{rfh,formula,data.frame,character,ANY-method}
+\alias{rfh,numeric,matrixORMatrix,numeric,NULL-method}
+\alias{rfh,numeric,matrixORMatrix,numeric,corSAR1-method}
 \title{Robust Fay Herriot Model}
 \usage{
-rfh(formula, data, samplingVar, ...)
+rfh(formula, data, samplingVar, correlation = NULL, ...)
 
-\S4method{rfh}{formula,data.frame,character}(formula, data, samplingVar, ...)
+\S4method{rfh}{formula,data.frame,character,ANY}(formula, data, samplingVar, correlation, ...)
+
+\S4method{rfh}{numeric,matrixORMatrix,numeric,`NULL`}(formula, data,
+  samplingVar, correlation = NULL, ...)
+
+\S4method{rfh}{numeric,matrixORMatrix,numeric,corSAR1}(formula, data,
+  samplingVar, correlation = NULL, ...)
 
 \method{predict}{fitrfh}(object, type = "REBLUP", ...)
 }
@@ -19,6 +27,8 @@ rfh(formula, data, samplingVar, ...)
 \item{data}{(data.frame)}
 
 \item{samplingVar}{(character)}
+
+\item{correlation}{an optional correlation structure, e.g. \link{corSAR1}.}
 
 \item{...}{arguments passed \link{fitGenericModel}}
 

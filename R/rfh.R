@@ -3,26 +3,43 @@
 #' @param formula (formula)
 #' @param data (data.frame)
 #' @param samplingVar (character)
+#' @param correlation an optional correlation structure, e.g. \link{corSAR1}.
 #' @param ... arguments passed \link{fitGenericModel}
 #'
 #' @rdname rfh
 #'
 #' @export
-rfh(formula, data, samplingVar, ...) %g% standardGeneric("rfh")
+rfh(formula, data, samplingVar, correlation = NULL, ...) %g% standardGeneric("rfh")
 
+#' @name rfh
+#' @usage \S4method{rfh}{formula,data.frame,character,ANY}(formula, data, samplingVar, correlation, ...)
+#' @aliases rfh,formula,data.frame,character,ANY-method
 #' @rdname rfh
-#' @export
-rfh(formula ~ formula, data ~ data.frame, samplingVar ~ character, ...) %m% {
+NULL
+
+rfh(formula ~ formula, data ~ data.frame, samplingVar ~ character, correlation ~ ANY, ...) %m% {
   call <- match.call()
   xy <- makeXY(formula, data)
   samplingVar <- data[[samplingVar]]
 
-  retList(
+  stripSelf(retList(
     "rfh",
     public = c("call"),
-    super = fitrfh(xy$y, xy$x, samplingVar, ...)
-  )
+    super = rfh(xy$y, xy$x, samplingVar, correlation, ...)
+  ))
 
+}
+
+#' @rdname rfh
+#' @export
+rfh(formula ~ numeric, data ~ matrix | Matrix, samplingVar ~ numeric, correlation ~ 'NULL', ...) %m% {
+  fitrfh(formula, data, samplingVar, ...)
+}
+
+#' @rdname rfh
+#' @export
+rfh(formula ~ numeric, data ~ matrix | Matrix, samplingVar ~ numeric, correlation ~ corSAR1, ...) %m% {
+  fitrsfh(formula, data, samplingVar, correlation@W, ...)
 }
 
 #' @param object (rfh) an object of class rfh

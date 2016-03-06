@@ -17,7 +17,7 @@ test_that("rfh is working", {
 
     dat$samplingVar <- 1
 
-    out <- rfh(y ~ x, dat, "samplingVar")
+    out <- rfh(y ~ x, dat, "samplingVar", maxIter = 1, maxIterRe = 1)
     expect_is(out, "list")
     expect_is(out$coefficients, "numeric")
     expect_is(out$variance, "numeric")
@@ -25,6 +25,32 @@ test_that("rfh is working", {
     expect_is(out$y, "numeric")
 
 })
+
+test_that("spatial rfh is working", {
+
+  library("saeSim")
+  set.seed(1)
+  dat <- base_id(10, 1) %>%
+    sim_gen_e() %>%
+    sim_gen_x() %>%
+    sim_gen_v() %>%
+    sim_resp_eq(y = 100 + 2 * x + v + e) %>%
+    as.data.frame
+
+  dat$samplingVar <- 1
+
+  W <- testRook(10)
+
+  out <- rfh(y ~ x, dat, "samplingVar", corSAR1(W), maxIter = 1, maxIterRe = 1)
+  expect_is(out, "list")
+  expect_is(out$coefficients, "numeric")
+  expect_is(out$variance, "numeric")
+  expect_is(out$samplingVar, "numeric")
+  expect_is(out$y, "numeric")
+  testthat::expect_is(out$W, "matrix")
+
+})
+
 
 test_that("predict.rfh", {
 

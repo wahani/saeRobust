@@ -4,6 +4,7 @@
 \alias{testMatX}
 \alias{testResponse}
 \alias{testResponse0}
+\alias{testRook}
 \title{Construction of test data}
 \usage{
 testMatX(...)
@@ -11,6 +12,8 @@ testMatX(...)
 testResponse0(x, beta = rep(1, ncol(x)))
 
 testResponse(y0, k = 1:4, .sd = sd(y0))
+
+testRook(n)
 }
 \arguments{
 \item{...}{matrices}
@@ -24,6 +27,8 @@ testResponse(y0, k = 1:4, .sd = sd(y0))
 \item{k}{values in 1 to 4 (integer)}
 
 \item{.sd}{the standard deviation used for random numbers}
+
+\item{n}{dimension}
 }
 \description{
 Construction of test data
@@ -39,6 +44,7 @@ library("magrittr")
 Matrix(1) \%>\% testMatX \%>\% testResponse0 \%>\% testResponse
 }
 \references{
-Weihs / Mersmann / Ligges (2014): Foundations of Statistical Algorithms: With References to R Packages
+Weihs / Mersmann / Ligges (2014): Foundations of Statistical
+  Algorithms: With References to R Packages
 }
 

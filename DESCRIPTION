@@ -16,7 +16,8 @@ Imports:
     MASS,
     modules,
     memoise,
-    Rcpp
+    Rcpp,
+    spdep
 License: MIT + file LICENSE
 LazyData: true
 Suggests:
