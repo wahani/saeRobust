@@ -62,7 +62,7 @@ fixedPointRobustDelta <- function(y, X, beta, matVFun, psi, K, derivSelect = 1) 
         U <- matU(matV$V())
         resid <- U$sqrtInv() %*% mem1
         psiResid <- psi(resid)
-        c1 <- matTrace(K / param * matV$VInv() %*% matV$deriv[[derivSelect]]())
+        c1 <- K / param * matTrace(matV$VInv() %*% matV$deriv[[derivSelect]]())
         c2 <- crossprod(psiResid, U$sqrt()) %*% matV$VInv() %*%
             matV$deriv[[derivSelect]]() %*% matV$VInv() %*% U$sqrt() %*% psiResid
 

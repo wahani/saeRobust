@@ -49,21 +49,38 @@ test_that("TFH", {
     testthat::expect_equal(a, b, check.attributes = FALSE)
   }
 
-  matV <- matVTFH(0.5, c(2, 3), 3, rep(1, 9))
-  Omega2 <- saeRobust:::matOmega2(3, 0.5)
+  nTime <- 3
+  nDomains <- 3
+  sige <- 1
+  sigv <- c(2, 5)
+  rho <- 0.2
+
+  matV <- matVTFH(rho, sigv, nTime, rep(sige, nTime * nDomains))
+  Omega2 <- saeRobust:::matOmega2(nTime, rho)
+  Omega2Ref <- 1 / (1-rho^2) *
+    matrix(c(1, rho, rho^2, rho, 1, rho, rho^2, rho, 1),
+           ncol = nTime)
+
+  expectEqual(Omega2, Omega2Ref)
+  expectEqual(Omega2, matV$Omega2())
 
   expectEqual(
     dim(matV$VInv()),
     c(9, 9)
   )
 
+  Z <- matTZ(nDomains, nTime)
+  Vu <- bdiag(Diagonal(nDomains, sigv[1]),
+              sigv[2] * matBlockDiagonal(Omega2, nDomains))
+
   expectEqual(
-    as.matrix(
-      solve(matTZ(3, 3) %*%
-              bdiag(Diagonal(3, 2), 3 * bdiag(matV$Omega2(), matV$Omega2(), matV$Omega2())) %*%
-              t(matTZ(3, 3)) + Diagonal(9, 1))
-    ),
+    as.matrix(solve(Z %*% Vu %*% t(Z) + Diagonal(nTime * nDomains, sige))),
     matV$VInv()
+  )
+
+  expectEqual(
+    as.matrix(Z %*% Vu %*% t(Z) + Diagonal(nTime * nDomains, sige)),
+    matV$V()
   )
 
   expectEqual(
@@ -73,7 +90,7 @@ test_that("TFH", {
 
   expectEqual(
     as.matrix(matV$deriv$rho()),
-    saeRobust:::matVDerR2(0.5, 3, Omega2, 3)
+    saeRobust:::matVDerR2(rho, sigv[2], Omega2, nTime)
   )
 
   expectEqual(
@@ -83,12 +100,10 @@ test_that("TFH", {
 
   expectEqual(
     matV$deriv$rho()[1:3, 1:3],
-    3 * (1 / (1 - rho^2) * matrix(c(0, 1, 2 * rho, 1, 0, 1, 2 * rho, 1, 0), ncol = 3) +
+    sigv[2] * (1 / (1 - rho^2) *
+                 matrix(c(0, 1, 2 * rho, 1, 0, 1, 2 * rho, 1, 0), ncol = 3) +
            2 * rho / (1 - rho^2) * matV$Omega2())
   )
-
-
-
 
 })
 
