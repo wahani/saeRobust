@@ -70,6 +70,36 @@ fixedPointRobustDelta <- function(y, X, beta, matVFun, psi, K, derivSelect = 1) 
     }
 }
 
+fixedPointRobustDelta2 <- function(y, X, beta, matVFun, psi, K, derivSelect) {
+  # Precalculations - they only have to be done once
+  mem1 <- (y - X %*% beta)
+
+  function(param) {
+    matV <- matVFun(param)
+    U <- matU(matV$V())
+    resid <- U$sqrtInv() %*% mem1
+    psiResid <- psi(resid)
+
+    C1tmp <- K * matV$VInv() %*% matV$deriv[[derivSelect[1]]]() %*% matV$ZVuZInv()
+    C2tmp <- K * matV$VInv() %*% matV$deriv[[derivSelect[2]]]() %*% matV$ZVuZInv()
+
+    C1 <- matrix(ncol = 2, c(
+      matTrace(C1tmp %*% matV$ZVuBarZ[[derivSelect[1]]]()),
+      matTrace(C1tmp %*% matV$ZVuBarZ[[derivSelect[2]]]()),
+      matTrace(C2tmp %*% matV$ZVuBarZ[[derivSelect[1]]]()),
+      matTrace(C2tmp %*% matV$ZVuBarZ[[derivSelect[2]]]())
+    ))
+
+    c2 <- lapply(matV$deriv[derivSelect], function(deriv) {
+      as.numeric(
+        crossprod(psiResid, U$sqrt()) %*% matV$VInv() %*%
+          deriv() %*% matV$VInv() %*% U$sqrt() %*% psiResid
+      )}) %>% unlist
+
+    as.numeric(solve(C1) %*% c2)
+  }
+}
+
 #' @rdname fixedPointFunctions
 #' @export
 fixedPointRobustRandomEffect <- function(y, X, beta, matV, psi) {

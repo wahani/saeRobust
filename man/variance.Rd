@@ -4,6 +4,7 @@
 \alias{variance}
 \alias{variance.fitrfh}
 \alias{variance.fitrsfh}
+\alias{variance.fitrtfh}
 \alias{weights.fitrfh}
 \title{Construct variance}
 \usage{
@@ -12,6 +13,8 @@ variance(.object, ...)
 \method{variance}{fitrfh}(.object, ...)
 
 \method{variance}{fitrsfh}(.object, ...)
+
+\method{variance}{fitrtfh}(.object, ...)
 
 \method{weights}{fitrfh}(object, ...)
 }

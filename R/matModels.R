@@ -71,7 +71,9 @@ matVSFH <- function(.rho, .sigma2, .W, .samplingVar) {
 matVTFH <- function(.rho, .sigma2, .nTime, .samplingVar) {
 
   .diag <- function(x) Diagonal(x = x)
+  .emptyMatrix <- function(dim) Matrix(0, dim, dim)
   .nDomains <- length(.samplingVar) / .nTime
+
 
   Ve <- getter(.samplingVar, .diag)
   VeInv <- getter(1 / .samplingVar, .diag)
@@ -82,7 +84,10 @@ matVTFH <- function(.rho, .sigma2, .nTime, .samplingVar) {
   Z <- getter(matTZ(.nDomains, .nTime))
   Z1 <- getter(matTZ1(.nDomains, .nTime))
 
-  Vu <- getter(bdiag(.sigma2[1] * Omega1(), .sigma2[2] * Omega2()))
+  Vu <- getter(
+    bdiag(.sigma2[1] * Omega1(),
+          .sigma2[2] * matBlockDiagonal(Omega2(), .nDomains))
+  )
 
   .V <- getter(matVInvT(
     as.matrix(Omega1()),
@@ -99,6 +104,23 @@ matVTFH <- function(.rho, .sigma2, .nTime, .samplingVar) {
     sigma21 = getter(matVDerS1(as.matrix(Omega1()), as.matrix(Z1()))),
     rho = getter(matVDerR2(.rho, .sigma2[2], Omega2(), .nDomains)),
     sigma22 = getter(matVDerS2(Omega2(), .nDomains))
+  )
+
+  .ZVuZ <- getter(matVInvT(
+    as.matrix(Omega1()),
+    .sigma2[1],
+    .rho, .sigma2[2],
+    as.matrix(Z1()),
+    rep(0, length(.samplingVar))
+  ))
+
+  ZVuZInv <- getter(.ZVuZ()$VInv)
+
+  ZVuBarZ <- list(
+    sigma21 = getter(Z() %*% tcrossprod(
+      bdiag(Omega1(), .emptyMatrix(.nDomains * .nTime)), Z())),
+    sigma22 = getter(Z() %*% tcrossprod(
+      bdiag(.emptyMatrix(.nDomains), matBlockDiagonal(Omega2(), .nDomains)), Z()))
   )
 
   retList()
