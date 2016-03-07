@@ -33,3 +33,7 @@ matVDerR2 <- function(rho2, sigma2, Ome2, nDomains) {
     .Call('saeRobust_matVDerR2', PACKAGE = 'saeRobust', rho2, sigma2, Ome2, nDomains)
 }
 
+fixedPointSigma <- function(y, X, beta, sigma, rho, Z1, Ome1, Z, sigmaSamplingError, k, K) {
+    .Call('saeRobust_fixedPointSigma', PACKAGE = 'saeRobust', y, X, beta, sigma, rho, Z1, Ome1, Z, sigmaSamplingError, k, K)
+}
+

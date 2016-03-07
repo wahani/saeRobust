@@ -16,6 +16,7 @@ robEstEqu <- function(y, X, .beta, u, matV, psi, K) {
     lapply(
       matV$deriv,
       function(deriv) {
+        browser()
         as.numeric(
           crossprod(psiResid(), U()$sqrt()) %*% matV$VInv() %*% deriv() %*%
             matV$VInv() %*% U()$sqrt() %*% psiResid() -

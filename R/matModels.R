@@ -81,12 +81,20 @@ matVTFH <- function(.rho, .sigma2, .nTime, .samplingVar) {
   Omega1 <- getter(Diagonal(.nDomains))
   Omega2 <- getter(matOmega2(.nTime, .rho))
 
+  .Omega1Inv <- getter(solve(Omega1()))
+  .Omega2Inv <- getter(solve(Omega2()))
+
   Z <- getter(matTZ(.nDomains, .nTime))
   Z1 <- getter(matTZ1(.nDomains, .nTime))
 
   Vu <- getter(
     bdiag(.sigma2[1] * Omega1(),
           .sigma2[2] * matBlockDiagonal(Omega2(), .nDomains))
+  )
+
+  VuInv <- getter(
+    bdiag(.Omega1Inv() / .sigma2[1],
+          matBlockDiagonal(.Omega2Inv(), .nDomains) / .sigma2[2])
   )
 
   .V <- getter(matVInvT(

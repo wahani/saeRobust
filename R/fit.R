@@ -47,7 +47,7 @@ fitrfh <- function(y, x, samplingVar, ...) {
 
       fpSigma2 <- fixedPointRobustDelta(
         y, x, beta, matVFun, psi, K
-      ) %>% addConstraintMin(0) %>% addHistory
+      ) %>% addConstraintMin(0.00001) %>% addHistory
 
       sigma2 <- fixedPoint(fpSigma2, sigma2, addMaxIter(convCrit, maxIter))
 
@@ -89,7 +89,7 @@ fitrsfh <- function(y, x, samplingVar, W, x0Var = c(0.01, 1), ...) {
       fpSigma2 <- fixedPointRobustDelta(
         y, x, beta, function(x) matVFun(c(rho, x)), psi, K, "sigma2"
       ) %>%
-        addConstraintMin(0) %>%
+        addConstraintMin(0.00001) %>%
         addHistory
 
       sigma2 <- fixedPoint(fpSigma2, sigma2, addMaxIter(convCrit, maxIterParam))
@@ -134,31 +134,41 @@ fitrtfh <- function(y, x, samplingVar, nTime, x0Var = c(0.01, 1, 1), ...) {
       # Defines one Iteration in algorithm:
       param <- as.numeric(param)
       beta <- param[-c(length(param) - (0:2))]
-      sigma2Temp <- param[length(param)]
-      sigma2 <- param[length(param) - 1]
+      sigmas <- param[length(param) - (0:1)]
       rho <- param[length(param) - 2]
 
+      matV <- matVFun(c(rho, sigmas))
+
+      # Regression Coefficients:
       fpBeta <- addHistory(fixedPointRobustBeta(
-        y, x, matVFun(c(rho, sigma2, sigma2Temp)), psi = psi
+        y, x, matV, psi = psi
       ))
 
       beta <- fixedPoint(fpBeta, beta, addMaxIter(convCrit, maxIterParam))
 
-      fpSigma2 <- fixedPointRobustDelta2(
-        y, x, beta, function(x) matVFun(c(rho, x)), psi, K, c("sigma21", "sigma22")
-      ) %>%
-        addConstraintMin(0) %>%
-        addHistory
+      # Variance Parameters:
+      .fpSigma2 <- function(sigmas) {
+        fixedPointSigma(
+          y, as.matrix(x), beta, sigmas, rho, as.matrix(matV$Z1()),
+          as.matrix(matV$Omega1()), as.matrix(matV$Z()),
+          get(".samplingVar", envir = attr(matV, ".self")), k, K
+        )
+      }
 
+      fpSigma2 <- .fpSigma2 %>%
+        addConstraintMin(0.00001) %>%
+        addHistory
 
       sigmas <- fixedPoint(
         fpSigma2,
-        c(sigma2, sigma2Temp),
+        sigmas,
         addMaxIter(convCrit, maxIterParam)
       )
 
+
+      # Correlation Parameters:
       fpRho <- fixedPointRobustDelta(
-        y, x, beta, function(x) matVFun(c(x, sigmas)), psi, K, "rho"
+        y, x, beta, function(x) matVFun(c(x, sigmas)), psi, K, derivSelect = "rho"
       ) %>%
         addAverageDamp %>%
         addConstraintMin(-0.99999) %>% addConstraintMax(0.99999) %>%
@@ -170,18 +180,17 @@ fitrtfh <- function(y, x, samplingVar, nTime, x0Var = c(0.01, 1, 1), ...) {
     }
   }
 
-  browser()
-
   matVFun <- function(x, ...) {
     matVTFH(.rho = x[1], .sigma2 = x[2:3], .nTime = nTime,
             .samplingVar = samplingVar, ...)
   }
+
   out <- fitGenericModel(y, x, matVFun, fixedPointParam, x0Var = x0Var, ...)
   names(out$iterations) <- c("coefficients", "correlation", "variance", "re")
-  names(out$variance) <- c("correlation", "variance")
+  names(out$variance) <- c("correlation", "variance1", "varianceAR")
 
   stripSelf(retList(
-    c("fitrsfh", "fitrfh"),
+    c("fitrtfh", "fitrfh"),
     public = c("samplingVar", "W"), super = out)
   )
 
@@ -210,6 +219,7 @@ fitGenericModel <- function(
   variance <- out[(length(x0Coef) + 1):length(out)]
 
   # Fitting Random Effects
+
   matV <- matVFun(variance)
   if (is.null(x0Re)) {
     x0Re <- fitReStartingValues(y, x, coefficients, matV, psi)

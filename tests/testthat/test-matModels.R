@@ -58,6 +58,15 @@ test_that("TFH", {
   )
 
   expectEqual(
+    as.matrix(
+      solve(matTZ(3, 3) %*%
+              bdiag(Diagonal(3, 2), 3 * bdiag(matV$Omega2(), matV$Omega2(), matV$Omega2())) %*%
+              t(matTZ(3, 3)) + Diagonal(9, 1))
+    ),
+    matV$VInv()
+  )
+
+  expectEqual(
     as.matrix(matV$deriv$sigma21()),
     as.matrix(matTZ1(3, 3) %*% Diagonal(3) %*% t(matTZ1(3, 3)))
   )
@@ -71,6 +80,15 @@ test_that("TFH", {
     as.matrix(matV$deriv$sigma22()),
     saeRobust:::matVDerS2(Omega2, 3)
   )
+
+  expectEqual(
+    matV$deriv$rho()[1:3, 1:3],
+    3 * (1 / (1 - rho^2) * matrix(c(0, 1, 2 * rho, 1, 0, 1, 2 * rho, 1, 0), ncol = 3) +
+           2 * rho / (1 - rho^2) * matV$Omega2())
+  )
+
+
+
 
 })
 

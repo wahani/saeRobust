@@ -59,7 +59,7 @@ matBConst <- function(y, X, beta, matV, psi) {
     Uu <- matU(matV$Vu())
 
     # Helper functions
-    resid <- function(u) as.numeric(memResid - u)
+    resid <- function(u) as.numeric(memResid - matV$Z() %*% u)
 
     w2 <- function(u) {
         resids <- resid(u) * diag(Ue$sqrtInv())

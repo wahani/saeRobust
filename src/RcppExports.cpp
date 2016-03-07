@@ -111,3 +111,24 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// fixedPointSigma
+arma::colvec fixedPointSigma(arma::colvec y, arma::mat X, arma::colvec beta, arma::colvec sigma, double rho, arma::mat Z1, arma::mat Ome1, arma::mat Z, arma::colvec sigmaSamplingError, double k, double K);
+RcppExport SEXP saeRobust_fixedPointSigma(SEXP ySEXP, SEXP XSEXP, SEXP betaSEXP, SEXP sigmaSEXP, SEXP rhoSEXP, SEXP Z1SEXP, SEXP Ome1SEXP, SEXP ZSEXP, SEXP sigmaSamplingErrorSEXP, SEXP kSEXP, SEXP KSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< arma::colvec >::type y(ySEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type X(XSEXP);
+    Rcpp::traits::input_parameter< arma::colvec >::type beta(betaSEXP);
+    Rcpp::traits::input_parameter< arma::colvec >::type sigma(sigmaSEXP);
+    Rcpp::traits::input_parameter< double >::type rho(rhoSEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Z1(Z1SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Ome1(Ome1SEXP);
+    Rcpp::traits::input_parameter< arma::mat >::type Z(ZSEXP);
+    Rcpp::traits::input_parameter< arma::colvec >::type sigmaSamplingError(sigmaSamplingErrorSEXP);
+    Rcpp::traits::input_parameter< double >::type k(kSEXP);
+    Rcpp::traits::input_parameter< double >::type K(KSEXP);
+    __result = Rcpp::wrap(fixedPointSigma(y, X, beta, sigma, rho, Z1, Ome1, Z, sigmaSamplingError, k, K));
+    return __result;
+END_RCPP
+}

@@ -37,8 +37,8 @@ variance.fitrsfh <- function(.object, ...) {
 variance.fitrtfh <- function(.object, ...) {
 
   expose(matVTFH(
-    .object$variance[2],
-    .object$variance[c(1, 3)],
+    .object$variance[1],
+    .object$variance[c(2, 3)],
     .object$nTime,
     .object$samplingVar))
 
