@@ -3,6 +3,7 @@
 \name{matVFH}
 \alias{matVFH}
 \alias{matVSFH}
+\alias{matVSTFH}
 \alias{matVTFH}
 \title{Model Variance Covariance Structures}
 \usage{
@@ -11,6 +12,8 @@ matVFH(.sigma2, .samplingVar)
 matVSFH(.rho, .sigma2, .W, .samplingVar)
 
 matVTFH(.rho, .sigma2, .nTime, .samplingVar)
+
+matVSTFH(.rho, .sigma2, .W, .nTime, .samplingVar)
 }
 \arguments{
 \item{.sigma2}{(numeric) a scalar. The variance parameter of the random

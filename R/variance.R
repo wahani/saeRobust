@@ -47,6 +47,21 @@ variance.fitrtfh <- function(.object, ...) {
 
 #' @export
 #' @rdname variance
+variance.fitrstfh <- function(.object, ...) {
+
+  expose(matVSTFH(
+    .object$variance[1:2],
+    .object$variance[3:4],
+    .object$W,
+    .object$nTime,
+    .object$samplingVar))
+
+  retList("rfhVariance")
+
+}
+
+#' @export
+#' @rdname variance
 weights.fitrfh <- function(object, ...) {
 
     V <- variance(object)

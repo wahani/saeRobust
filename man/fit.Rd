@@ -4,6 +4,7 @@
 \alias{fitGenericModel}
 \alias{fitrfh}
 \alias{fitrsfh}
+\alias{fitrstfh}
 \alias{fitrtfh}
 \title{Fitting Precedures}
 \usage{
@@ -12,6 +13,8 @@ fitrfh(y, x, samplingVar, ...)
 fitrsfh(y, x, samplingVar, W, x0Var = c(0.01, 1), ...)
 
 fitrtfh(y, x, samplingVar, nTime, x0Var = c(0.01, 1, 1), ...)
+
+fitrstfh(y, x, samplingVar, W, nTime, x0Var = c(0.01, 0.01, 1, 1), ...)
 
 fitGenericModel(y, x, matVFun, fixedPointParam, k = 1.345, K = getK(k),
   psi = . \%>\% psiOne(k), x0Coef = NULL, x0Var = 1, x0Re = NULL,
