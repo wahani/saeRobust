@@ -51,6 +51,35 @@ test_that("spatial rfh is working", {
 
 })
 
+test_that("temporal rfh is working", {
+
+  library("saeSim")
+  set.seed(3)
+  nDomains <- 20
+  nTime <- 10
+  dat <- base_id_temporal(nDomains, 1, nTime) %>%
+    sim_gen_e(sd = 10) %>%
+    sim_gen_x() %>%
+    sim_gen_v(sd = 10) %>%
+    sim_gen(gen_v_ar1(rho = 0.5, sd = 10, name = "ar")) %>%
+    sim_resp_eq(y = 100 + 2 * x + v + ar + e) %>%
+    as.data.frame
+
+  dat$samplingVar <- rep(100, nrow(dat))
+
+  out <- rfh(
+    y ~ x, dat, "samplingVar", corAR1(nTime),
+    maxIter = 1, maxIterParam = 1, maxIterRe = 1 # speed up
+  )
+
+  expect_is(out, "list")
+  expect_is(out$coefficients, "numeric")
+  expect_is(out$variance, "numeric")
+  expect_is(out$samplingVar, "numeric")
+  expect_is(out$y, "numeric")
+  testthat::expect_is(out$nTime, "numeric")
+
+})
 
 test_that("predict.rfh", {
 

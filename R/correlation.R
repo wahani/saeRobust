@@ -17,3 +17,20 @@ corSAR1(W ~ matrix | Matrix) %type% {
 #' @rdname correlation
 #' @export corSAR1
 corSAR1
+
+#' @slot nTime (numeric) number of time periods
+#'
+#' @rdname correlation
+#' @export
+corAR1(nTime ~ numeric | integer) %type% {
+  .Object
+}
+
+#' @name corAR1
+#' @usage corAR1(nTime, ...)
+#'
+#' @param nTime (numeric) number of time periods
+#'
+#' @rdname correlation
+#' @export corAR1
+corAR1

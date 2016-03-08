@@ -2,16 +2,22 @@
 % Please edit documentation in R/correlation.R
 \docType{class}
 \name{corSAR1-class}
+\alias{corAR1}
+\alias{corAR1-class}
 \alias{corSAR1}
 \alias{corSAR1-class}
 \title{Correlation Structure}
 \usage{
 corSAR1(W, ...)
+
+corAR1(nTime, ...)
 }
 \arguments{
 \item{W}{the proximity matrix}
 
 \item{...}{arguments passed to \code{new}}
+
+\item{nTime}{(numeric) number of time periods}
 }
 \description{
 Correlation Structure
@@ -20,5 +26,7 @@ Correlation Structure
 
 \describe{
 \item{\code{W}}{the proximity matrix}
+
+\item{\code{nTime}}{(numeric) number of time periods}
 }}
 

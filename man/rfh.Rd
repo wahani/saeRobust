@@ -6,6 +6,7 @@
 \alias{rfh}
 \alias{rfh,formula,data.frame,character,ANY-method}
 \alias{rfh,numeric,matrixORMatrix,numeric,NULL-method}
+\alias{rfh,numeric,matrixORMatrix,numeric,corAR1-method}
 \alias{rfh,numeric,matrixORMatrix,numeric,corSAR1-method}
 \title{Robust Fay Herriot Model}
 \usage{
@@ -17,6 +18,9 @@ rfh(formula, data, samplingVar, correlation = NULL, ...)
   samplingVar, correlation = NULL, ...)
 
 \S4method{rfh}{numeric,matrixORMatrix,numeric,corSAR1}(formula, data,
+  samplingVar, correlation = NULL, ...)
+
+\S4method{rfh}{numeric,matrixORMatrix,numeric,corAR1}(formula, data,
   samplingVar, correlation = NULL, ...)
 
 \method{predict}{fitrfh}(object, type = "REBLUP", ...)
