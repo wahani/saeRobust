@@ -12,11 +12,11 @@ getter <- function(.x, .wrapper = identity) {
 storage <- module({
     reformat <- function(storage) {
         .iter <- function(ind) {
-            map(storage, ~ attr(.[[ind]], "history")) %>%
-            { map(seq_along(.), i ~ cbind(.[[i]], i)) } %>% # add iteration
+            lapply(storage, function(.) attr(.[[ind]], "history")) %>%
+            { lapply(seq_along(.), function(i) cbind(.[[i]], i)) } %>% # add iteration
                 do.call(what = rbind)
         }
 
-        map(seq_along(storage[[1]]), .iter)
+        lapply(seq_along(storage[[1]]), .iter)
     }
 })

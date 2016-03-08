@@ -9,6 +9,7 @@
 #'   estimator.
 #' @param .rho (numeric) the correlation parameter for correlated random effects.
 #' @param .W (matrix) proximity matrix.
+#' @param .nTime (integer) the number of time periods.
 #'
 #' @details
 #'

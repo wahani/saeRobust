@@ -85,7 +85,7 @@ test_that("TFH", {
 
   expectEqual(
     as.matrix(matV$deriv$sigma21()),
-    as.matrix(matTZ1(3, 3) %*% Diagonal(3) %*% t(matTZ1(3, 3)))
+    as.matrix(matTZ1(3, 3)) %*% as.matrix(Diagonal(3)) %*% as.matrix(t(matTZ1(3, 3)))
   )
 
   expectEqual(

@@ -10,7 +10,6 @@ Depends:
     aoos (>= 0.4.0)
 Imports:
     assertthat,
-    dat,
     Matrix,
     magrittr,
     MASS,

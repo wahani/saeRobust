@@ -1,13 +1,12 @@
 #' @importFrom assertthat assert_that
-#' @import aoos
-#' @importFrom dat map
-#' @import methods
-#' @import Matrix
 #' @importFrom magrittr %>% %<>%
 #' @importFrom stats weights
+#' @import aoos
+#' @import methods
+#' @import Matrix
 #' @import modules
 #' @import Rcpp
 #' @useDynLib saeRobust
 NULL
 
-globalVariables(c(".", ".self", "psi", "convCrit", "maxIter", "K"))
+globalVariables(c(".", ".self", "psi", "convCrit", "maxIter", "maxIterParam", "k", "K"))

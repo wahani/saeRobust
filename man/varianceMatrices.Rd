@@ -26,9 +26,9 @@ matAConst(y, X, matV, psi)
 
 matW(y, X, beta, u, matV, psi)
 
-matTZ(nDomains, nTime)
+matTZ(.nDomains, .nTime)
 
-matTZ1(nDomains = 10, nTime = 10)
+matTZ1(.nDomains = 10, .nTime = 10)
 }
 \arguments{
 \item{.V}{(Matrix) variance matrix}
@@ -46,6 +46,10 @@ matTZ1(nDomains = 10, nTime = 10)
 \item{matV}{(list of functions) see \code{matVFH} for an example}
 
 \item{psi}{(function) the influence function}
+
+\item{.nDomains}{(integer) number of domains}
+
+\item{.nTime}{(integer) number of time periods}
 }
 \description{
 Matrix constructor functions

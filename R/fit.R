@@ -18,11 +18,14 @@
 #' @param x0Var (numeric) starting values for variance parameters
 #' @param x0Re (numeric) starting values for random effects
 #' @param tol (numeric) numerical toloerance to be used during optimisation
-#' @param maxIter (integer) the maximum number of iterations
+#' @param maxIter (integer) the maximum number of iterations for model parameters.
+#' @param maxIterParam (integer) the maximum number of iterations for each
+#'   parameter in each overall iteration
 #' @param maxIterRe (integer) the maximum number of iterations for fitting the
 #'   random effects
 #' @param convCrit (function) a function defining the stopping rule
 #' @param W (matrix) proximity matrix
+#' @param nTime (integer) number of time periods
 #'
 #' @rdname fit
 #' @export
@@ -123,7 +126,7 @@ fitrsfh <- function(y, x, samplingVar, W, x0Var = c(0.01, 1), ...) {
 
 #' @rdname fit
 #' @export
-fitrtfh <- function(y, x, samplingVar, nTime, x0Var = c(0.01, 1, 1), maxIterUniRoot, ...) {
+fitrtfh <- function(y, x, samplingVar, nTime, x0Var = c(0.01, 1, 1), ...) {
   # Non interactive fitting function for robust temporal FH
 
   fixedPointParam <- function(parent = parent.frame()) {
@@ -165,7 +168,7 @@ fitrtfh <- function(y, x, samplingVar, nTime, x0Var = c(0.01, 1, 1), maxIterUniR
       )
 
       fpRho <- fixedPointNumericDelta(
-        y, x, beta, function(x) matVFun(c(x, sigmas)), psi, K, "rho", 0.01
+        y, x, beta, function(x) matVFun(c(x, sigmas)), psi, K, "rho", 0.01, -0.99999
       ) %>%
         addConstraintMin(-0.99999) %>% addConstraintMax(0.99999) %>%
         addHistory

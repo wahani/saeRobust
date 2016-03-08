@@ -22,6 +22,8 @@ estimator.}
 \item{.rho}{(numeric) the correlation parameter for correlated random effects.}
 
 \item{.W}{(matrix) proximity matrix.}
+
+\item{.nTime}{(integer) the number of time periods.}
 }
 \description{
 Functions to create the variance-covariance structure for the implemented
