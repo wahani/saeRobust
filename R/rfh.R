@@ -48,6 +48,12 @@ rfh(formula ~ numeric, data ~ matrix | Matrix, samplingVar ~ numeric, correlatio
   fitrtfh(formula, data, samplingVar, correlation@nTime, ...)
 }
 
+#' @rdname rfh
+#' @export
+rfh(formula ~ numeric, data ~ matrix | Matrix, samplingVar ~ numeric, correlation ~ corSAR1AR1, ...) %m% {
+  fitrstfh(formula, data, samplingVar, correlation@W, correlation@nTime, ...)
+}
+
 #' @param object (rfh) an object of class rfh
 #' @param type (character) one in \code{c("linear", "REBLUP")}
 #'

@@ -6,16 +6,21 @@
 \alias{corAR1-class}
 \alias{corSAR1}
 \alias{corSAR1-class}
+\alias{corSAR1AR1}
+\alias{corSAR1AR1-class}
 \title{Correlation Structure}
 \usage{
 corSAR1(W, ...)
 
 corAR1(nTime, ...)
+
+corSAR1AR1(...)
 }
 \arguments{
 \item{W}{the proximity matrix}
 
-\item{...}{arguments passed to \code{new}}
+\item{...}{arguments passed to \code{new}. In the case of corSAR1AR1
+arguments \code{W} and \code{nTime} are expected.}
 
 \item{nTime}{(numeric) number of time periods}
 }
