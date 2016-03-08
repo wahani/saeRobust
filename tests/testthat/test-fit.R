@@ -63,30 +63,31 @@ test_that("fitrsfh is working", {
 
 test_that("fitrtfh", {
   library("saeSim")
-  set.seed(2)
+  set.seed(4)
   nDomains <- 30
   nTime <- 10
   dat <- base_id_temporal(nDomains, 1, nTime) %>%
-    sim_gen_e() %>%
+    sim_gen_e(sd = 10) %>%
     sim_gen_x() %>%
-    sim_gen_v(sd = 5) %>%
-    sim_gen(gen_v_ar1(rho = 0.9, sd = 10, name = "ar")) %>%
+    sim_gen_v(sd = 10) %>%
+    sim_gen(gen_v_ar1(rho = 0.5, sd = 10, name = "ar")) %>%
     sim_resp_eq(y = 100 + 2 * x + v + ar + e) %>%
     as.data.frame
 
   y <- dat$y
   X <- cbind(1, dat$x)
-  samplingVar <- rep(16, nrow(dat))
+  samplingVar <- rep(100, nrow(dat))
 
   out <- saeRobust:::fitrtfh(
-    y, X, samplingVar, nTime = nTime, x0Var = c(0.9, 25, 100),
+    y, X, samplingVar, nTime = nTime, x0Var = c(0.5, 100, 100),
     maxIter = 100, maxIterParam = 1, maxIterRe = 1 # speed up
   )
+
   # lapply(out$iterations, nrow)
   out$variance
   out$iterations$correlation
   out$iterations$variance
-  score(out)
+  score(out)$delta
 
 })
 

@@ -8,6 +8,8 @@
 #' @param matV (list of functions) see \link{matVFH}
 #' @param psi influence function
 #'
+#' @rdname objectiveFunctions
+#'
 #' @export
 scoreRobustBeta <- function(y, X, matV, psi) {
     # Helper functions
@@ -23,6 +25,35 @@ scoreRobustBeta <- function(y, X, matV, psi) {
     f1 <- function(beta) - memP0 %*% D(beta) %*% X
 
     list(f = f, f1 = f1)
+}
+
+#' @export
+#' @rdname fixedPointFunctions
+robustObjectiveDelta <- function(y, x, beta, matVFun, psi, K, derivSelect) {
+  # This is the squared estimation equation for a variance parameter. It can be
+  # used when the fixed point for delta
+  function(rho) {
+
+    matV <- matVFun(rho)
+    U <- matU(matV$V())
+    psiResid <- psi(U$sqrtInv() %*% (y - x %*% beta))
+
+    as.numeric(
+      crossprod(psiResid, U$sqrt()) %*% matV$VInv() %*%
+        matV$deriv[[derivSelect]]() %*%
+        matV$VInv() %*% U$sqrt() %*% psiResid -
+        matTrace(K * matV$VInv() %*% matV$deriv[[derivSelect]]())
+    )
+  }
+}
+
+#' @export
+#' @rdname fixedPointFunctions
+fixedPointNumericDelta <- function(y, x, beta, matVFun, psi, K, derivSelect, stepSize) {
+  obRho <- robustObjectiveDelta(y, x, beta, matVFun, psi, K, derivSelect)
+  function(rho) {
+    rho + obRho(rho) / ((obRho(rho - stepSize) - obRho(rho)) / stepSize)
+  }
 }
 
 #' Fixed Point Functions
@@ -70,6 +101,8 @@ fixedPointRobustDelta <- function(y, X, beta, matVFun, psi, K, derivSelect = 1) 
     }
 }
 
+#' @rdname fixedPointFunctions
+#' @export
 fixedPointRobustDelta2 <- function(y, X, beta, matVFun, psi, K, derivSelect) {
   # Precalculations - they only have to be done once
   mem1 <- (y - X %*% beta)
