@@ -17,9 +17,8 @@ fitrtfh(y, x, samplingVar, nTime, x0Var = c(0.01, 1, 1), ...)
 fitrstfh(y, x, samplingVar, W, nTime, x0Var = c(0.01, 0.01, 1, 1), ...)
 
 fitGenericModel(y, x, matVFun, fixedPointParam, k = 1.345, K = getK(k),
-  psi = . \%>\% psiOne(k), x0Coef = NULL, x0Var = 1, x0Re = NULL,
-  tol = 1e-06, maxIter = 100, maxIterParam = 1, maxIterRe = 100,
-  convCrit = convCritRelative(tol))
+  x0Coef = NULL, x0Var = 1, x0Re = NULL, tol = 1e-06, maxIter = 100,
+  maxIterParam = 1, maxIterRe = 100, convCrit = convCritRelative(tol))
 }
 \arguments{
 \item{y}{(numeric) response vector}
@@ -47,8 +46,6 @@ overall algorithm.}
 
 \item{K}{(numeric) scaling constant}
 
-\item{psi}{(function) influence function}
-
 \item{x0Coef}{(numeric) starting values for regression coefficients}
 
 \item{x0Re}{(numeric) starting values for random effects}
@@ -64,6 +61,8 @@ parameter in each overall iteration}
 random effects}
 
 \item{convCrit}{(function) a function defining the stopping rule}
+
+\item{psi}{(function) influence function}
 }
 \description{
 Several fitting procedures. Not intended for interactive use.

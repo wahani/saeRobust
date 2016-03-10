@@ -72,7 +72,7 @@ weights.fitrfh <- function(object, ...) {
         beta = object$coefficients,
         u = object$re,
         matV = V,
-        psi = object$psi
+        psi = . %>% psiOne(object$k)
     )
 
     A <- matA(
@@ -80,7 +80,7 @@ weights.fitrfh <- function(object, ...) {
         X = object$x,
         beta = object$coefficients,
         matV = V,
-        psi = object$psi
+        psi = . %>% psiOne(object$k)
     )
 
     B <- matB(
@@ -89,7 +89,7 @@ weights.fitrfh <- function(object, ...) {
         beta = object$coefficients,
         u = object$re,
         V,
-        psi = object$psi
+        psi = . %>% psiOne(object$k)
     )
 
     stripSelf(retList("rfhWeights", c("W", "A", "B")))

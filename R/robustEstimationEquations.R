@@ -52,7 +52,7 @@ score.default <- function(object, filter = c("beta", "delta", "re"), ...) {
     object$coefficients,
     object$re,
     variance(object),
-    object$psi,
+    psi = . %>% psiOne(object$k),
     object$K)
   out <- lapply(filter, function(f) scores[[f]]())
   names(out) <- filter
