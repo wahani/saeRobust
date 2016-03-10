@@ -4,12 +4,12 @@
 \alias{scoreRobustBeta}
 \title{Robust score function (ML) for beta}
 \usage{
-scoreRobustBeta(y, X, matV, psi)
+scoreRobustBeta(y, x, matV, psi)
 }
 \arguments{
 \item{y}{vector of response}
 
-\item{X}{design matrix}
+\item{x}{design matrix}
 
 \item{matV}{(list of functions) see \link{matVFH}}
 

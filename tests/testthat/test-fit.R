@@ -63,8 +63,8 @@ test_that("fitrsfh is working", {
 
 test_that("fitrtfh", {
   library("saeSim")
-  set.seed(4)
-  nDomains <- 30
+  set.seed(3)
+  nDomains <- 20
   nTime <- 10
   dat <- base_id_temporal(nDomains, 1, nTime) %>%
     sim_gen_e(sd = 10) %>%
@@ -75,20 +75,52 @@ test_that("fitrtfh", {
     as.data.frame
 
   y <- dat$y
-  X <- cbind(1, dat$x)
+  x <- cbind(1, dat$x)
   samplingVar <- rep(100, nrow(dat))
 
   out <- saeRobust:::fitrtfh(
-    y, X, samplingVar, nTime = nTime, x0Var = c(0.5, 100, 100),
-    maxIter = 100, maxIterParam = 1, maxIterRe = 1 # speed up
+    y, x, samplingVar, nTime = nTime, x0Var = c(0.5, 100, 100),
+    maxIter = 100, maxIterParam = 20, maxIterRe = 1 # speed up
   )
 
   # lapply(out$iterations, nrow)
-  out$variance
-  out$iterations$correlation
-  out$iterations$variance
-  score(out)$delta
+  # out$variance
+  # out$iterations$correlation
+  # out$iterations$variance
+  testthat::expect_equal(sum(score(out)$delta), 0, tolerance = 1e-05)
 
 })
 
+test_that("fitrtfh", {
+  library("saeSim")
+  set.seed(3)
+  nDomains <- 20
+  nTime <- 10
+  dat <- base_id_temporal(nDomains, 1, nTime) %>%
+    sim_gen_e(sd = 4) %>%
+    sim_gen_x() %>%
+    sim_gen(gen_v_sar(sd = 4, name = "v")) %>%
+    sim_gen(gen_v_ar1(rho = 0.5, sd = 4, name = "ar")) %>%
+    sim_resp_eq(y = 100 + 2 * x + v + ar + e) %>%
+    as.data.frame
+
+  y <- dat$y
+  x <- cbind(1, dat$x)
+  samplingVar <- rep(16, nrow(dat))
+  W <- testRook(nDomains)
+
+  out <- saeRobust:::fitrstfh(
+    y, x, samplingVar, nTime = nTime, W, x0Var = c(0.3, 0.5, 16, 16),
+    maxIter = 100, maxIterParam = 5, maxIterRe = 1 # speed up
+  )
+
+  # lapply(out$iterations, nrow)
+  # out$variance
+  # out$iterations$SAR
+  # out$iterations$AR
+  # out$iterations$variance
+  # score(out)$delta
+  testthat::expect_equal(sum(score(out)$delta), 0, tolerance = 1e-05)
+
+})
 

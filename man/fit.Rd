@@ -4,6 +4,7 @@
 \alias{fitGenericModel}
 \alias{fitrfh}
 \alias{fitrsfh}
+\alias{fitrstfh}
 \alias{fitrtfh}
 \title{Fitting Precedures}
 \usage{
@@ -11,7 +12,9 @@ fitrfh(y, x, samplingVar, ...)
 
 fitrsfh(y, x, samplingVar, W, x0Var = c(0.01, 1), ...)
 
-fitrtfh(y, x, samplingVar, nTime, x0Var = c(0.01, 1, 1), maxIterUniRoot, ...)
+fitrtfh(y, x, samplingVar, nTime, x0Var = c(0.01, 1, 1), ...)
+
+fitrstfh(y, x, samplingVar, W, nTime, x0Var = c(0.01, 0.01, 1, 1), ...)
 
 fitGenericModel(y, x, matVFun, fixedPointParam, k = 1.345, K = getK(k),
   psi = . \%>\% psiOne(k), x0Coef = NULL, x0Var = 1, x0Re = NULL,
@@ -30,6 +33,8 @@ fitGenericModel(y, x, matVFun, fixedPointParam, k = 1.345, K = getK(k),
 \item{W}{(matrix) proximity matrix}
 
 \item{x0Var}{(numeric) starting values for variance parameters}
+
+\item{nTime}{(integer) number of time periods}
 
 \item{matVFun}{(function) a function with one argument - the variance
 parameters - constructing something like \link{matVFH}}
@@ -50,7 +55,10 @@ overall algorithm.}
 
 \item{tol}{(numeric) numerical toloerance to be used during optimisation}
 
-\item{maxIter}{(integer) the maximum number of iterations}
+\item{maxIter}{(integer) the maximum number of iterations for model parameters.}
+
+\item{maxIterParam}{(integer) the maximum number of iterations for each
+parameter in each overall iteration}
 
 \item{maxIterRe}{(integer) the maximum number of iterations for fitting the
 random effects}

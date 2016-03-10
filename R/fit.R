@@ -18,11 +18,14 @@
 #' @param x0Var (numeric) starting values for variance parameters
 #' @param x0Re (numeric) starting values for random effects
 #' @param tol (numeric) numerical toloerance to be used during optimisation
-#' @param maxIter (integer) the maximum number of iterations
+#' @param maxIter (integer) the maximum number of iterations for model parameters.
+#' @param maxIterParam (integer) the maximum number of iterations for each
+#'   parameter in each overall iteration
 #' @param maxIterRe (integer) the maximum number of iterations for fitting the
 #'   random effects
 #' @param convCrit (function) a function defining the stopping rule
 #' @param W (matrix) proximity matrix
+#' @param nTime (integer) number of time periods
 #'
 #' @rdname fit
 #' @export
@@ -123,7 +126,7 @@ fitrsfh <- function(y, x, samplingVar, W, x0Var = c(0.01, 1), ...) {
 
 #' @rdname fit
 #' @export
-fitrtfh <- function(y, x, samplingVar, nTime, x0Var = c(0.01, 1, 1), maxIterUniRoot, ...) {
+fitrtfh <- function(y, x, samplingVar, nTime, x0Var = c(0.01, 1, 1), ...) {
   # Non interactive fitting function for robust temporal FH
 
   fixedPointParam <- function(parent = parent.frame()) {
@@ -165,7 +168,7 @@ fitrtfh <- function(y, x, samplingVar, nTime, x0Var = c(0.01, 1, 1), maxIterUniR
       )
 
       fpRho <- fixedPointNumericDelta(
-        y, x, beta, function(x) matVFun(c(x, sigmas)), psi, K, "rho", 0.01
+        y, x, beta, function(x) matVFun(c(x, sigmas)), psi, K, "rho", 0.01, -0.99999
       ) %>%
         addConstraintMin(-0.99999) %>% addConstraintMax(0.99999) %>%
         addHistory
@@ -188,6 +191,89 @@ fitrtfh <- function(y, x, samplingVar, nTime, x0Var = c(0.01, 1, 1), maxIterUniR
   stripSelf(retList(
     c("fitrtfh", "fitrfh"),
     public = c("samplingVar", "nTime"), super = out)
+  )
+
+}
+
+#' @rdname fit
+#' @export
+fitrstfh <- function(y, x, samplingVar, W, nTime, x0Var = c(0.01, 0.01, 1, 1), ...) {
+  # Non interactive fitting function for robust temporal FH
+
+  fixedPointParam <- function(parent = parent.frame()) {
+    # To connect the returned function to the calling environment:
+    enclosingEnv <- environment()
+    parent.env(enclosingEnv) <- parent
+    function(param) {
+      # Defines one Iteration in algorithm:
+      param <- as.numeric(param)
+      beta <- param[-c(length(param) - (0:3))]
+      sigmas <- param[length(param) - (1:0)]
+      rho1 <- param[length(param) - (3)]
+      rho2 <- param[length(param) - (2)]
+
+      matV <- matVFun(c(rho1, rho2, sigmas))
+
+      # Regression Coefficients:
+      fpBeta <- addHistory(fixedPointRobustBeta(
+        y, x, matV, psi = psi
+      ))
+
+      beta <- fixedPoint(fpBeta, beta, addMaxIter(convCrit, maxIterParam))
+
+      # Variance Parameters:
+      .fpSigma2 <- function(sigmas) {
+        # For performance this one is implemented in c++:
+        fixedPointSigma(
+          y, as.matrix(x), beta, sigmas, rho2, as.matrix(matV$Z1()),
+          as.matrix(matV$Omega1()), as.matrix(matV$Z()),
+          get(".samplingVar", envir = attr(matV, ".self")), k, K
+        )
+      }
+
+      fpSigma2 <- .fpSigma2 %>% addConstraintMin(0.00001) %>% addHistory
+
+      sigmas <- fixedPoint(
+        fpSigma2,
+        sigmas,
+        addMaxIter(convCrit, maxIterParam)
+      )
+
+      # AR:
+      fpRho <- fixedPointNumericDelta(
+        y, x, beta, function(x) matVFun(c(rho1, x, sigmas)), psi, K, "rho2", 0.01, -0.99999
+      ) %>%
+        addConstraintMin(-0.99999) %>% addConstraintMax(0.99999) %>%
+        addHistory
+
+      rho2 <- fixedPoint(fpRho, rho2, addMaxIter(convCrit, maxIterParam))
+
+      # SAR
+      fpRho <- fixedPointRobustDelta(
+        y, x, beta, function(x) matVFun(c(x, rho2, sigmas)), psi, K, "rho1"
+      ) %>%
+        addAverageDamp %>%
+        addConstraintMin(-0.99999) %>% addConstraintMax(0.99999) %>%
+        addHistory
+
+      rho1 <- fixedPoint(fpRho, rho1, addMaxIter(convCrit, maxIterParam))
+
+      list(beta, rho1, rho2, sigmas)
+    }
+  }
+
+  matVFun <- function(x, ...) {
+    matVSTFH(.rho = x[1:2], .sigma2 = x[3:4], .nTime = nTime, .W = W,
+            .samplingVar = samplingVar, ...)
+  }
+
+  out <- fitGenericModel(y, x, matVFun, fixedPointParam, x0Var = x0Var, ...)
+  names(out$iterations) <- c("coefficients", "SAR", "AR", "variance", "re")
+  names(out$variance) <- c("SAR", "AR", "varianceSAR", "varianceAR")
+
+  stripSelf(retList(
+    c("fitrstfh", "fitrfh"),
+    public = c("samplingVar", "W", "nTime"), super = out)
   )
 
 }

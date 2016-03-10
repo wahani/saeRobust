@@ -1,6 +1,8 @@
 #' Matrix constructor functions
 #'
 #' @param .V (Matrix) variance matrix
+#' @param .nDomains (integer) number of domains
+#' @param .nTime (integer) number of time periods
 #'
 #' @details
 #'
@@ -139,10 +141,10 @@ matW <- function(y, X, beta, u, matV, psi) {
 #'
 #' @export
 #' @rdname varianceMatrices
-matTZ <- function(nDomains, nTime) {
+matTZ <- function(.nDomains, .nTime) {
   #Construct Z-Matrix for temporal mixed model
-  Z1 <- matTZ1(nDomains, nTime)
-  Z2 <- Diagonal(nDomains * nTime)
+  Z1 <- matTZ1(.nDomains, .nTime)
+  Z2 <- Diagonal(.nDomains * .nTime)
   cbind(Z1, Z2)
 }
 
@@ -151,8 +153,8 @@ matTZ <- function(nDomains, nTime) {
 #'
 #' @export
 #' @rdname varianceMatrices
-matTZ1 <- function(nDomains = 10, nTime = 10) {
-  I1 <- Diagonal(nDomains)
-  I2 <- rep(1, nTime)
+matTZ1 <- function(.nDomains = 10, .nTime = 10) {
+  I1 <- Diagonal(.nDomains)
+  I2 <- rep(1, .nTime)
   I1 %x% I2
 }

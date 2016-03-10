@@ -4,27 +4,49 @@
 #' its derivative. Both are functions of the beta coefficients.
 #'
 #' @param y vector of response
-#' @param X design matrix
+#' @param x design matrix
 #' @param matV (list of functions) see \link{matVFH}
 #' @param psi influence function
 #'
 #' @rdname objectiveFunctions
 #'
 #' @export
-scoreRobustBeta <- function(y, X, matV, psi) {
+scoreRobustBeta <- function(y, x, matV, psi) {
     # Helper functions
-    resid <- function(beta) U$sqrtInv() %*% (y - X %*% beta)
+    resid <- function(beta) U$sqrtInv() %*% (y - x %*% beta)
     D <- function(beta) Diagonal(x = psi(resid(beta), deriv = TRUE))
 
     # Precalculations - they only have to be done once
     U <- matU(matV$V())
-    memP0 <- crossprod(X, matV$VInv())
+    memP0 <- crossprod(x, matV$VInv())
     memP1 <- memP0 %*% U$sqrt()
 
     f <- function(beta) memP1 %*% psi(resid(beta))
-    f1 <- function(beta) - memP0 %*% D(beta) %*% X
+    f1 <- function(beta) - memP0 %*% D(beta) %*% x
 
     list(f = f, f1 = f1)
+}
+
+#' Fixed Point Functions
+#'
+#' This is an implementation of a robustified fixed point function to identify
+#' beta coefficients in any mixed linear model.
+#'
+#' @param y vector of response
+#' @param x design matrix
+#' @param matV (list of functions) see \link{matVFH}
+#' @param psi influence function
+#' @param stepSize (numeric) size to be used in numeric derivative
+#' @param lowerBound (numeric) a lower bound, such that \code{param - stepSize}
+#'   cannot be outside of the parameter space
+#'
+#' @rdname fixedPointFunctions
+#' @export
+fixedPointRobustBeta <- function(y, x, matV, psi) {
+    makeMatA <- matAConst(y, x, matV, psi)
+    function(beta) {
+        as.numeric(makeMatA(beta) %*% y)
+    }
 }
 
 #' @export
@@ -49,30 +71,11 @@ robustObjectiveDelta <- function(y, x, beta, matVFun, psi, K, derivSelect) {
 
 #' @export
 #' @rdname fixedPointFunctions
-fixedPointNumericDelta <- function(y, x, beta, matVFun, psi, K, derivSelect, stepSize) {
-  obRho <- robustObjectiveDelta(y, x, beta, matVFun, psi, K, derivSelect)
+fixedPointNumericDelta <- function(y, x, beta, matVFun, psi, K, derivSelect, stepSize, lowerBound) {
+  obDelta <- robustObjectiveDelta(y, x, beta, matVFun, psi, K, derivSelect)
   function(rho) {
-    rho + obRho(rho) / ((obRho(rho - stepSize) - obRho(rho)) / stepSize)
+    rho + obDelta(rho) / ((obDelta(max(lowerBound, rho - stepSize)) - obDelta(rho)) / stepSize)
   }
-}
-
-#' Fixed Point Functions
-#'
-#' This is an implementation of a robustified fixed point function to identify
-#' beta coefficients in any mixed linear model.
-#'
-#' @param y vector of response
-#' @param X design matrix
-#' @param matV (list of functions) see \link{matVFH}
-#' @param psi influence function
-#'
-#' @rdname fixedPointFunctions
-#' @export
-fixedPointRobustBeta <- function(y, X, matV, psi) {
-    makeMatA <- matAConst(y, X, matV, psi)
-    function(beta) {
-        as.numeric(makeMatA(beta) %*% y)
-    }
 }
 
 #' @param matVFun a function with one argument constructing something similar to
@@ -84,9 +87,9 @@ fixedPointRobustBeta <- function(y, X, matV, psi) {
 #'
 #' @rdname fixedPointFunctions
 #' @export
-fixedPointRobustDelta <- function(y, X, beta, matVFun, psi, K, derivSelect = 1) {
+fixedPointRobustDelta <- function(y, x, beta, matVFun, psi, K, derivSelect = 1) {
     # Precalculations - they only have to be done once
-    mem1 <- (y - X %*% beta)
+    mem1 <- (y - x %*% beta)
 
     function(param) {
         matV <- matVFun(param)
@@ -103,9 +106,9 @@ fixedPointRobustDelta <- function(y, X, beta, matVFun, psi, K, derivSelect = 1) 
 
 #' @rdname fixedPointFunctions
 #' @export
-fixedPointRobustDelta2 <- function(y, X, beta, matVFun, psi, K, derivSelect) {
+fixedPointRobustDelta2 <- function(y, x, beta, matVFun, psi, K, derivSelect) {
   # Precalculations - they only have to be done once
-  mem1 <- (y - X %*% beta)
+  mem1 <- (y - x %*% beta)
 
   function(param) {
     matV <- matVFun(param)
@@ -135,8 +138,8 @@ fixedPointRobustDelta2 <- function(y, X, beta, matVFun, psi, K, derivSelect) {
 
 #' @rdname fixedPointFunctions
 #' @export
-fixedPointRobustRandomEffect <- function(y, X, beta, matV, psi) {
-    makeMatB <- matBConst(y, X, beta, matV, psi)
-    memResid <- y - X %*% beta
+fixedPointRobustRandomEffect <- function(y, x, beta, matV, psi) {
+    makeMatB <- matBConst(y, x, beta, matV, psi)
+    memResid <- y - x %*% beta
     function(u) as.numeric(makeMatB(u) %*% memResid)
 }
