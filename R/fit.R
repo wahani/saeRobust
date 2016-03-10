@@ -196,10 +196,12 @@ fitrtfh <- function(y, x, samplingVar, nTime, x0Var = c(0.01, 1, 1), maxIterUniR
 #' @rdname fit
 fitGenericModel <- function(
   y, x, matVFun, fixedPointParam,
-  k = 1.345, K = getK(k), psi = . %>% psiOne(k),
+  k = 1.345, K = getK(k),
   x0Coef = NULL, x0Var = 1, x0Re = NULL,
   tol = 1e-6, maxIter = 100, maxIterParam = 1, maxIterRe = 100, convCrit = convCritRelative(tol)) {
   # Non interactive fitting function for robust FH Models
+
+  psi <- . %>% psiOne(k)
 
   # Fitting Model Parameter:
   if (is.null(x0Coef)) {
@@ -237,7 +239,7 @@ fitGenericModel <- function(
   stripSelf(retList(public = c(
     "coefficients", "variance", "iterations",
     "tol", "maxIter", "maxIterRe",
-    "k", "K", "psi",
+    "k", "K",
     "y", "x", "re", "reblup", "residuals"
   )))
 
