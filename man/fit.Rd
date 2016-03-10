@@ -61,8 +61,6 @@ parameter in each overall iteration}
 random effects}
 
 \item{convCrit}{(function) a function defining the stopping rule}
-
-\item{psi}{(function) influence function}
 }
 \description{
 Several fitting procedures. Not intended for interactive use.

@@ -13,7 +13,6 @@
 #'   overall algorithm.
 #' @param k (numeric) tuning constant
 #' @param K (numeric) scaling constant
-#' @param psi (function) influence function
 #' @param x0Coef (numeric) starting values for regression coefficients
 #' @param x0Var (numeric) starting values for variance parameters
 #' @param x0Re (numeric) starting values for random effects
