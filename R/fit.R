@@ -2,6 +2,7 @@
 #'
 #' Several fitting procedures. Not intended for interactive use.
 #'
+#' @inheritParams rfh
 #' @param y (numeric) response vector
 #' @param x ([m|M]atrix) the design matrix
 #' @param samplingVar (numeric) vector with sampling variances
@@ -62,7 +63,7 @@ fitrfh <- function(y, x, samplingVar, ...) {
   names(out$iterations) <- c("coefficients", "variance", "re")
   names(out$variance) <- "variance"
 
-  stripSelf(retList("fitrfh", public = c("samplingVar"), super = out))
+  stripSelf(retList(public = c("samplingVar"), super = out))
 
 }
 
@@ -117,7 +118,7 @@ fitrsfh <- function(y, x, samplingVar, W, x0Var = c(0.01, 1), ...) {
   names(out$variance) <- c("correlation", "variance")
 
   stripSelf(retList(
-    c("fitrsfh", "fitrfh"),
+    c("fitrsfh"),
     public = c("samplingVar", "W"), super = out)
   )
 
@@ -188,7 +189,7 @@ fitrtfh <- function(y, x, samplingVar, nTime, x0Var = c(0.01, 1, 1), ...) {
   names(out$variance) <- c("correlation", "variance1", "varianceAR")
 
   stripSelf(retList(
-    c("fitrtfh", "fitrfh"),
+    c("fitrtfh"),
     public = c("samplingVar", "nTime"), super = out)
   )
 
@@ -271,7 +272,7 @@ fitrstfh <- function(y, x, samplingVar, W, nTime, x0Var = c(0.01, 0.01, 1, 1), .
   names(out$variance) <- c("SAR", "AR", "varianceSAR", "varianceAR")
 
   stripSelf(retList(
-    c("fitrstfh", "fitrfh"),
+    c("fitrstfh"),
     public = c("samplingVar", "W", "nTime"), super = out)
   )
 
@@ -283,8 +284,9 @@ fitGenericModel <- function(
   y, x, matVFun, fixedPointParam,
   k = 1.345, K = getK(k),
   x0Coef = NULL, x0Var = 1, x0Re = NULL,
-  tol = 1e-6, maxIter = 100, maxIterParam = 1, maxIterRe = 100, convCrit = convCritRelative(tol)) {
+  tol = 1e-6, maxIter = 100, maxIterParam = 1, maxIterRe = 100, convCrit = convCritRelative(tol), ...) {
   # Non interactive fitting function for robust FH Models
+  # ... are ignored
 
   psi <- . %>% psiOne(k)
 
@@ -302,7 +304,6 @@ fitGenericModel <- function(
   variance <- out[(length(x0Coef) + 1):length(out)]
 
   # Fitting Random Effects
-
   matV <- matVFun(variance)
   if (is.null(x0Re)) {
     x0Re <- fitReStartingValues(y, x, coefficients, matV, psi)
@@ -318,14 +319,15 @@ fitGenericModel <- function(
 
   # Reformats
   re <- re$re
-  reblup <- as.numeric(x %*% coefficients + matV$Z() %*% re)
+  fitted <- as.numeric(x %*% coefficients)
+  reblup <- as.numeric(fitted + matV$Z() %*% re)
   residuals <- y - reblup
 
-  stripSelf(retList(public = c(
+  stripSelf(retList("fitrfh", public = c(
     "coefficients", "variance", "iterations",
-    "tol", "maxIter", "maxIterRe",
+    "tol", "maxIter", "maxIterParam", "maxIterRe",
     "k", "K",
-    "y", "x", "re", "reblup", "residuals"
+    "y", "x", "re", "reblup", "residuals", "fitted"
   )))
 
 }

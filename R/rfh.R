@@ -24,31 +24,31 @@ rfh(formula ~ formula, data ~ data.frame, samplingVar ~ character, correlation ~
 
   stripSelf(retList(
     "rfh",
-    public = c("call"),
+    public = c("call", "formula"),
     super = rfh(xy$y, xy$x, samplingVar, correlation, ...)
   ))
 
 }
 
-#' @rdname rfh
+#' @rdname fit
 #' @export
 rfh(formula ~ numeric, data ~ matrix | Matrix, samplingVar ~ numeric, correlation ~ 'NULL', ...) %m% {
   fitrfh(formula, data, samplingVar, ...)
 }
 
-#' @rdname rfh
+#' @rdname fit
 #' @export
 rfh(formula ~ numeric, data ~ matrix | Matrix, samplingVar ~ numeric, correlation ~ corSAR1, ...) %m% {
   fitrsfh(formula, data, samplingVar, correlation@W, ...)
 }
 
-#' @rdname rfh
+#' @rdname fit
 #' @export
 rfh(formula ~ numeric, data ~ matrix | Matrix, samplingVar ~ numeric, correlation ~ corAR1, ...) %m% {
   fitrtfh(formula, data, samplingVar, correlation@nTime, ...)
 }
 
-#' @rdname rfh
+#' @rdname fit
 #' @export
 rfh(formula ~ numeric, data ~ matrix | Matrix, samplingVar ~ numeric, correlation ~ corSAR1AR1, ...) %m% {
   fitrstfh(formula, data, samplingVar, correlation@W, correlation@nTime, ...)

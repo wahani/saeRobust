@@ -18,6 +18,7 @@ test_that("rfh is working", {
     dat$samplingVar <- 1
 
     out <- rfh(y ~ x, dat, "samplingVar", maxIter = 1, maxIterRe = 1)
+
     expect_is(out, "list")
     expect_is(out$coefficients, "numeric")
     expect_is(out$variance, "numeric")

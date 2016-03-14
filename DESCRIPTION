@@ -1,9 +1,9 @@
 Package: saeRobust
-Title: Tools for Fitting Robust Mixed Models in Small Area Estimation
+Title: Robust Small Area Estimation
 Version: 0.0.5
-Authors@R: person("Sebastian", "Warnholz", , "Sebastian.Warnholz@fu-berlin.de", role = c("aut", "cre"))
-Description: This package provides tools to program the algorithms used to fit
-    robust mixed models in the context of small area estimation.
+Authors@R: person("Sebastian", "Warnholz", "Sebastian.Warnholz@fu-berlin.de", role = c("aut", "cre"))
+Description: This package provides robust estimators for commonly used models
+  in the SAE field: FH, spatial FH, temporal FH, spatio-temporal FH.
 Depends:
     R (>= 3.2),
     methods,
@@ -29,3 +29,21 @@ Encoding: UTF-8
 ByteCompile: true
 RoxygenNote: 5.0.1
 LinkingTo: Rcpp, RcppArmadillo
+Collate:
+    'NAMESPACE.R'
+    'RcppExports.R'
+    'correlation.R'
+    'fit.R'
+    'fixedPoint.R'
+    'helper.R'
+    'makeXY.R'
+    'mat.R'
+    'matModels.R'
+    'mse.R'
+    'psiFunctions.R'
+    'rfh.R'
+    'robustEstimationEquations.R'
+    'robustObjectiveFunctions.R'
+    'testData.R'
+    'update.R'
+    'variance.R'
