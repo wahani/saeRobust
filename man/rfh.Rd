@@ -10,24 +10,32 @@ rfh(formula, data, samplingVar, correlation = NULL, ...)
 
 \S4method{rfh}{formula,data.frame,character,ANY}(formula, data, samplingVar, correlation, ...)
 
-\method{predict}{fitrfh}(object, type = "reblup", ...)
+\method{predict}{fitrfh}(object, type = "reblup", c = 1, ...)
 }
 \arguments{
-\item{formula}{(formula)}
+\item{formula}{(formula) a formula specifying the fixed effects part of the
+model.}
 
-\item{data}{(data.frame)}
+\item{data}{(data.frame) a data set.}
 
-\item{samplingVar}{(character)}
+\item{samplingVar}{(character) the name of the variable containing the
+sampling variances.}
 
-\item{correlation}{an optional correlation structure, e.g. \link{corSAR1}.}
+\item{correlation}{an optional correlation structure, e.g. \link{corSAR1},
+for the random effects part of the model. Default is no correlation, i.e. a
+random intercept.}
 
 \item{...}{arguments passed \link{fitGenericModel}}
 
 \item{object}{(rfh) an object of class rfh}
 
-\item{type}{(character) one or more in \code{c("linear", "reblup")}}
+\item{type}{(character) one or more in \code{c("linear", "reblup", "reblupbc")}}
+
+\item{c}{(numeric) scalar; a multiplyer constant used in the bias correction.
+Default is to make no correction for realisations of direct estimator
+within \code{c = 1} times the standard deviation of direct estimator.}
 }
 \description{
-Robust Fay Herriot Model
+User interface to fit robust Fay-Herriot type models.
 }
 

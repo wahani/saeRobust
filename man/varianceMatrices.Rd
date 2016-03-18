@@ -10,6 +10,7 @@
 \alias{matTrace}
 \alias{matU}
 \alias{matW}
+\alias{matWbc}
 \title{Matrix constructor functions}
 \usage{
 matU(.V)
@@ -25,6 +26,8 @@ matA(y, X, beta, matV, psi)
 matAConst(y, X, matV, psi)
 
 matW(y, X, beta, re, matV, psi)
+
+matWbc(y, reblup, W, samplingVar, c = 1)
 
 matTZ(.nDomains, .nTime)
 
@@ -46,6 +49,14 @@ matTZ1(.nDomains = 10, .nTime = 10)
 \item{matV}{(list of functions) see \code{matVFH} for an example}
 
 \item{psi}{(function) the influence function}
+
+\item{reblup}{(numeric) vector with robust best linear unbiased predictions}
+
+\item{W}{(Matrix) the weighting matrix}
+
+\item{samplingVar}{(numeric) the vector of sampling variances}
+
+\item{c}{(numeric) scalar}
 
 \item{.nDomains}{(integer) number of domains}
 
@@ -78,6 +89,10 @@ Matrix constructor functions
 \code{matW} returns a matrix containing the weights as they are
   defined for the pseudo linear form, such that \code{matW \%*\% y} is the
   REBLUP.
+
+\code{matWbc} returns a matrix containing the weights as they are
+  defined for the pseudo linear form, such that \code{matWbc \%*\% y} is the
+  bias-corrected REBLUP. \code{c} is a multiplyer for the standard deviation.
 
 \code{matTZ} constructs the Z matrix in a linear mixed model with
   autocorrelated random effects.

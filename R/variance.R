@@ -4,6 +4,7 @@
 #' object.
 #'
 #' @param .object,object an object
+#' @param c (numeric) scalar
 #' @param ... arguments passed to method
 #'
 #' @export
@@ -14,9 +15,9 @@ variance <- function(.object, ...) UseMethod("variance")
 #' @rdname variance
 variance.fitrfh <- function(.object, ...) {
 
-    expose(matVFH(.object$variance, .object$samplingVar))
+  expose(matVFH(.object$variance, .object$samplingVar))
 
-    retList("rfhVariance")
+  retList("rfhVariance")
 }
 
 #' @export
@@ -62,37 +63,45 @@ variance.fitrstfh <- function(.object, ...) {
 
 #' @export
 #' @rdname variance
-weights.fitrfh <- function(object, ...) {
+weights.fitrfh <- function(object, c = 1, ...) {
 
-    V <- variance(object)
+  V <- variance(object)
 
-    W <-  matW(
-        y = object$y,
-        X = object$x,
-        beta = object$coefficients,
-        re = object$re,
-        matV = V,
-        psi = . %>% psiOne(object$k)
-    )
+  W <-  matW(
+    y = object$y,
+    X = object$x,
+    beta = object$coefficients,
+    re = object$re,
+    matV = V,
+    psi = . %>% psiOne(object$k)
+  )
 
-    A <- matA(
-        y = object$y,
-        X = object$x,
-        beta = object$coefficients,
-        matV = V,
-        psi = . %>% psiOne(object$k)
-    )
+  A <- matA(
+    y = object$y,
+    X = object$x,
+    beta = object$coefficients,
+    matV = V,
+    psi = . %>% psiOne(object$k)
+  )
 
-    B <- matB(
-        y = object$y,
-        X = object$x,
-        beta = object$coefficients,
-        re = object$re,
-        V,
-        psi = . %>% psiOne(object$k)
-    )
+  B <- matB(
+    y = object$y,
+    X = object$x,
+    beta = object$coefficients,
+    re = object$re,
+    V,
+    psi = . %>% psiOne(object$k)
+  )
 
-    stripSelf(retList("rfhWeights", c("W", "A", "B")))
+  Wbc <- matWbc(
+    y = object$y,
+    reblup = object$reblup,
+    W = W,
+    samplingVar = object$samplingVar,
+    c = c
+  )
+
+  stripSelf(retList("rfhWeights", c("W", "Wbc", "A", "B")))
 
 }
 

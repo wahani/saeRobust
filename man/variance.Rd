@@ -19,12 +19,14 @@ variance(.object, ...)
 
 \method{variance}{fitrstfh}(.object, ...)
 
-\method{weights}{fitrfh}(object, ...)
+\method{weights}{fitrfh}(object, c = 1, ...)
 }
 \arguments{
 \item{.object, object}{an object}
 
 \item{...}{arguments passed to method}
+
+\item{c}{(numeric) scalar}
 }
 \description{
 A generic function to construct the different variance components of an

@@ -1,9 +1,18 @@
 #' Robust Fay Herriot Model
 #'
-#' @param formula (formula)
-#' @param data (data.frame)
-#' @param samplingVar (character)
-#' @param correlation an optional correlation structure, e.g. \link{corSAR1}.
+#' User interface to fit robust Fay-Herriot type models.
+#'
+#' @param formula (formula) a formula specifying the fixed effects part of the
+#'   model.
+#' @param data (data.frame) a data set.
+#' @param samplingVar (character) the name of the variable in \code{data}
+#'   containing the sampling variances.
+#' @param correlation an optional correlation structure, e.g. \link{corSAR1},
+#'   for the random effects part of the model. Default is no correlation, i.e. a
+#'   random intercept.
+#' @param c (numeric) scalar; a multiplyer constant used in the bias correction.
+#'   Default is to make no correction for realisations of direct estimator
+#'   within \code{c = 1} times the standard deviation of direct estimator.
 #' @param ... arguments passed \link{fitGenericModel}
 #'
 #' @rdname rfh
@@ -55,18 +64,20 @@ rfh(formula ~ numeric, data ~ matrix | Matrix, samplingVar ~ numeric, correlatio
 }
 
 #' @param object (rfh) an object of class rfh
-#' @param type (character) one or more in \code{c("linear", "reblup")}
+#' @param type (character) one or more in \code{c("linear", "reblup", "reblupbc")}
 #'
 #' @rdname rfh
 #' @export
-predict.fitrfh <- function(object, type = "reblup", ...) {
+predict.fitrfh <- function(object, type = "reblup", c = 1, ...) {
 
   re <- as.numeric(variance(object)$Z() %*% object$re)
   Xb <- fitted.values(object)
+  Wbc <- weights(object, c = c)$Wbc
 
   out <- data.frame(re = re)
   if (is.element("linear", type)) out$linear <- Xb
   if (is.element("reblup", type)) out$reblup <- Xb + re
+  if (is.element("reblupbc", type)) out$reblupbc <- as.numeric(Wbc %*% object$y)
 
   out
 

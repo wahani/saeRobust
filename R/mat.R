@@ -37,8 +37,12 @@ matTrace <- function(x) {
 #' @param X (Matrix) design matrix
 #' @param beta (numeric) vector of regression coefficients
 #' @param re (numeric) vector of random effects
+#' @param reblup (numeric) vector with robust best linear unbiased predictions
 #' @param matV (list of functions) see \code{matVFH} for an example
 #' @param psi (function) the influence function
+#' @param W (Matrix) the weighting matrix
+#' @param samplingVar (numeric) the vector of sampling variances
+#' @param c (numeric) scalar
 #'
 #' @details \code{matB} computes the matrix B which is used to compute the
 #'   weights in the pseudo linearised representation of the REBLUP.
@@ -134,6 +138,33 @@ matW <- function(y, X, beta, re, matV, psi) {
     B <- matB(y, X, beta, re, matV, psi)
     XA <- X %*% A
     XA + B %*% (Diagonal(length(y)) - XA)
+}
+
+#' @details \code{matWbc} returns a matrix containing the weights as they are
+#'   defined for the pseudo linear form, such that \code{matWbc \%*\% y} is the
+#'   bias-corrected REBLUP. \code{c} is a multiplyer for the standard deviation.
+#'
+#' @rdname varianceMatrices
+#' @export
+matWbc <- function(y, reblup, W, samplingVar, c = 1) {
+  samplingVar <- sqrt(samplingVar) # we continue with sd not var
+  Wbc <- W
+  w1 <- 1 - c * samplingVar / y
+  w2 <- 1 + c * samplingVar / y
+  cond1 <- reblup < (y - c * samplingVar)
+  cond2 <- reblup > (y + c * samplingVar)
+
+  # How can we vectorize this: So long we need operate on each line of W.
+  for (i in seq_along(samplingVar)) {
+    I <- ifelse(seq_along(samplingVar) == i, 1, 0) # 1(j = i)
+    w1_ <- w1[i] * I
+    w2_ <- w2[i] * I
+    w <- W[i, ]
+    (if (cond1[i]) w1_
+    else if (cond2[i]) w2_
+    else w) -> Wbc[i, ]
+  }
+  Wbc
 }
 
 #' @details \code{matTZ} constructs the Z matrix in a linear mixed model with

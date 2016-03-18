@@ -80,11 +80,14 @@ random effects}
 
 \item{convCrit}{(function) a function defining the stopping rule}
 
-\item{formula}{(formula)}
+\item{formula}{(formula) a formula specifying the fixed effects part of the
+model.}
 
-\item{data}{(data.frame)}
+\item{data}{(data.frame) a data set.}
 
-\item{correlation}{an optional correlation structure, e.g. \link{corSAR1}.}
+\item{correlation}{an optional correlation structure, e.g. \link{corSAR1},
+for the random effects part of the model. Default is no correlation, i.e. a
+random intercept.}
 }
 \description{
 Several fitting procedures. Not intended for interactive use.
