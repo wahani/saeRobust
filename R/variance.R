@@ -70,7 +70,7 @@ weights.fitrfh <- function(object, ...) {
         y = object$y,
         X = object$x,
         beta = object$coefficients,
-        u = object$re,
+        re = object$re,
         matV = V,
         psi = . %>% psiOne(object$k)
     )
@@ -87,7 +87,7 @@ weights.fitrfh <- function(object, ...) {
         y = object$y,
         X = object$x,
         beta = object$coefficients,
-        u = object$re,
+        re = object$re,
         V,
         psi = . %>% psiOne(object$k)
     )

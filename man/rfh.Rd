@@ -10,7 +10,7 @@ rfh(formula, data, samplingVar, correlation = NULL, ...)
 
 \S4method{rfh}{formula,data.frame,character,ANY}(formula, data, samplingVar, correlation, ...)
 
-\method{predict}{fitrfh}(object, type = "REBLUP", ...)
+\method{predict}{fitrfh}(object, type = "reblup", ...)
 }
 \arguments{
 \item{formula}{(formula)}
@@ -25,7 +25,7 @@ rfh(formula, data, samplingVar, correlation = NULL, ...)
 
 \item{object}{(rfh) an object of class rfh}
 
-\item{type}{(character) one in \code{c("linear", "REBLUP")}}
+\item{type}{(character) one in \code{c("linear", "reblup")}}
 }
 \description{
 Robust Fay Herriot Model

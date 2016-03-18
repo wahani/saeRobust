@@ -39,16 +39,15 @@ mse.fitrfh <- function(object, type = "pseudo", B = 100, ...) {
                 k = object$k,
                 tol = object$tol
             )
-            (predict(fit)$REBLUP - as.numeric(trueVal))^2
+            (fit$reblup - as.numeric(trueVal))^2
         })
         rowMeans(bootSamples)
     }
 
     matV <- variance(object)
+    Xb <- fitted.values(object)
 
-    out <- predict(object)["REBLUP"]
-    Xb <- as.numeric(object$x %*% object$coefficients)
-
+    out <- predict(object)["reblup"]
     if ("pseudo" %in% type) out$pseudo <- pseudo(Xb, matV)
     if ("boot" %in% type) out$boot <- boot(B, Xb, matV)
     out

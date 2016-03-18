@@ -141,18 +141,18 @@ test_that("predict.rfh", {
     expectIs(out, "data.frame")
     expectIs(out$re, "numeric")
     expectEqual(
-        as.numeric(out$REBLUP - out$re),
+        as.numeric(out$reblup - out$re),
         as.numeric(modelFit$x %*% modelFit$coefficients)
     )
 
     out <- predict(modelFit)
-    expectEqual(names(out), c("REBLUP", "re"))
+    expectEqual(names(out), c("reblup", "re"))
 
     out <- predict(modelFit, "linear")
     expectEqual(names(out), c("linear", "re"))
 
     out <- predict(modelFit)
-    expectEqual(names(out), c("REBLUP", "re"))
+    expectEqual(names(out), c("reblup", "re"))
 
 })
 

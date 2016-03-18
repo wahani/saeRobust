@@ -55,15 +55,15 @@ rfh(formula ~ numeric, data ~ matrix | Matrix, samplingVar ~ numeric, correlatio
 }
 
 #' @param object (rfh) an object of class rfh
-#' @param type (character) one in \code{c("linear", "REBLUP")}
+#' @param type (character) one in \code{c("linear", "reblup")}
 #'
 #' @rdname rfh
 #' @export
-predict.fitrfh <- function(object, type = "REBLUP", ...) {
+predict.fitrfh <- function(object, type = "reblup", ...) {
 
   re <- if ("linear" == type) {
     0
-  } else if ("REBLUP" == type) {
+  } else if ("reblup" == type) {
     as.numeric(variance(object)$Z() %*% object$re)
   }
 

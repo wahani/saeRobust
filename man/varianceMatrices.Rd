@@ -16,7 +16,7 @@ matU(.V)
 
 matTrace(x)
 
-matB(y, X, beta, u, matV, psi)
+matB(y, X, beta, re, matV, psi)
 
 matBConst(y, X, beta, matV, psi)
 
@@ -24,7 +24,7 @@ matA(y, X, beta, matV, psi)
 
 matAConst(y, X, matV, psi)
 
-matW(y, X, beta, u, matV, psi)
+matW(y, X, beta, re, matV, psi)
 
 matTZ(.nDomains, .nTime)
 
@@ -41,7 +41,7 @@ matTZ1(.nDomains = 10, .nTime = 10)
 
 \item{beta}{(numeric) vector of regression coefficients}
 
-\item{u}{(numeric) vector of random effects}
+\item{re}{(numeric) vector of random effects}
 
 \item{matV}{(list of functions) see \code{matVFH} for an example}
 

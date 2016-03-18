@@ -36,7 +36,7 @@ matTrace <- function(x) {
 #' @param y (numeric) response
 #' @param X (Matrix) design matrix
 #' @param beta (numeric) vector of regression coefficients
-#' @param u (numeric) vector of random effects
+#' @param re (numeric) vector of random effects
 #' @param matV (list of functions) see \code{matVFH} for an example
 #' @param psi (function) the influence function
 #'
@@ -45,8 +45,8 @@ matTrace <- function(x) {
 #'
 #' @rdname varianceMatrices
 #' @export
-matB <- function(y, X, beta, u, matV, psi) {
-    matBConst(y, X, beta, matV, psi)(u)
+matB <- function(y, X, beta, re, matV, psi) {
+    matBConst(y, X, beta, matV, psi)(re)
 }
 
 #' @details \code{matBConst} returns a function with one argument, u, to compute
@@ -78,9 +78,9 @@ matBConst <- function(y, X, beta, matV, psi) {
     memResid <- y - memXB
     memZVeU <- crossprod(matV$Z(), matV$VeInv())
 
-    function(u) {
-        W2 <- Diagonal(x = w2(u))
-        W3 <- Diagonal(x = w3(u))
+    function(re) {
+        W2 <- Diagonal(x = w2(re))
+        W3 <- Diagonal(x = w3(re))
         memPart1 <- memZVeU %*% W2
         memPart2 <- matV$VuInv() %*% W3
         solve(memPart1 %*% matV$Z() + memPart2) %*% memPart1
@@ -129,9 +129,9 @@ matAConst <- function(y, X, matV, psi) {
 #'
 #' @rdname varianceMatrices
 #' @export
-matW <- function(y, X, beta, u, matV, psi) {
+matW <- function(y, X, beta, re, matV, psi) {
     A <- matA(y, X, beta, matV, psi)
-    B <- matB(y, X, beta, u, matV, psi)
+    B <- matB(y, X, beta, re, matV, psi)
     XA <- X %*% A
     XA + B %*% (Diagonal(length(y)) - XA)
 }
