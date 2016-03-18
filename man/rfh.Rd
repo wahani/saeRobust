@@ -25,7 +25,7 @@ rfh(formula, data, samplingVar, correlation = NULL, ...)
 
 \item{object}{(rfh) an object of class rfh}
 
-\item{type}{(character) one in \code{c("linear", "reblup")}}
+\item{type}{(character) one or more in \code{c("linear", "reblup")}}
 }
 \description{
 Robust Fay Herriot Model

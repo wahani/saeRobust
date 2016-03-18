@@ -146,13 +146,10 @@ test_that("predict.rfh", {
     )
 
     out <- predict(modelFit)
-    expectEqual(names(out), c("reblup", "re"))
+    expectEqual(names(out), c("re", "reblup"))
 
     out <- predict(modelFit, "linear")
-    expectEqual(names(out), c("linear", "re"))
-
-    out <- predict(modelFit)
-    expectEqual(names(out), c("reblup", "re"))
+    expectEqual(names(out), c("re", "linear"))
 
 })
 
