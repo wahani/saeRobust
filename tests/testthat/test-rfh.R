@@ -112,6 +112,10 @@ test_that("temporal rfh is working", {
   testthat::expect_is(out$nTime, "numeric")
   testthat::expect_is(out$W, "matrix")
 
+  # What do we expect here? Basically I just want to check that the code runs
+  # without error:
+  predict(out, type = c("reblup", "reblupbc"))
+
 })
 
 test_that("predict.rfh", {

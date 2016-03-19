@@ -18,8 +18,8 @@ model.}
 
 \item{data}{(data.frame) a data set.}
 
-\item{samplingVar}{(character) the name of the variable containing the
-sampling variances.}
+\item{samplingVar}{(character) the name of the variable in \code{data}
+containing the sampling variances.}
 
 \item{correlation}{an optional correlation structure, e.g. \link{corSAR1},
 for the random effects part of the model. Default is no correlation, i.e. a

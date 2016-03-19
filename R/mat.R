@@ -134,10 +134,10 @@ matAConst <- function(y, X, matV, psi) {
 #' @rdname varianceMatrices
 #' @export
 matW <- function(y, X, beta, re, matV, psi) {
-    A <- matA(y, X, beta, matV, psi)
-    B <- matB(y, X, beta, re, matV, psi)
-    XA <- X %*% A
-    XA + B %*% (Diagonal(length(y)) - XA)
+  A <- matA(y, X, beta, matV, psi)
+  B <- matB(y, X, beta, re, matV, psi)
+  XA <- X %*% A
+  XA + matV$Z() %*% B %*% (Diagonal(length(y)) - XA)
 }
 
 #' @details \code{matWbc} returns a matrix containing the weights as they are
