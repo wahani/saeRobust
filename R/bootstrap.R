@@ -1,10 +1,14 @@
 #' Fit model on Bootstrap sample
 #'
-#' These methods help to repeatedly fit a \link{rfh} model on bootstrap samples.
+#' These functions help to repeatedly fit a \link{rfh} model on bootstrap
+#' samples. Use \code{bootstrap} as a user interface. \code{boot} can be used to
+#' extend the framework but is not meant to be used interactively. If you are
+#' interested in the parameteric bootstrap for a 'rfh' model you can use the
+#' implementation in \link{mse}.
 #'
-#' @param modelA a fitted object
-#' @param modelB a fitted object used to draw samples. In most cases this is
-#'   \code{modelA}. Alternatively it may be useful to use a non-robust model.
+#' @param object a fitted object
+#' @param matV a fitted object used to draw samples. In most cases this is
+#'   \code{object}. Alternatively it may be useful to use a non-robust model.
 #' @param B the number of repetitions
 #' @param filter a vector indicating which elements in the fittedd object to
 #'   keep in each repetition.
@@ -12,46 +16,50 @@
 #'
 #' @export
 #' @rdname bootstrap
-bootstrap(modelA, modelB = modelA, B = NULL, ...) %g% standardGeneric("bootstrap")
-
-#' @export
-#' @rdname bootstrap
-bootstrap(modelA, modelB ~ missing, B ~ missing, ...) %m%
-  bootstrap(modelA = modelA, modelB = modelA, B = NULL, ...)
-
-#' @export
-#' @rdname bootstrap
-bootstrap(modelA, modelB ~ missing, B ~ numeric|integer, ...) %m% {
-  bootstrap(modelA = modelA, modelB = modelA, B = B, ...)
+bootstrap <- function(object, matV = variance(object), B = NULL, ...) {
+  # This function avoids the 'unecessary' methods for missing values when we
+  # want S4 dispatch with default values in the generic
+  boot(object, matV, B, ...)
 }
 
 #' @export
 #' @rdname bootstrap
-bootstrap(modelA, modelB, B ~ integer|numeric, filter = NULL, ...) %m% {
+boot(object, matV, B, ...) %g% standardGeneric("boot")
+
+# we need these two methods when we want to use boot as a user interrface
+# boot(object, matV ~ missing, B ~ missing, ...) %m%
+#   boot(object = object, matV = variance(object), B = NULL, ...)
+#
+# boot(object, matV ~ missing, B ~ numeric|integer, ...) %m% {
+#   boot(object = object, matV = variance(object), B = B, ...)
+# }
+
+#' @export
+#' @rdname bootstrap
+boot(object, matV, B ~ integer|numeric, filter = NULL, ...) %m% {
   if (is.null(filter)) {
-    replicate(B, bootstrap(modelA, modelB, NULL, ...), FALSE)
+    replicate(B, boot(object, matV, NULL, ...), FALSE)
   } else {
-    replicate(B, bootstrap(modelA, modelB, NULL, ...)[filter], FALSE)
+    replicate(B, boot(object, matV, NULL, ...)[filter], FALSE)
   }
 }
 
 #' @export
 #' @rdname bootstrap
-bootstrap(modelA ~ rfh, modelB ~ rfh, B ~ NULL, ...) %m% {
+boot(object ~ rfh, matV ~ rfhVariance, B ~ NULL, ...) %m% {
   # This we need to get directly in the update method for fitrfh class
   # Otherwise weired things are happening in the call for the S4-generic
-  class(modelA) <- class(modelA)[-1] # this hopefully only removes 'rfh'
+  class(object) <- class(object)[-1] # this hopefully only removes 'rfh'
 
   # Bootstrap sample:
-  Xb <- fitted.values(modelB)
-  matV <- variance(modelB)
+  Xb <- fitted.values(object)
   re <- MASS::mvrnorm(1, mu = rep(0, length(Xb)), matV$Vu())
   e <- MASS::mvrnorm(1, mu = rep(0, length(Xb)), matV$Ve())
   trueY <- as.numeric(Xb + matV$Z() %*% re)
   y <- trueY + e
 
   # refit:
-  out <- update(modelA, y = y)
+  out <- update(object, y = y)
   out$trueY <- trueY
   out
 }

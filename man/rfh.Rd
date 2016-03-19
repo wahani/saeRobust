@@ -8,7 +8,8 @@
 \usage{
 rfh(formula, data, samplingVar, correlation = NULL, ...)
 
-\S4method{rfh}{formula,data.frame,character,ANY}(formula, data, samplingVar, correlation, ...)
+\S4method{rfh}{formula,data.frame,character,ANY}(formula, data,
+  samplingVar, correlation, ...)
 
 \method{predict}{fitrfh}(object, type = "reblup", c = 1, ...)
 }

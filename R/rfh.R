@@ -21,7 +21,8 @@
 rfh(formula, data, samplingVar, correlation = NULL, ...) %g% standardGeneric("rfh")
 
 #' @name rfh
-#' @usage \S4method{rfh}{formula,data.frame,character,ANY}(formula, data, samplingVar, correlation, ...)
+#' @usage \S4method{rfh}{formula,data.frame,character,ANY}(formula, data,
+#'   samplingVar, correlation, ...)
 #' @aliases rfh,formula,data.frame,character,ANY-method
 #' @rdname rfh
 NULL

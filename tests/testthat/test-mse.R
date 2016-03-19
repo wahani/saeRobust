@@ -25,7 +25,7 @@ test_that("mse.rfh", {
   out <- mse(modelFit, "pseudo")
   expectEqual(names(out), c("reblup", "pseudo"))
 
-  out <- mse(modelFit, c("boot", "pseudo"), B = 2)
+  out <- mse(modelFit, c("boot", "pseudo"), B = 3)
   expectEqual(names(out), c("reblup", "pseudo", "boot"))
 
 })

@@ -28,24 +28,11 @@ mse.fitrfh <- function(object, type = "pseudo", B = 100, ...) {
     as.numeric(var + bias^2)
   }
 
-  boot <- function(B, Xb, matV) {
-    bootSamples <- replicate(B, {
-      re <- MASS::mvrnorm(1, mu = rep(0, length(Xb)), matV$Vu())
-      e <- MASS::mvrnorm(1, mu = rep(0, length(Xb)), matV$Ve())
-      trueVal <- Xb + matV$Z() %*% re
-      y <- trueVal + e
-      fit <- fitrfh(
-        y = y,
-        x = object$x,
-        samplingVar = object$samplingVar,
-        x0Coef = object$coefficients,
-        x0Var = object$variance,
-        k = object$k,
-        tol = object$tol
-      )
-      (fit$reblup - as.numeric(trueVal))^2
-    })
-    rowMeans(bootSamples)
+  boot <- function(B, matV) {
+    resList <- bootstrap(object, matV, B = B, filter = c("reblup", "trueY"))
+    colMeans(do.call(rbind, lapply(resList, function(el) {
+      (el$reblup - el$trueY)^2
+    })))
   }
 
   matV <- variance(object)
@@ -53,7 +40,7 @@ mse.fitrfh <- function(object, type = "pseudo", B = 100, ...) {
 
   out <- predict(object)["reblup"]
   if ("pseudo" %in% type) out$pseudo <- pseudo(Xb, matV)
-  if ("boot" %in% type) out$boot <- boot(B, Xb, matV)
+  if ("boot" %in% type) out$boot <- boot(B, matV)
   out
 
 }

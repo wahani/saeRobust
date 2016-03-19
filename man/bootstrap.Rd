@@ -2,31 +2,25 @@
 % Please edit documentation in R/bootstrap.R
 \docType{methods}
 \name{bootstrap}
+\alias{boot}
+\alias{boot,ANY,ANY,integerORnumeric-method}
+\alias{boot,rfh,rfhVariance,NULL-method}
 \alias{bootstrap}
-\alias{bootstrap,ANY,ANY,integerORnumeric-method}
-\alias{bootstrap,ANY,missing,missing-method}
-\alias{bootstrap,ANY,missing,numericORinteger-method}
-\alias{bootstrap,rfh,rfh,NULL-method}
 \title{Fit model on Bootstrap sample}
 \usage{
-bootstrap(modelA, modelB = modelA, B = NULL, ...)
+bootstrap(object, matV = variance(object), B = NULL, ...)
 
-\S4method{bootstrap}{ANY,missing,missing}(modelA, modelB = modelA, B = NULL,
-  ...)
+boot(object, matV, B, ...)
 
-\S4method{bootstrap}{ANY,missing,numericORinteger}(modelA, modelB = modelA,
-  B = NULL, ...)
+\S4method{boot}{ANY,ANY,integerORnumeric}(object, matV, B, filter = NULL, ...)
 
-\S4method{bootstrap}{ANY,ANY,integerORnumeric}(modelA, modelB, B,
-  filter = NULL, ...)
-
-\S4method{bootstrap}{rfh,rfh,`NULL`}(modelA, modelB = modelA, B = NULL, ...)
+\S4method{boot}{rfh,rfhVariance,`NULL`}(object, matV, B, ...)
 }
 \arguments{
-\item{modelA}{a fitted object}
+\item{object}{a fitted object}
 
-\item{modelB}{a fitted object used to draw samples. In most cases this is
-\code{modelA}. Alternatively it may be useful to use a non-robust model.}
+\item{matV}{a fitted object used to draw samples. In most cases this is
+\code{object}. Alternatively it may be useful to use a non-robust model.}
 
 \item{B}{the number of repetitions}
 
@@ -36,6 +30,10 @@ bootstrap(modelA, modelB = modelA, B = NULL, ...)
 keep in each repetition.}
 }
 \description{
-These methods help to repeatedly fit a \link{rfh} model on bootstrap samples.
+These functions help to repeatedly fit a \link{rfh} model on bootstrap
+samples. Use \code{bootstrap} as a user interface. \code{boot} can be used to
+extend the framework but is not meant to be used interactively. If you are
+interested in the parameteric bootstrap for a 'rfh' model you can use the
+implementation in \link{mse}.
 }
 
