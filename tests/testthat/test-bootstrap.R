@@ -1,5 +1,5 @@
-context("mse")
-test_that("mse.rfh", {
+context("bootstrap")
+test_that("bootsrtap backbone", {
 
   expectIs <- function(x, a) {
     testthat::expect_is(x, a)
@@ -22,12 +22,7 @@ test_that("mse.rfh", {
 
   modelFit <- rfh(y ~ x, dat, "samplingVar")
 
-  out <- mse(modelFit, "pseudo")
-  expectEqual(names(out), c("reblup", "pseudo"))
-
-  out <- mse(modelFit, c("boot", "pseudo"), B = 2)
-  expectEqual(names(out), c("reblup", "pseudo", "boot"))
+  expectIs(bootstrap(modelFit), "fitrfh")
+  expectIs(bootstrap(modelFit, B = 2, filter = "variance"), "list")
 
 })
-
-

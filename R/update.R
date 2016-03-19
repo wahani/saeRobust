@@ -23,9 +23,9 @@ update(object ~ rfh, formula, ..., where = parent.frame(2)) %m% {
 
   # continuing with update.default because of nse problems
   call <- getCall(object)
-  extras <- match.call(expand.dots = FALSE)$...
+  extras <- list(...)
 
-  if (!missing(formula))
+  if (!missing(formula) && inherits(formula, "formula"))
     call$formula <- update(formula(object), formula)
 
   if (length(extras)) {
