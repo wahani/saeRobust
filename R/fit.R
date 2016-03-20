@@ -97,10 +97,9 @@ fitrsfh <- function(y, x, samplingVar, W, x0Var = c(0.01, 1), ...) {
 
       sigma2 <- fixedPoint(fpSigma2, sigma2, addMaxIter(convCrit, maxIterParam))
 
-      fpRho <- fixedPointRobustDelta(
-        y, x, beta, function(x) matVFun(c(x, sigma2)), psi, K, "rho"
+      fpRho <- fixedPointNumericDelta(
+        y, x, beta, function(x) matVFun(c(x, sigma2)), psi, K, "rho", 0.01, -0.99999
       ) %>%
-        addAverageDamp %>%
         addConstraintMin(-0.99999) %>% addConstraintMax(0.99999) %>%
         addHistory
 
@@ -249,10 +248,9 @@ fitrstfh <- function(y, x, samplingVar, W, nTime, x0Var = c(0.01, 0.01, 1, 1), .
       rho2 <- fixedPoint(fpRho, rho2, addMaxIter(convCrit, maxIterParam))
 
       # SAR
-      fpRho <- fixedPointRobustDelta(
-        y, x, beta, function(x) matVFun(c(x, rho2, sigmas)), psi, K, "rho1"
+      fpRho <- fixedPointNumericDelta(
+        y, x, beta, function(x) matVFun(c(x, rho2, sigmas)), psi, K, "rho1", 0.01, -0.99999
       ) %>%
-        addAverageDamp %>%
         addConstraintMin(-0.99999) %>% addConstraintMax(0.99999) %>%
         addHistory
 

@@ -120,7 +120,7 @@ test_that("fitrtfh", {
   # out$iterations$AR
   # out$iterations$variance
   # score(out)$delta
-  testthat::expect_equal(sum(score(out)$delta), 0, tolerance = 1e-05)
+  testthat::expect_equal(sum(score(out)$delta), 0, tolerance = 1e-04)
 
 })
 
