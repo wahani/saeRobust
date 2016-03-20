@@ -2,8 +2,8 @@ context("fit")
 
 test_that("rfhfit is working", {
   library("saeSim")
-  set.seed(1)
-  dat <- base_id(10, 1) %>%
+  set.seed(2)
+  dat <- base_id(100, 1) %>%
     sim_gen_e() %>%
     sim_gen_x() %>%
     sim_gen_v() %>%
@@ -18,6 +18,12 @@ test_that("rfhfit is working", {
   expect_is(out, "list")
   expect_is(out$coefficients, "numeric")
   expect_is(out$variance, "numeric")
+
+  testthat::expect_equal(
+    sum(score(out)$delta, score(out)$beta),
+    0, tolerance = 1e-04
+  )
+
 })
 
 test_that("fitrsfh is working", {
@@ -58,6 +64,8 @@ test_that("fitrsfh is working", {
   expect_is(out, "list")
   expect_is(out$coefficients, "numeric")
   expect_is(out$variance, "numeric")
+
+  testthat::expect_equal(sum(score(out)$delta), 0, tolerance = 1e-04)
 
 })
 
