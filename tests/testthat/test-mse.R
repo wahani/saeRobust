@@ -22,11 +22,14 @@ test_that("mse.rfh", {
 
   modelFit <- rfh(y ~ x, dat, "samplingVar")
 
-  out <- mse(modelFit, "pseudo")
+  out <- mse(modelFit, "pseudo", "reblup")
   expectEqual(names(out), c("reblup", "pseudo"))
 
-  out <- mse(modelFit, c("boot", "pseudo"), B = 3)
+  out <- mse(modelFit, c("boot", "pseudo"), "reblup", B = 3)
   expectEqual(names(out), c("reblup", "pseudo", "boot"))
+
+  out <- mse(modelFit, c("boot", "pseudo"), predType = "reblupbc", B = 3)
+  expectEqual(names(out), c("reblupbc", "pseudobc", "bootbc"))
 
 })
 

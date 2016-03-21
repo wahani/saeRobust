@@ -7,7 +7,8 @@
 \usage{
 mse(object, ...)
 
-\method{mse}{fitrfh}(object, type = "pseudo", B = 100, ...)
+\method{mse}{fitrfh}(object, type = "pseudo", predType = "reblupbc",
+  B = 100, ...)
 }
 \arguments{
 \item{object}{(see methods) an object containing the estimation result, e.g.
@@ -17,6 +18,8 @@ mse(object, ...)
 
 \item{type}{(character) the type of the MSE. Available are 'pseudo' and
 'boot'}
+
+\item{predType}{(character) the type of prediction: \code{c("reblup", "reblupbc")}}
 
 \item{B}{(numeric) number of bootstrap repetitions}
 }

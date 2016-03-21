@@ -12,7 +12,8 @@ bootstrap(object, matV = variance(object), B = NULL, ...)
 
 boot(object, matV, B, ...)
 
-\S4method{boot}{ANY,ANY,integerORnumeric}(object, matV, B, filter = NULL, ...)
+\S4method{boot}{ANY,ANY,integerORnumeric}(object, matV, B, filter = NULL,
+  postProcessing = identity, ...)
 
 \S4method{boot}{rfh,rfhVariance,`NULL`}(object, matV, B, ...)
 }
@@ -28,6 +29,9 @@ boot(object, matV, B, ...)
 
 \item{filter}{a vector indicating which elements in the fittedd object to
 keep in each repetition.}
+
+\item{postProcessing}{a function to process the results. Is applied before
+the filter.}
 }
 \description{
 These functions help to repeatedly fit a \link{rfh} model on bootstrap
