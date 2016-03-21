@@ -53,7 +53,7 @@ boot(object ~ rfh, matV ~ rfhVariance, B ~ NULL, ...) %m% {
 
   # Bootstrap sample:
   Xb <- fitted.values(object)
-  re <- MASS::mvrnorm(1, mu = rep(0, length(Xb)), matV$Vu())
+  re <- MASS::mvrnorm(1, mu = rep(0, nrow(matV$Vu())), matV$Vu())
   e <- MASS::mvrnorm(1, mu = rep(0, length(Xb)), matV$Ve())
   trueY <- as.numeric(Xb + matV$Z() %*% re)
   y <- trueY + e
