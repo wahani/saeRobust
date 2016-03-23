@@ -21,12 +21,16 @@ mse <- function(object, ...) UseMethod("mse")
 mse.fitrfh <- function(object, type = "pseudo", predType = "reblupbc", B = 100, ...) {
 
   pseudo <- function(Xb, matV, Wtype = "W") {
+    # Compute:
+    # Var: A Z Vu t(Z) t(A) + W Ve t(W)
+    # Bias: W Xb - Xb
+    # diag(var) + bias^2
     W <- weights(object)[[Wtype]]
-    G <- diag(matV$Z() %*% tcrossprod(matV$Vu(), matV$Z()))
-    A <- (W - Diagonal(length(object$y)))^2
-    var <- A %*% G + W^2 %*% object$samplingVar
-    bias <- if (Wtype == "W") W %*% Xb - Xb else 0
-    as.numeric(var + bias^2)
+    G <- matV$Z() %*% tcrossprod(matV$Vu(), matV$Z())
+    A <- W - Diagonal(length(object$y))
+    var <- A %*% tcrossprod(G, A) + W %*% tcrossprod(matV$Ve(), W)
+    bias <- W %*% Xb - Xb
+    as.numeric(diag(var) + bias^2)
   }
 
   boot <- function(B, matV) {
