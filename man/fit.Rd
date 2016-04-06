@@ -23,7 +23,7 @@ fitrstfh(y, x, samplingVar, W, nTime, x0Var = c(0.01, 0.01, 1, 1), ...)
 
 fitGenericModel(y, x, matVFun, fixedPointParam, k = 1.345, K = getK(k),
   x0Coef = NULL, x0Var = 1, x0Re = NULL, tol = 1e-06, maxIter = 100,
-  maxIterParam = 1, maxIterRe = 100, convCrit = convCritRelative(tol),
+  maxIterParam = 10, maxIterRe = 100, convCrit = convCritRelative(tol),
   ...)
 
 \S4method{rfh}{numeric,matrixORMatrix,numeric,`NULL`}(formula, data,

@@ -12,6 +12,8 @@
 #' @param B the number of repetitions
 #' @param filter a vector indicating which elements in the fittedd object to
 #'   keep in each repetition.
+#' @param postProcessing a function to process the results. Is applied before
+#'   the filter.
 #' @param ... arguments passed down to methods
 #'
 #' @export
@@ -36,11 +38,11 @@ boot(object, matV, B, ...) %g% standardGeneric("boot")
 
 #' @export
 #' @rdname bootstrap
-boot(object, matV, B ~ integer|numeric, filter = NULL, ...) %m% {
+boot(object, matV, B ~ integer|numeric, filter = NULL, postProcessing = identity, ...) %m% {
   if (is.null(filter)) {
-    replicate(B, boot(object, matV, NULL, ...), FALSE)
+    replicate(B, postProcessing(boot(object, matV, NULL, ...)), FALSE)
   } else {
-    replicate(B, boot(object, matV, NULL, ...)[filter], FALSE)
+    replicate(B, postProcessing(boot(object, matV, NULL, ...))[filter], FALSE)
   }
 }
 
@@ -53,7 +55,7 @@ boot(object ~ rfh, matV ~ rfhVariance, B ~ NULL, ...) %m% {
 
   # Bootstrap sample:
   Xb <- fitted.values(object)
-  re <- MASS::mvrnorm(1, mu = rep(0, length(Xb)), matV$Vu())
+  re <- MASS::mvrnorm(1, mu = rep(0, nrow(matV$Vu())), matV$Vu())
   e <- MASS::mvrnorm(1, mu = rep(0, length(Xb)), matV$Ve())
   trueY <- as.numeric(Xb + matV$Z() %*% re)
   y <- trueY + e

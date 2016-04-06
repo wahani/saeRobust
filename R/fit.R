@@ -282,7 +282,7 @@ fitGenericModel <- function(
   y, x, matVFun, fixedPointParam,
   k = 1.345, K = getK(k),
   x0Coef = NULL, x0Var = 1, x0Re = NULL,
-  tol = 1e-6, maxIter = 100, maxIterParam = 1, maxIterRe = 100, convCrit = convCritRelative(tol), ...) {
+  tol = 1e-6, maxIter = 100, maxIterParam = 10, maxIterRe = 100, convCrit = convCritRelative(tol), ...) {
   # Non interactive fitting function for robust FH Models
   # ... are ignored
 
