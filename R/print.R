@@ -56,8 +56,8 @@ summary.rfh <- function(object, ...) {
 print.summary.rfh <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
 
   tmp <- x
-  class(x) <- class(x)[-1]
-  print(x)
+  class(tmp) <- class(tmp)[-1]
+  print(tmp)
 
   printDefault(digits = digits, rbind(
     "Random Effects" = summary(x$re),
