@@ -46,13 +46,13 @@ fitrfh <- function(y, x, samplingVar, ...) {
         y, x, matVFun(sigma2), psi = psi
       ))
 
-      beta <- fixedPoint(fpBeta, beta, addMaxIter(convCrit, maxIter))
+      beta <- fixedPoint(fpBeta, beta, addMaxIter(convCrit, maxIterParam))
 
       fpSigma2 <- fixedPointRobustDelta(
         y, x, beta, matVFun, psi, K
       ) %>% addConstraintMin(0.00001) %>% addHistory
 
-      sigma2 <- fixedPoint(fpSigma2, sigma2, addMaxIter(convCrit, maxIter))
+      sigma2 <- fixedPoint(fpSigma2, sigma2, addMaxIter(convCrit, maxIterParam))
 
       list(beta, sigma2)
     }
