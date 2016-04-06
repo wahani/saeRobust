@@ -5,4 +5,5 @@ warnings_are_errors: true
 sudo: required
 cache: packages
 
-r_github_packages: wahani/saeSim
+r_github_packages:
+  - wahani/saeSim
