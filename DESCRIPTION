@@ -21,6 +21,7 @@ License: MIT + file LICENSE
 LazyData: true
 Suggests:
     knitr,
+    rmarkdown,
     sae,
     saeSim,
     testthat
