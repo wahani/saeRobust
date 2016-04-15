@@ -6,6 +6,7 @@
 #' @import methods
 #' @import modules
 #' @import Rcpp
+#' @import ggplot2
 #' @useDynLib saeRobust
 NULL
 

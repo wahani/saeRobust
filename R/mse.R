@@ -55,7 +55,8 @@ mse.fitrfh <- function(object, type = "pseudo", predType = "reblupbc", B = 100, 
   matV <- variance(object)
   Xb <- fitted.values(object)
 
-  out <- predict(object, type = predType)[predType]
+  out <- predict(object, type = predType)[c("direct", predType)]
+  out$samplingVar <- object$samplingVar
   if ("pseudo" %in% type && "reblup" %in% predType) out$pseudo <- pseudo(Xb, matV)
   if ("pseudo" %in% type && "reblupbc" %in% predType) out$pseudobc <- pseudo(Xb, matV, "Wbc")
   if ("boot" %in% type) {
@@ -63,6 +64,7 @@ mse.fitrfh <- function(object, type = "pseudo", predType = "reblupbc", B = 100, 
     if ("reblup" %in% predType) out$boot <- boots$reblup
     if ("reblupbc" %in% predType) out$bootbc <- boots$reblupbc
   }
-  out
+
+  addAttr(out, c("mse.fitrfh", "data.frame"), "class")
 
 }

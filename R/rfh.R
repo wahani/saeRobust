@@ -18,6 +18,21 @@
 #' @rdname rfh
 #'
 #' @export
+#' @examples
+#' data("grapes", package = "sae")
+#'
+#' fitRFH <- rfh(
+#'   grapehect ~ area + workdays - 1,
+#'   data = grapes,
+#'   samplingVar = "var"
+#' )
+#'
+#' fitRFH
+#' summary(fitRFH)
+#'
+#' plot(fitRFH)
+#' plot(predict(fitRFH))
+#' plot(mse(fitRFH))
 rfh(formula, data, samplingVar, correlation = NULL, ...) %g% standardGeneric("rfh")
 
 #' @name rfh
@@ -75,11 +90,11 @@ predict.fitrfh <- function(object, type = "reblup", c = 1, ...) {
   Xb <- fitted.values(object)
   Wbc <- weights(object, c = c)$Wbc
 
-  out <- data.frame(re = re)
+  out <- data.frame(re = re, direct = object$y)
   if (is.element("linear", type)) out$linear <- Xb
   if (is.element("reblup", type)) out$reblup <- Xb + re
   if (is.element("reblupbc", type)) out$reblupbc <- as.numeric(Wbc %*% object$y)
 
-  out
+  addAttr(out, c("prediction.fitrfh", "data.frame"), "class")
 
 }

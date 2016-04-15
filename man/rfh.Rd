@@ -39,4 +39,20 @@ within \code{c = 1} times the standard deviation of direct estimator.}
 \description{
 User interface to fit robust Fay-Herriot type models.
 }
+\examples{
+data("grapes", package = "sae")
+
+fitRFH <- rfh(
+  grapehect ~ area + workdays - 1,
+  data = grapes,
+  samplingVar = "var"
+)
+
+fitRFH
+summary(fitRFH)
+
+plot(fitRFH)
+plot(predict(fitRFH))
+plot(mse(fitRFH))
+}
 

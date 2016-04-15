@@ -140,7 +140,10 @@ addStorage <- function(fun) {
     }
 }
 
-#' @details \code{newtonRaphson} finds zeroes of a function. The user can supply the function and its first derivative. Note that the Newton Raphson Algorithm is a special case of a fixed point algorithm thus it is implemented using \code{\link{fixedPoint}} and is only a convenience.
+#' @details \code{newtonRaphson} finds zeroes of a function. The user can supply
+#'   the function and its first derivative. Note that the Newton Raphson
+#'   Algorithm is a special case of a fixed point algorithm thus it is
+#'   implemented using \code{\link{fixedPoint}} and is only a convenience.
 #'
 #' @param funList (list) the functions to be evaluated in the algorithm. First
 #'   element is typically the score function, second is the derivative of the

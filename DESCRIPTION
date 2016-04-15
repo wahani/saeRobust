@@ -1,6 +1,6 @@
 Package: saeRobust
 Title: Robust Small Area Estimation
-Version: 0.0.5
+Version: 0.0.6
 Authors@R: person("Sebastian", "Warnholz", , "Sebastian.Warnholz@fu-berlin.de", role = c("aut", "cre"))
 Description: This package provides robust estimators for commonly used models
     in the SAE field: FH, spatial FH, temporal FH, spatio-temporal FH.
@@ -10,6 +10,7 @@ Depends:
     aoos (>= 0.4.0)
 Imports:
     assertthat,
+    ggplot2,
     Matrix,
     magrittr,
     MASS,
@@ -42,6 +43,7 @@ Collate:
     'mat.R'
     'matModels.R'
     'mse.R'
+    'plot.R'
     'print.R'
     'psiFunctions.R'
     'rfh.R'

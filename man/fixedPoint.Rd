@@ -93,7 +93,10 @@ A fixed-point function supplied by the user is iteratively
   list in which each result is stored. The function will coerce the return
   value into a numeric.
 
-\code{newtonRaphson} finds zeroes of a function. The user can supply the function and its first derivative. Note that the Newton Raphson Algorithm is a special case of a fixed point algorithm thus it is implemented using \code{\link{fixedPoint}} and is only a convenience.
+\code{newtonRaphson} finds zeroes of a function. The user can supply
+  the function and its first derivative. Note that the Newton Raphson
+  Algorithm is a special case of a fixed point algorithm thus it is
+  implemented using \code{\link{fixedPoint}} and is only a convenience.
 }
 \examples{
 \dontrun{
