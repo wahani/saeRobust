@@ -12,7 +12,7 @@
 
 \method{plot}{prediction.fitrfh}(x, y, alpha = 0.05, ...)
 
-\method{plot}{mse.fitrfh}(x, y = "pseudo", ...)
+\method{plot}{mse.fitrfh}(x, y = "pseudo", xlim = NULL, ylim = NULL, ...)
 
 qqPlot(sample)
 
@@ -28,17 +28,22 @@ blandAltmanPlot(x, y, alpha = 0.05)
 \item{alpha}{(numeric) between 0 and 1 - used in computation of confidence
 interval}
 
+\item{xlim, ylim}{arguments are passed to \link[ggplot2]{coord_cartesian} and
+\link[ggplot2]{coord_flip}.}
+
 \item{sample}{(numeric) a vector}
 }
 \description{
-Various implementations of diagnostic plots. They are linked together using the \link{plot} generic function.
+Various implementations of diagnostic plots. They are linked together using
+the \link{plot} generic function.
 }
 \details{
 \code{qqPlot} a QQ-Plot using ggplot2
 
 \code{blandAltmanPlot} a Bland-Altman plot. Solid line is the mean. Dashed
-lines are the upper and lower bound of a confidence interval assuming a
-normal distribution. The alpha level can be set using \code{alpha}.
+lines are the upper and lower bound of the limits-of-aggreements: z-quantile
+* sd(x - y) -- not the standard error. The alpha level can be set using
+\code{alpha}. This plot is otherwise known as Tukey's mean-difference plot.
 }
 \examples{
 qqPlot(rnorm(10))
