@@ -1,12 +1,15 @@
 #' Plots
 #'
-#' Various implementations of diagnostic plots. They are linked together using the \link{plot} generic function.
+#' Various implementations of diagnostic plots. They are linked together using
+#' the \link{plot} generic function.
 #'
 #' @param sample (numeric) a vector
 #' @param x an object
 #' @param y for mse estimates a filter for the predictors; otherwise ignored
 #' @param alpha (numeric) between 0 and 1 - used in computation of confidence
 #'   interval
+#' @param xlim,ylim arguments are passed to \link[ggplot2]{coord_cartesian} and
+#'   \link[ggplot2]{coord_flip}.
 #' @param ... ignored
 #'
 #' @details
@@ -14,8 +17,9 @@
 #' \code{qqPlot} a QQ-Plot using ggplot2
 #'
 #' \code{blandAltmanPlot} a Bland-Altman plot. Solid line is the mean. Dashed
-#' lines are the upper and lower bound of a confidence interval assuming a
-#' normal distribution. The alpha level can be set using \code{alpha}.
+#' lines are the upper and lower bound of the limits-of-aggreements: z-quantile
+#' * sd(x - y) -- not the standard error. The alpha level can be set using
+#' \code{alpha}. This plot is otherwise known as Tukey's mean-difference plot.
 #'
 #' @export
 #' @rdname plot
@@ -85,12 +89,12 @@ plot.prediction.fitrfh <- function(x, y, alpha = 0.05, ...) {
 #' @method plot mse.fitrfh
 #' @rdname plot
 #' @export
-plot.mse.fitrfh <- function(x, y = "pseudo", ...) {
+plot.mse.fitrfh <- function(x, y = "pseudo", xlim = NULL, ylim = NULL, ...) {
   # cv: coefficient of variation -- se / mean
 
   varToPlot <- names(x)[names(x) %in% c("reblup", "reblupbc")]
   mseToPlot <- names(x)[names(x) %in% paste0(y, c("", "bc"))]
-  x <- x[order(x$samplingVar), ]
+  x <- x[order(abs(sqrt(x$samplingVar) / x$direct)), ]
 
   ggDat <- data.frame(
     predictions = c(x$direct, unlist(as.list(x[varToPlot]))),
@@ -103,15 +107,16 @@ plot.mse.fitrfh <- function(x, y = "pseudo", ...) {
 
   cvPlot <- ggplot(ggDat, aes_string(x = "area", y = "cv", colour = "method")) +
     geom_point() +
+    coord_cartesian(xlim, ylim) +
     labs(
-      x = "domain (sorted by increasing sampling variance of direct estimator)",
+      x = "domain (sorted by increasing CV of direct)",
       y = "CV",
       title = c("Scatterplot for CV against sorted domain")
     )
 
   boxPlot <- ggplot(ggDat, aes_string(x = "method", y = "cv")) +
     geom_boxplot() +
-    coord_flip() +
+    coord_flip(xlim, ylim) +
     labs(x = NULL, y = "CV", title = "Boxplot for CV")
 
   ggPlots <- list(scatterPlot = cvPlot, boxPlot = boxPlot)
