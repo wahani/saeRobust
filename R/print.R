@@ -2,11 +2,11 @@
 #' @export
 print.rfh <- function(x, digits = max(3L, getOption("digits") - 3L), ...) {
   # Call:
-  cat(
-    "\nCall:\n",
-    paste(deparse(x$call), sep = "\n", collapse = "\n"),
-    "\n\n", sep = "", fill = TRUE
-  )
+
+  callChar <- unlist(strsplit(deparse(x$call), split = " "))
+  callChar <- callChar[!(callChar == "")]
+  cat("\nCall:\n")
+  cat(callChar, "\n\n", sep = " ", fill = TRUE)
 
   # Coefficients:
   if (length(coef(x))) {
