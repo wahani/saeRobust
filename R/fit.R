@@ -1,6 +1,8 @@
 #' Fitting Precedures
 #'
-#' Several fitting procedures. Not intended for interactive use.
+#' Several fitting procedures. The arguments can be passed to these functions
+#' using the interface in \link{rfh}. The functions here listed are not intended
+#' for interactive use.
 #'
 #' @inheritParams rfh
 #' @param y (numeric) response vector
