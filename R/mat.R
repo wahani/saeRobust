@@ -61,34 +61,34 @@ matB <- function(y, X, beta, re, matV, psi) {
 #' @export
 matBConst <- function(y, X, beta, matV, psi) {
 
-    Ue <- matU(matV$Ve())
-    Uu <- matU(matV$Vu())
+  Ue <- matU(matV$Ve())
+  Uu <- matU(matV$Vu())
 
-    # Helper functions
-    resid <- function(u) as.numeric(memResid - matV$Z() %*% u)
+  # Helper functions
+  resid <- function(u) as.numeric(memResid - as.matrix(matV$Z()) %*% u)
 
-    w2 <- function(u) {
-        resids <- resid(u) * diag(Ue$sqrtInv())
-        psi(resids) / resids
-    }
+  w2 <- function(u) {
+    resids <- resid(u) * diag(Ue$sqrtInv())
+    psi(resids) / resids
+  }
 
-    w3 <- function(u) {
-        resids <- u * diag(Uu$sqrtInv())
-        psi(resids) / resids
-    }
+  w3 <- function(u) {
+    resids <- u * diag(Uu$sqrtInv())
+    psi(resids) / resids
+  }
 
-    # Precalculations - they only have to be done once
-    memXB <- X %*% beta
-    memResid <- y - memXB
-    memZVeU <- crossprod(matV$Z(), matV$VeInv())
+  # Precalculations - they only have to be done once
+  memXB <- X %*% beta
+  memResid <- y - memXB
+  memZVeU <- crossprod(matV$Z(), matV$VeInv())
 
-    function(re) {
-        W2 <- Diagonal(x = w2(re))
-        W3 <- Diagonal(x = w3(re))
-        memPart1 <- memZVeU %*% W2
-        memPart2 <- matV$VuInv() %*% W3
-        solve(memPart1 %*% matV$Z() + memPart2) %*% memPart1
-    }
+  function(re) {
+    W2 <- Diagonal(x = w2(re))
+    W3 <- Diagonal(x = w3(re))
+    memPart1 <- memZVeU %*% W2
+    memPart2 <- matV$VuInv() %*% W3
+    solve(memPart1 %*% matV$Z() + memPart2) %*% memPart1
+  }
 }
 
 #' @details \code{matA} computes the matrix A which is used to compute the

@@ -52,15 +52,15 @@ matVSFH <- function(.rho, .sigma2, .W, .samplingVar) {
   Vu <- getter(.sigma2 * Omega1())
   VuInv <- getter(solve(Vu()))
 
-  V <- getter(Vu() + Ve())
-  VInv <- getter(solve(V()))
+  V <- getter(Vu() + Ve(), as.matrix)
+  VInv <- getter(solve(V()), as.matrix)
 
   Z <- getter(Diagonal(length(.samplingVar)))
 
   deriv <- list(
     rho = getter(matVDerR1(
       .rho, .sigma2, as.matrix(Z()), as.matrix(Omega1()), as.matrix(.W))),
-    sigma2 = getter(Omega1())
+    sigma2 = getter(as.matrix(Omega1()))
   )
 
   retList()

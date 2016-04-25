@@ -21,7 +21,7 @@ testMatX <- function(...) {
     m <- length(Z) + 1
     n <- m * p
 
-    I <- do.call(rBind, replicate(m, Diagonal(p)))
+    I <- do.call(rBind, replicate(m, Diagonal(p), simplify = FALSE))
 
     listOfCols <- lapply(1:m, function(i) {
         if (i == m) {

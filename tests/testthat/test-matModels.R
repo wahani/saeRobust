@@ -8,7 +8,7 @@ test_that("FH", {
 
   matV <- matVFH(0.5, c(1, 1))
 
-  expectEqual(Matrix::Diagonal(x = 1 / (0.5 + c(1, 1))), matV$VInv())
+  expectEqual(saeRobust:::Diagonal(x = 1 / (0.5 + c(1, 1))), matV$VInv())
 
 })
 
@@ -28,7 +28,7 @@ test_that("SFH", {
 
   expectEqual(
     matV$VInv(),
-    solve(0.5 * Omega1 + Diagonal(3))
+    as.matrix(solve(0.5 * Omega1 + Diagonal(3)))
   )
 
   expectEqual(

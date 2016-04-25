@@ -139,7 +139,8 @@ fixedPointRobustDelta2 <- function(y, x, beta, matVFun, psi, K, derivSelect) {
 #' @rdname fixedPointFunctions
 #' @export
 fixedPointRobustRandomEffect <- function(y, x, beta, matV, psi) {
+
     makeMatB <- matBConst(y, x, beta, matV, psi)
     memResid <- y - x %*% beta
-    function(u) as.numeric(makeMatB(u) %*% memResid)
+    function(u) as.numeric(as.matrix(makeMatB(u)) %*% memResid)
 }

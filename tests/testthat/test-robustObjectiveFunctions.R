@@ -93,8 +93,8 @@ test_that("Fixed Point for Robust Variance is correct", {
     estVarRobust <- fixedPoint(fpFun, 1, convCrit)
     estVarFH <- sae::eblupFH(y ~ x, dirVar, method = "FH", data = df)$fit$refvar
 
-    expect_is(estVarRobust, "numeric")
-    expect_true(estVarRobust < estVarFH)
+    testthat::expect_is(estVarRobust, "numeric")
+    testthat::expect_true(estVarRobust < estVarFH)
 
     # Approximately equal to non robust FH? Not at the moment. It is not clear
     # if this implementation has some bug or if there is something in sae - or
