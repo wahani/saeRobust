@@ -25,7 +25,6 @@ mse(object, ...)
 }
 \description{
 A generic function to compute the mean squared error of the predicted values
-under the estimated model. This estimation can also be triggered using the
-predict function.
+under the estimated model. see \link{rfh} for an example.
 }
 

@@ -17,6 +17,7 @@ getK(k)
 \item{deriv}{if \code{TRUE} returns the derivative}
 }
 \description{
-influence-function
+\code{psiOne} is a Huber influence function. \code{getK}
+  function to compute capital K -- used internally.
 }
 

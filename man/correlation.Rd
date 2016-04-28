@@ -17,7 +17,7 @@ corAR1(nTime, ...)
 corSAR1AR1(...)
 }
 \arguments{
-\item{W}{the proximity matrix}
+\item{W}{the row-standardised proximity matrix}
 
 \item{...}{arguments passed to \code{new}. In the case of corSAR1AR1
 arguments \code{W} and \code{nTime} are expected.}
@@ -25,12 +25,23 @@ arguments \code{W} and \code{nTime} are expected.}
 \item{nTime}{(numeric) number of time periods}
 }
 \description{
-Correlation Structure
+Various correlation structures. They can be used inside the \link{rfh}
+function to supply an alterantive variance structure to be fitted.
+}
+\details{
+\code{corSAR1} can be used to model a simultanous autoregressive
+  process of order one: spatial correlation.
+
+\code{corAR1} can be used to model a autoregressive
+  process of order one: temporal correlation.
+
+\code{corSAR1AR1} can be used to model to model spatial and temporal
+  correlation
 }
 \section{Slots}{
 
 \describe{
-\item{\code{W}}{the proximity matrix}
+\item{\code{W}}{the row-standardised proximity matrix}
 
 \item{\code{nTime}}{(numeric) number of time periods}
 }}

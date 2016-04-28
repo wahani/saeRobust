@@ -1,6 +1,7 @@
 #' psiOne
 #'
-#' @description influence-function
+#' @description \code{psiOne} is a Huber influence function. \code{getK}
+#'   function to compute capital K -- used internally.
 #'
 #' @param u standardized residuals
 #' @param k tuning constant

@@ -29,8 +29,9 @@ scoreRobustBeta <- function(y, x, matV, psi) {
 
 #' Fixed Point Functions
 #'
-#' This is an implementation of a robustified fixed point function to identify
-#' beta coefficients in any mixed linear model.
+#' This is an implementation of robustified fixed point functions to identify
+#' model parameters in any mixed linear model: regression coefficients, variance
+#' parameters, and random effects
 #'
 #' @param y vector of response
 #' @param x design matrix

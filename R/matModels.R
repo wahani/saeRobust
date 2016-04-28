@@ -1,7 +1,8 @@
 #' Model Variance Covariance Structures
 #'
 #' Functions to create the variance-covariance structure for the implemented
-#' models. All these functions return a list with methods to compute variations.
+#' models. All these functions return a list with methods to compute different
+#' parts of the variance structure.
 #'
 #' @param .sigma2 (numeric) a scalar. The variance parameter of the random
 #'   effects.

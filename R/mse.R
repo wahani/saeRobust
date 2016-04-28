@@ -1,15 +1,15 @@
 #' Compute the Mean Squared Error of an Estimator
 #'
 #' A generic function to compute the mean squared error of the predicted values
-#' under the estimated model. This estimation can also be triggered using the
-#' predict function.
+#' under the estimated model. see \link{rfh} for an example.
 #'
 #' @param object (see methods) an object containing the estimation result, e.g.
 #'   \link{rfh}
 #' @param type (character) the type of the MSE. Available are 'pseudo' and
 #'   'boot'
 #' @param B (numeric) number of bootstrap repetitions
-#' @param predType (character) the type of prediction: \code{c("reblup", "reblupbc")}
+#' @param predType (character) the type of prediction: \code{c("reblup",
+#'   "reblupbc")}
 #' @param ... arguments passed to methods
 #'
 #' @export

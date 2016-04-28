@@ -30,7 +30,8 @@ estimator.}
 }
 \description{
 Functions to create the variance-covariance structure for the implemented
-models. All these functions return a list with methods to compute variations.
+models. All these functions return a list with methods to compute different
+parts of the variance structure.
 }
 \details{
 \code{matVFH} constructs variance-covariance matrix for a FH-model.

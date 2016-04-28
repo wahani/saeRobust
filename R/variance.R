@@ -1,7 +1,7 @@
 #' Construct variance
 #'
 #' A generic function to construct the different variance components of an
-#' object.
+#' object. Not needed in interactive use.
 #'
 #' @param .object,object an object
 #' @param c (numeric) scalar

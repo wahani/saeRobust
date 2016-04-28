@@ -30,6 +30,6 @@ variance(.object, ...)
 }
 \description{
 A generic function to construct the different variance components of an
-object.
+object. Not needed in interactive use.
 }
 

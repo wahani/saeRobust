@@ -1,5 +1,9 @@
 #' Matrix constructor functions
 #'
+#' These functions construct different parts of matrix components. They are used
+#' internally. If you are interested in the weights of a model fitted using
+#' \link{rfh} please try to use \link[saeRobust]{weights.fitrfh} on that object.
+#'
 #' @param .V (Matrix) variance matrix
 #' @param .nDomains (integer) number of domains
 #' @param .nTime (integer) number of time periods

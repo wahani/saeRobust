@@ -63,7 +63,9 @@ matTZ1(.nDomains = 10, .nTime = 10)
 \item{.nTime}{(integer) number of time periods}
 }
 \description{
-Matrix constructor functions
+These functions construct different parts of matrix components. They are used
+internally. If you are interested in the weights of a model fitted using
+\link{rfh} please try to use \link[saeRobust]{weights.fitrfh} on that object.
 }
 \details{
 \code{matU} computes U. U is the matrix containing only the diagonal

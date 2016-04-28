@@ -1,6 +1,12 @@
 #' Correlation Structure
 #'
-#' @slot W the proximity matrix
+#' Various correlation structures. They can be used inside the \link{rfh}
+#' function to supply an alterantive variance structure to be fitted.
+#'
+#' @details \code{corSAR1} can be used to model a simultanous autoregressive
+#'   process of order one: spatial correlation.
+#'
+#' @slot W the row-standardised proximity matrix
 #'
 #' @rdname correlation
 #' @export
@@ -11,7 +17,7 @@ corSAR1(W ~ matrix | Matrix) %type% {
 #' @name corSAR1
 #' @usage corSAR1(W, ...)
 #'
-#' @param W the proximity matrix
+#' @param W the row-standardised proximity matrix
 #' @param ... arguments passed to \code{new}. In the case of corSAR1AR1
 #'   arguments \code{W} and \code{nTime} are expected.
 #'
@@ -19,6 +25,9 @@ corSAR1(W ~ matrix | Matrix) %type% {
 #' @export corSAR1
 corSAR1
 
+#' @details \code{corAR1} can be used to model a autoregressive
+#'   process of order one: temporal correlation.
+#'
 #' @slot nTime (numeric) number of time periods
 #'
 #' @rdname correlation
@@ -40,6 +49,9 @@ corAR1
 #' @export
 corAR1 : corSAR1 : corSAR1AR1() %type% .Object
 
+#' @details \code{corSAR1AR1} can be used to model to model spatial and temporal
+#'   correlation
+#'
 #' @name corSAR1AR1
 #' @usage corSAR1AR1(...)
 #'
