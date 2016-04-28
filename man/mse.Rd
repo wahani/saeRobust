@@ -19,7 +19,8 @@ mse(object, ...)
 \item{type}{(character) the type of the MSE. Available are 'pseudo' and
 'boot'}
 
-\item{predType}{(character) the type of prediction: \code{c("reblup", "reblupbc")}}
+\item{predType}{(character) the type of prediction: \code{c("reblup",
+"reblupbc")}}
 
 \item{B}{(numeric) number of bootstrap repetitions}
 }
