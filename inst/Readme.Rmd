@@ -1,4 +1,7 @@
 [![Travis-CI Build Status](https://travis-ci.org/wahani/saeRobust.svg?branch=master)](https://travis-ci.org/wahani/saeRobust)
+[![codecov.io](https://codecov.io/github/wahani/saeRobust/coverage.svg?branch=master)](https://codecov.io/github/wahani/saeRobust?branch=master)
+[![CRAN](http://www.r-pkg.org/badges/version/saeRobust)](https://cran.r-project.org/package=saeRobust)
+![Downloads](http://cranlogs.r-pkg.org/badges/saeRobust)
 
 # Robust Methods for Robust Small Area Estimation
 
