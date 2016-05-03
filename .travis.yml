@@ -6,4 +6,7 @@ sudo: required
 cache: packages
 
 r_github_packages:
-  - wahani/saeSim
+  - jimhester/covr
+
+after_success:
+  - Rscript -e 'library(covr);codecov()'
