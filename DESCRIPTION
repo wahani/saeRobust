@@ -1,13 +1,15 @@
 Package: saeRobust
 Title: Robust Small Area Estimation
-Version: 0.0.6
+Version: 0.1.0
 Authors@R: person("Sebastian", "Warnholz", , "Sebastian.Warnholz@fu-berlin.de", role = c("aut", "cre"))
-Description: This package provides robust estimators for commonly used models
-    in the SAE field: FH, spatial FH, temporal FH, spatio-temporal FH.
+Description: Methods to fit robust alterantives to commonly used models in the
+    SAE field. The methods here used are based on best linear unbiased
+    predictions (EBLUPs) and include the Fay-Herriot model and spatial and
+    temporal extensions.
 Depends:
     R (>= 3.2),
     methods,
-    aoos (>= 0.4.0)
+    aoos
 Imports:
     assertthat,
     ggplot2,
