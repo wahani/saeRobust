@@ -3,3 +3,4 @@
 ^\.travis\.yml$
 Readme.md
 ^cran-comments\.md$
+prepareRepo.R

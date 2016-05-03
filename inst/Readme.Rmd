@@ -2,25 +2,22 @@
 
 # Robust Methods for Robust Small Area Estimation
 
-Methods to fit robust alterantives to commonly used models in the
-    SAE field. The methods here used are based on best linear unbiased
-    predictions (EBLUPs) and include the Fay-Herriot model and spatial and
-    temporal extensions.
+```{r results='asis', echo=FALSE}
+cat(packageDescription("saeRobust", fields = "Description"))
+```
 
 
 # Installation
 
 From CRAN:
 
-
-```r
+```{r eval=FALSE}
 installed.packages("saeRobust")
 ```
 
 From this repo:
 
-
-```r
+```{r eval=FALSE}
 devtools::install_github("wahani/saeRobust")
 ```
 
