@@ -9,6 +9,12 @@
 
 * This is a new release.
 
+* License components with restrictions and base license permitting such:
+  MIT + file LICENSE
+File 'LICENSE':
+  YEAR: 2016
+  COPYRIGHT HOLDER: Sebastian Warnholz
+
 ## Reverse dependencies
 
 This is a new release, so there are no reverse dependencies.
