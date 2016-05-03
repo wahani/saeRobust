@@ -2,10 +2,11 @@
 
 # Robust Methods for Robust Small Area Estimation
 
-Methods to fit robust alterantives to commonly used models in the
-    SAE field. The methods here used are based on best linear unbiased
-    predictions (EBLUPs) and include the Fay-Herriot model and spatial and
-    temporal extensions.
+Methods to fit robust alternatives to commonly used models used in
+Small Area Estimation. The methods here used are based on best linear
+unbiased predictions and linear mixed models. At this time available models
+are area level models incorporating spatial and temporal autocorrelation in
+the random effects.
 
 
 # Installation
