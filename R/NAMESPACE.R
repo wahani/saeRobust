@@ -1,6 +1,6 @@
 #' @importFrom assertthat assert_that
 #' @importFrom magrittr %>% %<>%
-#' @importFrom stats coef coefficients dnorm fitted.values model.frame model.matrix model.response pnorm predict qnorm quantile residuals rnorm sd
+#' @importFrom stats coef coefficients dnorm fitted.values model.frame model.matrix model.response pnorm predict qnorm quantile residuals rnorm sd weights getCall formula
 #' @import aoos
 #' @import ggplot2
 #' @import Matrix
