@@ -8,7 +8,7 @@ test_that("FH", {
 
   matV <- matVFH(0.5, c(1, 1))
 
-  expectEqual(saeRobust:::Diagonal(x = 1 / (0.5 + c(1, 1))), matV$VInv())
+  expectEqual(Diagonal(x = 1 / (0.5 + c(1, 1))), matV$VInv())
 
 })
 

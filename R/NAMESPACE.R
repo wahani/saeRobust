@@ -1,12 +1,13 @@
 #' @importFrom assertthat assert_that
 #' @importFrom magrittr %>% %<>%
-#' @importFrom stats weights getCall formula
-#' @import Matrix
+#' @importFrom stats coef coefficients dnorm fitted.values model.frame model.matrix model.response pnorm predict qnorm quantile residuals rnorm sd
 #' @import aoos
+#' @import ggplot2
+#' @import Matrix
+#' @importMethodsFrom Matrix update
 #' @import methods
 #' @import modules
 #' @import Rcpp
-#' @import ggplot2
 #' @useDynLib saeRobust
 NULL
 
@@ -20,11 +21,11 @@ setOldClass(c("fitrtfh", "fitrfh"))
 setOldClass(c("fitrstfh", "fitrfh"))
 
 
-Diagonal <- function(n, x = NULL) {
-  # This wrapper exists to stop the Matrix package to rise warnings when multiplying
-  # diagonals. I don't see a reason for these warnings and am convinced it is a
-  # bug in Matrix.
-  if (missing(n)) as.matrix(Matrix::Diagonal(x = x))
-  else if (!missing(n) & is.null(x)) as.matrix(Matrix::Diagonal(n = n))
-  else as.matrix(Matrix::Diagonal(n = n, x = x))
-}
+# Diagonal <- function(n, x = NULL) {
+#   # This wrapper exists to stop the Matrix package to rise warnings when multiplying
+#   # diagonals. I don't see a reason for these warnings and am convinced it is a
+#   # bug in Matrix.
+#   if (missing(n)) as.matrix(Matrix::Diagonal(x = x))
+#   else if (!missing(n) & is.null(x)) as.matrix(Matrix::Diagonal(n = n))
+#   else as.matrix(Matrix::Diagonal(n = n, x = x))
+# }
