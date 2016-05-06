@@ -3,7 +3,7 @@
 [![CRAN](http://www.r-pkg.org/badges/version/saeRobust)](https://cran.r-project.org/package=saeRobust)
 ![Downloads](http://cranlogs.r-pkg.org/badges/saeRobust)
 
-# Robust Methods for Robust Small Area Estimation
+# Robust Methods for Small Area Estimation
 
 ```{r results='asis', echo=FALSE}
 cat(packageDescription("saeRobust", fields = "Description"))
