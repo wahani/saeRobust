@@ -20,4 +20,9 @@ getK(k)
 \code{psiOne} is a Huber influence function. \code{getK}
   function to compute capital K -- used internally.
 }
+\examples{
+set.seed(1)
+u <- rnorm(10)
+psiOne(u, k = 1.345, deriv = FALSE)
+}
 

@@ -8,6 +8,10 @@
 #'   extract from
 #'
 #' @export
+#'
+#' @examples
+#' set.seed(1)
+#' makeXY(y ~ I(x^2), data.frame(x = rnorm(10), y = rnorm(10)))
 makeXY <- function(.formula, .data){
 
     assert_that(inherits(.formula, "formula"), is.data.frame(.data))

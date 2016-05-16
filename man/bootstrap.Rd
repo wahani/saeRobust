@@ -20,8 +20,9 @@ boot(object, matV, B, ...)
 \arguments{
 \item{object}{a fitted object}
 
-\item{matV}{a fitted object used to draw samples. In most cases this is
-\code{object}. Alternatively it may be useful to use a non-robust model.}
+\item{matV}{the variance of a fitted object used to draw samples. In most
+cases this is \code{object}. Alternatively it may be useful to use a
+non-robust model.}
 
 \item{B}{the number of repetitions}
 
@@ -39,5 +40,12 @@ samples. Use \code{bootstrap} as a user interface. \code{boot} can be used to
 extend the framework but is not meant to be used interactively. If you are
 interested in the parameteric bootstrap for a 'rfh' model you can use the
 implementation in \link{mse}.
+}
+\examples{
+data(milk, package = "sae")
+milk$samplingVar <- milk$SD^2
+modelFit <- rfh(yi ~ as.factor(MajorArea), milk, "samplingVar")
+bootstrapCoefs <- bootstrap(modelFit, B = 2, filter = "coefficients")
+do.call(rbind, unlist(bootstrapCoefs, FALSE))
 }
 

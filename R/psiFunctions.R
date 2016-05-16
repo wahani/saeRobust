@@ -9,6 +9,11 @@
 #'
 #' @rdname psiFunctions
 #' @export
+#'
+#' @examples
+#' set.seed(1)
+#' u <- rnorm(10)
+#' psiOne(u, k = 1.345, deriv = FALSE)
 psiOne <- function(u, k = 1.345, deriv = FALSE){
     u <- as.numeric(u) # in the case that u comes from the Matrix package
     if (deriv) return(as.numeric(abs(u) <= k))

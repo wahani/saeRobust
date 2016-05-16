@@ -7,8 +7,9 @@
 #' implementation in \link{mse}.
 #'
 #' @param object a fitted object
-#' @param matV a fitted object used to draw samples. In most cases this is
-#'   \code{object}. Alternatively it may be useful to use a non-robust model.
+#' @param matV the variance of a fitted object used to draw samples. In most
+#'   cases this is \code{object}. Alternatively it may be useful to use a
+#'   non-robust model.
 #' @param B the number of repetitions
 #' @param filter a vector indicating which elements in the fittedd object to
 #'   keep in each repetition.
@@ -18,6 +19,13 @@
 #'
 #' @export
 #' @rdname bootstrap
+#'
+#' @examples
+#' data(milk, package = "sae")
+#' milk$samplingVar <- milk$SD^2
+#' modelFit <- rfh(yi ~ as.factor(MajorArea), milk, "samplingVar")
+#' bootstrapCoefs <- bootstrap(modelFit, B = 2, filter = "coefficients")
+#' do.call(rbind, unlist(bootstrapCoefs, FALSE))
 bootstrap <- function(object, matV = variance(object), B = NULL, ...) {
   # This function avoids the 'unecessary' methods for missing values when we
   # want S4 dispatch with default values in the generic
@@ -27,14 +35,6 @@ bootstrap <- function(object, matV = variance(object), B = NULL, ...) {
 #' @export
 #' @rdname bootstrap
 boot(object, matV, B, ...) %g% standardGeneric("boot")
-
-# we need these two methods when we want to use boot as a user interrface
-# boot(object, matV ~ missing, B ~ missing, ...) %m%
-#   boot(object = object, matV = variance(object), B = NULL, ...)
-#
-# boot(object, matV ~ missing, B ~ numeric|integer, ...) %m% {
-#   boot(object = object, matV = variance(object), B = B, ...)
-# }
 
 #' @export
 #' @rdname bootstrap

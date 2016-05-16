@@ -14,6 +14,18 @@ score(object, filter, ...)
 \item{...}{arguments passed to methods}
 }
 \description{
-These values should be close to zero for a model fit.
+Can be used to compute the values of the robust estimation equations at their
+'solution'.
+}
+\examples{
+data("grapes", package = "sae")
+
+fitRFH <- rfh(
+  grapehect ~ area + workdays - 1,
+  data = grapes,
+  samplingVar = "var"
+)
+
+score(fitRFH)
 }
 

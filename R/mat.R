@@ -14,8 +14,52 @@
 #'   elements of V. This function returns a list of functions which can be
 #'   called to compute specific transformations of U.
 #'
+#' @references
+#'
+#' Warnholz, S. (2016): "Small Area Estimaiton Using Robust Extension to Area
+#' Level Models". Not published (yet).
+#'
 #' @rdname varianceMatrices
 #' @export
+#'
+#' @examples
+#' data("grapes", package = "sae")
+#' data("grapesprox", package = "sae")
+#'
+#' fitRFH <- rfh(
+#'   grapehect ~ area + workdays - 1,
+#'   data = grapes,
+#'   samplingVar = "var"
+#' )
+#'
+#' matV <- variance(fitRFH)
+#'
+#' # matU:
+#' matU(matV$V())$U()
+#' matU(matV$V())$sqrt()
+#' matU(matV$V())$sqrtInv()
+#'
+#' # matB (and matA + matW accordingly):
+#' matB(
+#'   fitRFH$y,
+#'   fitRFH$x,
+#'   fitRFH$coefficients,
+#'   fitRFH$re,
+#'   matV,
+#'   function(x) psiOne(x, k = fitRFH$k)
+#' )
+#'
+#' matBConst(
+#'   fitRFH$y,
+#'   fitRFH$x,
+#'   fitRFH$coefficients,
+#'   matV,
+#'   function(x) psiOne(x, k = fitRFH$k)
+#' )(fitRFH$re)
+#'
+#' # construcors for 'Z' in linear mixed models
+#' matTZ(2, 3)
+#' matTZ1(2, 3)
 matU <- function(.V) {
 
     .diag <- function(x) Diagonal(x = x)
@@ -59,7 +103,7 @@ matB <- function(y, X, beta, re, matV, psi) {
 
 #' @details \code{matBConst} returns a function with one argument, u, to compute
 #'   the matrix B. This function is used internally to compute B in the fixed
-#'   point algorithm (see \link{fixedPointRobustRandomEffect}).
+#'   point algorithm.
 #'
 #' @rdname varianceMatrices
 #' @export
@@ -106,7 +150,7 @@ matA <- function(y, X, beta, matV, psi) {
 
 #' @details \code{matAConst} returns a function with one argument, beta, to
 #'   compute the matrix A. This function is used internally to compute A in the
-#'   fixed point algorithm for beta (see \link{fixedPointRobustBeta}).
+#'   fixed point algorithm for beta.
 #'
 #' @rdname varianceMatrices
 #' @export

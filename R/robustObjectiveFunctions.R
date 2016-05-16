@@ -1,16 +1,3 @@
-#' Robust score function (ML) for beta
-#'
-#' Constructs a list of functions with \code{f} as the score and \code{f1} as
-#' its derivative. Both are functions of the beta coefficients.
-#'
-#' @param y vector of response
-#' @param x design matrix
-#' @param matV (list of functions) see \link{matVFH}
-#' @param psi influence function
-#'
-#' @rdname objectiveFunctions
-#'
-#' @export
 scoreRobustBeta <- function(y, x, matV, psi) {
     # Helper functions
     resid <- function(beta) U$sqrtInv() %*% (y - x %*% beta)
@@ -27,22 +14,6 @@ scoreRobustBeta <- function(y, x, matV, psi) {
     list(f = f, f1 = f1)
 }
 
-#' Fixed Point Functions
-#'
-#' This is an implementation of robustified fixed point functions to identify
-#' model parameters in any mixed linear model: regression coefficients, variance
-#' parameters, and random effects
-#'
-#' @param y vector of response
-#' @param x design matrix
-#' @param matV (list of functions) see \link{matVFH}
-#' @param psi influence function
-#' @param stepSize (numeric) size to be used in numeric derivative
-#' @param lowerBound (numeric) a lower bound, such that \code{param - stepSize}
-#'   cannot be outside of the parameter space
-#'
-#' @rdname fixedPointFunctions
-#' @export
 fixedPointRobustBeta <- function(y, x, matV, psi) {
     makeMatA <- matAConst(y, x, matV, psi)
     function(beta) {
@@ -50,8 +21,6 @@ fixedPointRobustBeta <- function(y, x, matV, psi) {
     }
 }
 
-#' @export
-#' @rdname fixedPointFunctions
 robustObjectiveDelta <- function(y, x, beta, matVFun, psi, K, derivSelect) {
   # This is the squared estimation equation for a variance parameter. It can be
   # used when the fixed point for delta
@@ -70,8 +39,6 @@ robustObjectiveDelta <- function(y, x, beta, matVFun, psi, K, derivSelect) {
   }
 }
 
-#' @export
-#' @rdname fixedPointFunctions
 fixedPointNumericDelta <- function(y, x, beta, matVFun, psi, K, derivSelect, stepSize, lowerBound) {
   obDelta <- robustObjectiveDelta(y, x, beta, matVFun, psi, K, derivSelect)
   function(rho) {
@@ -79,15 +46,6 @@ fixedPointNumericDelta <- function(y, x, beta, matVFun, psi, K, derivSelect, ste
   }
 }
 
-#' @param matVFun a function with one argument constructing something similar to
-#'   \link{matVFH}: e.g. \code{. \%>\% matVFH(c(1, 1))}
-#' @param K constant, see \link{getK}
-#' @param beta beta coefficients to be used
-#' @param derivSelect an indicator to select the derivative in matV. Position or
-#'   name
-#'
-#' @rdname fixedPointFunctions
-#' @export
 fixedPointRobustDelta <- function(y, x, beta, matVFun, psi, K, derivSelect = 1) {
     # Precalculations - they only have to be done once
     mem1 <- (y - x %*% beta)
@@ -105,8 +63,6 @@ fixedPointRobustDelta <- function(y, x, beta, matVFun, psi, K, derivSelect = 1) 
     }
 }
 
-#' @rdname fixedPointFunctions
-#' @export
 fixedPointRobustDelta2 <- function(y, x, beta, matVFun, psi, K, derivSelect) {
   # Precalculations - they only have to be done once
   mem1 <- (y - x %*% beta)
@@ -137,8 +93,6 @@ fixedPointRobustDelta2 <- function(y, x, beta, matVFun, psi, K, derivSelect) {
   }
 }
 
-#' @rdname fixedPointFunctions
-#' @export
 fixedPointRobustRandomEffect <- function(y, x, beta, matV, psi) {
 
     makeMatB <- matBConst(y, x, beta, matV, psi)

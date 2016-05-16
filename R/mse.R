@@ -1,7 +1,7 @@
 #' Compute the Mean Squared Error of an Estimator
 #'
 #' A generic function to compute the mean squared error of the predicted values
-#' under the estimated model. see \link{rfh} for an example.
+#' under the estimated model. See also \link{rfh} for examples.
 #'
 #' @param object (see methods) an object containing the estimation result, e.g.
 #'   \link{rfh}
@@ -12,8 +12,37 @@
 #'   "reblupbc")}
 #' @param ... arguments passed to methods
 #'
+#' @details
+#'
+#' Type pseudo is an approximation of the MSE based on a pseudo
+#' linearisation approach by Chambers, et. al. (2011). The specifics can be
+#' found in Warnholz (2016). Type boot implements a parameteric bootstrap for
+#' these methods.
+#'
+#' @references
+#'
+#' Chambers, R., H. Chandra and N. Tzavidis (2011). "On bias-robust mean squared
+#' error estimation for pseudo-linear small area estimators". In: Survey
+#' Methodology 37 (2), pp. 153–170.
+#'
+#' Warnholz, S. (2016): "Small Area Estimaiton Using Robust Extension to Area
+#' Level Models". Not published (yet).
+#'
 #' @export
 #' @rdname mse
+#'
+#' @examples
+#' data("grapes", package = "sae")
+#' data("grapesprox", package = "sae")
+#'
+#' fitRFH <- rfh(
+#'   grapehect ~ area + workdays - 1,
+#'   data = grapes,
+#'   samplingVar = "var"
+#' )
+#'
+#' mseRFH <- mse(fitRFH)
+#' plot(mseRFH)
 mse <- function(object, ...) UseMethod("mse")
 
 #' @export

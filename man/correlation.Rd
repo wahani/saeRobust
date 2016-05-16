@@ -26,7 +26,8 @@ arguments \code{W} and \code{nTime} are expected.}
 }
 \description{
 Various correlation structures. They can be used inside the \link{rfh}
-function to supply an alterantive variance structure to be fitted.
+function to supply an alterantive variance structure to be fitted. For
+examples see the documentation of \link{rfh}.
 }
 \details{
 \code{corSAR1} can be used to model a simultanous autoregressive

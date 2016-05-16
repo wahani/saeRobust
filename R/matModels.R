@@ -1,25 +1,3 @@
-#' Model Variance Covariance Structures
-#'
-#' Functions to create the variance-covariance structure for the implemented
-#' models. All these functions return a list with methods to compute different
-#' parts of the variance structure.
-#'
-#' @param .sigma2 (numeric) a scalar. The variance parameter of the random
-#'   effects.
-#' @param .samplingVar (numeric) the vector of sampling variances of the direct
-#'   estimator.
-#' @param .rho (numeric) the correlation parameter for correlated random effects.
-#' @param .W (matrix) proximity matrix.
-#' @param .nTime (integer) the number of time periods.
-#'
-#' @details
-#'
-#' \code{matVFH} constructs variance-covariance matrix for a FH-model.
-#'
-#' \code{matVSFH} the spatial FH model.
-#'
-#' @rdname matModels
-#' @export
 matVFH <- function(.sigma2, .samplingVar) {
 
   .diag <- function(x) Diagonal(x = x)
@@ -40,8 +18,6 @@ matVFH <- function(.sigma2, .samplingVar) {
 
 }
 
-#' @export
-#' @rdname matModels
 matVSFH <- function(.rho, .sigma2, .W, .samplingVar) {
 
   .diag <- function(x) Diagonal(x = x)
@@ -68,8 +44,6 @@ matVSFH <- function(.rho, .sigma2, .W, .samplingVar) {
 
 }
 
-#' @export
-#' @rdname matModels
 matVTFH <- function(.rho, .sigma2, .nTime, .samplingVar) {
 
   .diag <- function(x) Diagonal(x = x)
@@ -137,8 +111,6 @@ matVTFH <- function(.rho, .sigma2, .nTime, .samplingVar) {
 
 }
 
-#' @export
-#' @rdname matModels
 matVSTFH <- function(.rho, .sigma2, .W, .nTime, .samplingVar) {
 
   .diag <- function(x) Diagonal(x = x)

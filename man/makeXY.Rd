@@ -16,4 +16,8 @@ extract from}
 Extract respone vector and design matrix from data with given
   formula.
 }
+\examples{
+set.seed(1)
+makeXY(y ~ I(x^2), data.frame(x = rnorm(10), y = rnorm(10)))
+}
 

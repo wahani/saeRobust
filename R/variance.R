@@ -1,7 +1,7 @@
 #' Construct variance
 #'
 #' A generic function to construct the different variance components of an
-#' object. Not needed in interactive use.
+#' object. You may want to use this in conjunction with \link{bootstrap}.
 #'
 #' @param .object,object an object
 #' @param c (numeric) scalar
@@ -9,6 +9,27 @@
 #'
 #' @export
 #' @rdname variance
+#'
+#' @examples
+#' data("grapes", package = "sae")
+#' data("grapesprox", package = "sae")
+#'
+#' fitRFH <- rfh(
+#'   grapehect ~ area + workdays - 1,
+#'   data = grapes,
+#'   samplingVar = "var"
+#' )
+#'
+#' # The variance component of a mixed linear model:
+#' matV <- variance(fitRFH)
+#' # The full variance matrix:
+#' matV$V()
+#'
+#' # The sampling error component
+#' matV$Ve()
+#'
+#' # the random effects component
+#' matV$Vu()
 variance <- function(.object, ...) UseMethod("variance")
 
 #' @export

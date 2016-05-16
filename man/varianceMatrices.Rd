@@ -79,14 +79,14 @@ internally. If you are interested in the weights of a model fitted using
 
 \code{matBConst} returns a function with one argument, u, to compute
   the matrix B. This function is used internally to compute B in the fixed
-  point algorithm (see \link{fixedPointRobustRandomEffect}).
+  point algorithm.
 
 \code{matA} computes the matrix A which is used to compute the
   weights in the pseudo linearized representation of the REBLUP.
 
 \code{matAConst} returns a function with one argument, beta, to
   compute the matrix A. This function is used internally to compute A in the
-  fixed point algorithm for beta (see \link{fixedPointRobustBeta}).
+  fixed point algorithm for beta.
 
 \code{matW} returns a matrix containing the weights as they are
   defined for the pseudo linear form, such that \code{matW \%*\% y} is the
@@ -101,5 +101,48 @@ internally. If you are interested in the weights of a model fitted using
 
 \code{matTZ1} constructs the Z1 matrix in a linear mixed model with
   autocorrelated random effects.
+}
+\examples{
+data("grapes", package = "sae")
+data("grapesprox", package = "sae")
+
+fitRFH <- rfh(
+  grapehect ~ area + workdays - 1,
+  data = grapes,
+  samplingVar = "var"
+)
+
+matV <- variance(fitRFH)
+
+# matU:
+matU(matV$V())$U()
+matU(matV$V())$sqrt()
+matU(matV$V())$sqrtInv()
+
+# matB (and matA + matW accordingly):
+matB(
+  fitRFH$y,
+  fitRFH$x,
+  fitRFH$coefficients,
+  fitRFH$re,
+  matV,
+  function(x) psiOne(x, k = fitRFH$k)
+)
+
+matBConst(
+  fitRFH$y,
+  fitRFH$x,
+  fitRFH$coefficients,
+  matV,
+  function(x) psiOne(x, k = fitRFH$k)
+)(fitRFH$re)
+
+# construcors for 'Z' in linear mixed models
+matTZ(2, 3)
+matTZ1(2, 3)
+}
+\references{
+Warnholz, S. (2016): "Small Area Estimaiton Using Robust Extension to Area
+Level Models". Not published (yet).
 }
 

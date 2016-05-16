@@ -34,7 +34,8 @@ robEstEqu <- function(y, X, .beta, u, matV, psi, K) {
 
 #' Compute values of robust score functions
 #'
-#' These values should be close to zero for a model fit.
+#' Can be used to compute the values of the robust estimation equations at their
+#' 'solution'.
 #'
 #' @param object a fitted object
 #' @param filter (character) a selection of values to be computed
@@ -42,6 +43,17 @@ robEstEqu <- function(y, X, .beta, u, matV, psi, K) {
 #'
 #' @export
 #' @rdname score
+#'
+#' @examples
+#' data("grapes", package = "sae")
+#'
+#' fitRFH <- rfh(
+#'   grapehect ~ area + workdays - 1,
+#'   data = grapes,
+#'   samplingVar = "var"
+#' )
+#'
+#' score(fitRFH)
 score <- function(object, filter, ...) UseMethod("score")
 
 #' @export

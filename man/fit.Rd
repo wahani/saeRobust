@@ -54,7 +54,7 @@ fitGenericModel(y, x, matVFun, fixedPointParam, k = 1.345, K = getK(k),
 \item{nTime}{(integer) number of time periods}
 
 \item{matVFun}{(function) a function with one argument - the variance
-parameters - constructing something like \link{matVFH}}
+parameters - constructing something like \link{variance}}
 
 \item{fixedPointParam}{(function) a function with one argument. The vector of
 model parameters. Returns a list of results of the next iteration in the
@@ -91,7 +91,21 @@ random intercept.}
 }
 \description{
 Several fitting procedures. The arguments can be passed to these functions
-using the interface in \link{rfh}. The functions here listed are not intended
-for interactive use.
+using the interface in \link{rfh}. The functions here listed are the low
+level implementations and are not intended for interactive use.
+}
+\details{
+\code{fitrfh} implements the robust Fay-Herriot model; \code{fitrsfh} the
+spatial, \code{fitrtfh} the temporal, and \code{fitrstfh} the spatio-temporal
+extension to this model type. See \link{rfh} how to fit such models.
+\code{fitGenericModel} is used by all these implementations and can be used
+for possible extensions of the framework.
+}
+\examples{
+data(milk, package = "sae")
+x <- matrix(1, nrow = NROW(milk))
+y <- milk$yi
+samplingVar <- milk$SD^2
+fitrfh(y, x, samplingVar)
 }
 
