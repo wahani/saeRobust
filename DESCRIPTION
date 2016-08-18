@@ -21,6 +21,7 @@ Imports:
     MASS,
     modules,
     memoise,
+    pbapply,
     Rcpp,
     spdep
 License: MIT + file LICENSE

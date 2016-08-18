@@ -40,9 +40,9 @@ boot(object, matV, B, ...) %g% standardGeneric("boot")
 #' @rdname bootstrap
 boot(object, matV, B ~ integer|numeric, filter = NULL, postProcessing = identity, ...) %m% {
   if (is.null(filter)) {
-    replicate(B, postProcessing(boot(object, matV, NULL, ...)), FALSE)
+    pbreplicate(B, postProcessing(boot(object, matV, NULL, ...)), FALSE)
   } else {
-    replicate(B, postProcessing(boot(object, matV, NULL, ...))[filter], FALSE)
+    pbreplicate(B, postProcessing(boot(object, matV, NULL, ...))[filter], FALSE)
   }
 }
 
