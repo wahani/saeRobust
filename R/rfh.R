@@ -143,7 +143,7 @@ NULL
 rfh(formula ~ formula, data ~ data.frame, samplingVar ~ character, correlation ~ ANY, ...) %m% {
   call <- match.call()
   xy <- makeXY(formula, data)
-  samplingVar <- data[[samplingVar]]
+  samplingVar <- check$samplingVar(data[[samplingVar]])
 
   stripSelf(retList(
     "rfh",

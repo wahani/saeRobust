@@ -29,6 +29,33 @@ test_that("rfh is working", {
 
 })
 
+test_that("rfh warnings and errors", {
+
+    library("saeSim")
+    set.seed(1)
+    dat <- base_id(10, 1) %>%
+        sim_gen_e() %>%
+        sim_gen_x() %>%
+        sim_gen_v() %>%
+        sim_resp_eq(y = 100 + 2 * x + v + e) %>%
+        as.data.frame
+
+    dat$samplingVar <- 0
+
+    expect_warning(
+      rfh(y ~ x, dat, "samplingVar", maxIter = 1, maxIterRe = 1),
+      "zero sampling variances"
+    )
+
+    dat$samplingVar <- NA
+    
+    expect_error(
+      rfh(y ~ x, dat, "samplingVar", maxIter = 1, maxIterRe = 1),
+      "Missing values"
+    )
+
+})
+
 test_that("spatial rfh is working", {
 
   library("saeSim")
