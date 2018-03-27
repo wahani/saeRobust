@@ -1,20 +1,15 @@
 ## Test environments
-* local ubuntu 14.10, R 3.3.0
-* ubuntu 12.04 (on travis-ci), R 3.3.0
-* win-builder (release)
+* local ubuntu 17.10
+* ubuntu on travis-ci
+* win-builder
 
 ## R CMD check results
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 0 note
 
-* This is a new release.
-
-* License components with restrictions and base license permitting such:
-  MIT + file LICENSE
-File 'LICENSE':
-  YEAR: 2016
-  COPYRIGHT HOLDER: Sebastian Warnholz
+* This is a maintenance release to avoid the use of rBind and cBind (replaced by 
+  rbind and cbind).
 
 ## Reverse dependencies
 
-This is a new release, so there are no reverse dependencies.
+To the best of my knowledge there are no reverse dependencies.

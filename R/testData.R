@@ -21,19 +21,19 @@ testMatX <- function(...) {
     m <- length(Z) + 1
     n <- m * p
 
-    I <- do.call(rBind, replicate(m, Diagonal(p), simplify = FALSE))
+    I <- do.call(rbind, replicate(m, Diagonal(p), simplify = FALSE))
 
     listOfCols <- lapply(1:m, function(i) {
         if (i == m) {
             ind <- c(rep(0, length.out = n - p), rep(1, length.out = p))
-            Reduce(rBind, replicate(m, Z[[1]])) - I * ind
+            Reduce(rbind, replicate(m, Z[[1]])) - I * ind
         } else {
             ind <- c(rep(1, length.out = n - i * p), rep(0, length.out = i * p))
-            Reduce(rBind, replicate(m, Z[[i]])) + I * ind
+            Reduce(rbind, replicate(m, Z[[i]])) + I * ind
         }
     })
 
-    Matrix(do.call(cBind, listOfCols), forceCheck = TRUE)
+    Matrix(do.call(cbind, listOfCols), forceCheck = TRUE)
 
 }
 
@@ -68,8 +68,8 @@ testResponse <- function(y0, k = 1:4, .sd = sd(y0)) {
 
     ck <- 2^c(-21 - i, -3 - i, 1 - i, 19 - i)
 
-    y0s <- do.call(cBind, replicate(length(k), Matrix(y0, ncol = 1)))
-    r0s <- do.call(cBind, lapply(ck[k], . %>% { . * r0 } %>% Matrix(ncol = 1)))
+    y0s <- do.call(cbind, replicate(length(k), Matrix(y0, ncol = 1)))
+    r0s <- do.call(cbind, lapply(ck[k], . %>% { . * r0 } %>% Matrix(ncol = 1)))
     y0s + r0s
 
 }

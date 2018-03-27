@@ -3,13 +3,13 @@
 [![CRAN](http://www.r-pkg.org/badges/version/saeRobust)](https://cran.r-project.org/package=saeRobust)
 ![Downloads](http://cranlogs.r-pkg.org/badges/saeRobust)
 
-# Robust Methods for Robust Small Area Estimation
+# Robust Methods for Small Area Estimation
 
 Methods to fit robust alternatives to commonly used models used in
-Small Area Estimation. The methods here used are based on best linear
-unbiased predictions and linear mixed models. At this time available models
-are area level models incorporating spatial and temporal autocorrelation in
-the random effects.
+    Small Area Estimation. The methods here used are based on best linear
+    unbiased predictions and linear mixed models. At this time available models
+    include area level models incorporating spatial and temporal correlation in
+    the random effects.
 
 
 # Installation
@@ -27,5 +27,4 @@ From this repo:
 ```r
 devtools::install_github("wahani/saeRobust")
 ```
-
 

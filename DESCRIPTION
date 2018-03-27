@@ -1,6 +1,6 @@
 Package: saeRobust
 Title: Robust Small Area Estimation
-Version: 0.1.2
+Version: 0.2.0
 Author: Sebastian Warnholz [aut, cre]
 Maintainer: Sebastian Warnholz <Sebastian.Warnholz@fu-berlin.de>
 Description: Methods to fit robust alternatives to commonly used models used in
