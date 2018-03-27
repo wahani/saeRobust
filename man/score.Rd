@@ -28,4 +28,3 @@ fitRFH <- rfh(
 
 score(fitRFH)
 }
-

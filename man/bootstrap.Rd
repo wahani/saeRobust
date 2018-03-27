@@ -2,10 +2,10 @@
 % Please edit documentation in R/bootstrap.R
 \docType{methods}
 \name{bootstrap}
+\alias{bootstrap}
 \alias{boot}
 \alias{boot,ANY,ANY,integerORnumeric-method}
 \alias{boot,rfh,rfhVariance,NULL-method}
-\alias{bootstrap}
 \title{Fit model on Bootstrap sample}
 \usage{
 bootstrap(object, matV = variance(object), B = NULL, ...)
@@ -48,4 +48,3 @@ modelFit <- rfh(yi ~ as.factor(MajorArea), milk, "samplingVar")
 bootstrapCoefs <- bootstrap(modelFit, B = 2, filter = "coefficients")
 do.call(rbind, unlist(bootstrapCoefs, FALSE))
 }
-

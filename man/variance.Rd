@@ -4,8 +4,8 @@
 \alias{variance}
 \alias{variance.fitrfh}
 \alias{variance.fitrsfh}
-\alias{variance.fitrstfh}
 \alias{variance.fitrtfh}
+\alias{variance.fitrstfh}
 \alias{weights.fitrfh}
 \title{Construct variance}
 \usage{
@@ -53,4 +53,3 @@ matV$Ve()
 # the random effects component
 matV$Vu()
 }
-

@@ -55,4 +55,3 @@ Methodology 37 (2), pp. 153–170.
 Warnholz, S. (2016): "Small Area Estimaiton Using Robust Extension to Area
 Level Models". Not published (yet).
 }
-

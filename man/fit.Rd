@@ -2,14 +2,14 @@
 % Please edit documentation in R/fit.R, R/rfh.R
 \docType{methods}
 \name{fitrfh}
-\alias{fitGenericModel}
 \alias{fitrfh}
 \alias{fitrsfh}
-\alias{fitrstfh}
 \alias{fitrtfh}
+\alias{fitrstfh}
+\alias{fitGenericModel}
 \alias{rfh,numeric,matrixORMatrix,numeric,NULL-method}
-\alias{rfh,numeric,matrixORMatrix,numeric,corAR1-method}
 \alias{rfh,numeric,matrixORMatrix,numeric,corSAR1-method}
+\alias{rfh,numeric,matrixORMatrix,numeric,corAR1-method}
 \alias{rfh,numeric,matrixORMatrix,numeric,corSAR1AR1-method}
 \title{Fitting Precedures}
 \usage{
@@ -108,4 +108,3 @@ y <- milk$yi
 samplingVar <- milk$SD^2
 fitrfh(y, x, samplingVar)
 }
-

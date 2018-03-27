@@ -20,4 +20,3 @@ Extract respone vector and design matrix from data with given
 set.seed(1)
 makeXY(y ~ I(x^2), data.frame(x = rnorm(10), y = rnorm(10)))
 }
-

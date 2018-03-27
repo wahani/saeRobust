@@ -2,8 +2,8 @@
 % Please edit documentation in R/update.R
 \docType{methods}
 \name{update,rfh-method}
-\alias{update,fitrfh-method}
 \alias{update,rfh-method}
+\alias{update,fitrfh-method}
 \title{Update a fitted object}
 \usage{
 \S4method{update}{rfh}(object, formula, ..., where = parent.frame(2))
@@ -24,4 +24,3 @@ This is a method which can be used to update a \link{rfh} result object and
 refit it. The fitted parameter values from the current object are used as
 starting values, then \link{update.default} is called.
 }
-

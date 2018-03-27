@@ -2,12 +2,12 @@
 % Please edit documentation in R/correlation.R
 \docType{class}
 \name{corSAR1-class}
-\alias{corAR1}
-\alias{corAR1-class}
-\alias{corSAR1}
 \alias{corSAR1-class}
-\alias{corSAR1AR1}
+\alias{corSAR1}
+\alias{corAR1-class}
+\alias{corAR1}
 \alias{corSAR1AR1-class}
+\alias{corSAR1AR1}
 \title{Correlation Structure}
 \usage{
 corSAR1(W, ...)

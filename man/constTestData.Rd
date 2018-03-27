@@ -2,8 +2,8 @@
 % Please edit documentation in R/testData.R
 \name{testMatX}
 \alias{testMatX}
-\alias{testResponse}
 \alias{testResponse0}
+\alias{testResponse}
 \alias{testRook}
 \title{Construction of test data}
 \usage{
@@ -47,4 +47,3 @@ Matrix(1) \%>\% testMatX \%>\% testResponse0 \%>\% testResponse
 Weihs / Mersmann / Ligges (2014): Foundations of Statistical
   Algorithms: With References to R Packages
 }
-
