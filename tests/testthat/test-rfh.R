@@ -48,7 +48,7 @@ test_that("rfh warnings and errors", {
     )
 
     dat$samplingVar <- NA
-    
+
     expect_error(
       rfh(y ~ x, dat, "samplingVar", maxIter = 1, maxIterRe = 1),
       "Missing values"
@@ -185,5 +185,3 @@ test_that("predict.rfh", {
     expectEqual(names(out), c("re", "direct", "linear"))
 
 })
-
-

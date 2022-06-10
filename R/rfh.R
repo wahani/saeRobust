@@ -79,7 +79,7 @@
 #' Canadian Journal of Statistics 37 (3), pp. 381–399.
 #'
 #' Warnholz, S. (2016): "Small Area Estimaiton Using Robust Extension to Area
-#' Level Models". Not published (yet).
+#' Level Models". Dissertation. https://refubium.fu-berlin.de/handle/fub188/9706.
 #'
 #' @rdname rfh
 #'
@@ -131,7 +131,7 @@
 #'   corSAR1AR1(W = as.matrix(spacetimeprox), nTime = nTime)
 #' )
 #' }
-rfh(formula, data, samplingVar, correlation = NULL, ...) %g% standardGeneric("rfh")
+setGeneric("rfh", function(formula, data, samplingVar, correlation = NULL, ...) standardGeneric("rfh"))
 
 #' @name rfh
 #' @usage \S4method{rfh}{formula,data.frame,character,ANY}(formula, data,
@@ -140,42 +140,60 @@ rfh(formula, data, samplingVar, correlation = NULL, ...) %g% standardGeneric("rf
 #' @rdname rfh
 NULL
 
-rfh(formula ~ formula, data ~ data.frame, samplingVar ~ character, correlation ~ ANY, ...) %m% {
-  call <- match.call()
-  xy <- makeXY(formula, data)
-  samplingVar <- check$samplingVar(data[[samplingVar]])
+setMethod(
+  "rfh",
+  c(formula = "formula", data = "data.frame", samplingVar = "character", correlation = "ANY"),
+  function(formula, data, samplingVar, correlation, ...) {
+    call <- match.call()
+    xy <- makeXY(formula, data)
+    samplingVar <- check$samplingVar(data[[samplingVar]])
 
-  stripSelf(retList(
-    "rfh",
-    public = c("call", "formula"),
-    super = rfh(xy$y, xy$x, samplingVar, correlation, ...)
-  ))
-
-}
-
-#' @rdname fit
-#' @export
-rfh(formula ~ numeric, data ~ matrix | Matrix, samplingVar ~ numeric, correlation ~ 'NULL', ...) %m% {
-  fitrfh(formula, data, samplingVar, ...)
-}
+    stripSelf(retList(
+      "rfh",
+      public = c("call", "formula"),
+      super = rfh(xy$y, xy$x, samplingVar, correlation, ...)
+    ))
+  }
+)
 
 #' @rdname fit
 #' @export
-rfh(formula ~ numeric, data ~ matrix | Matrix, samplingVar ~ numeric, correlation ~ corSAR1, ...) %m% {
-  fitrsfh(formula, data, samplingVar, correlation@W, ...)
-}
+setMethod(
+  "rfh",
+  c(formula = "numeric", data = "matrixORMatrix", samplingVar = "numeric", correlation = "NULL"),
+  function(formula, data, samplingVar, correlation, ...) {
+    fitrfh(formula, data, samplingVar, ...)
+  }
+)
 
 #' @rdname fit
 #' @export
-rfh(formula ~ numeric, data ~ matrix | Matrix, samplingVar ~ numeric, correlation ~ corAR1, ...) %m% {
-  fitrtfh(formula, data, samplingVar, correlation@nTime, ...)
-}
+setMethod(
+  "rfh", c("numeric", "matrixORMatrix", "numeric", "corSAR1"),
+  function(formula, data, samplingVar, correlation, ...) {
+    fitrsfh(formula, data, samplingVar, correlation@W, ...)
+  }
+)
 
 #' @rdname fit
 #' @export
-rfh(formula ~ numeric, data ~ matrix | Matrix, samplingVar ~ numeric, correlation ~ corSAR1AR1, ...) %m% {
-  fitrstfh(formula, data, samplingVar, correlation@W, correlation@nTime, ...)
-}
+setMethod(
+  "rfh",
+  c("numeric", "matrixORMatrix", "numeric", "corAR1"),
+  function(formula, data, samplingVar, correlation, ...) {
+    fitrtfh(formula, data, samplingVar, correlation@nTime, ...)
+  }
+)
+
+#' @rdname fit
+#' @export
+setMethod(
+  "rfh",
+  c("numeric", "matrixORMatrix", "numeric", "corSAR1AR1"),
+  function(formula, data, samplingVar, correlation, ...) {
+    fitrstfh(formula, data, samplingVar, correlation@W, correlation@nTime, ...)
+  }
+)
 
 #' @param object (rfh) an object of class rfh
 #' @param type (character) one or more in \code{c("linear", "reblup", "reblupbc")}
@@ -183,7 +201,6 @@ rfh(formula ~ numeric, data ~ matrix | Matrix, samplingVar ~ numeric, correlatio
 #' @rdname rfh
 #' @export
 predict.fitrfh <- function(object, type = "reblup", c = 1, ...) {
-
   re <- as.numeric(variance(object)$Z() %*% object$re)
   Xb <- fitted.values(object)
   Wbc <- weights(object, c = c)$Wbc
@@ -194,5 +211,4 @@ predict.fitrfh <- function(object, type = "reblup", c = 1, ...) {
   if (is.element("reblupbc", type)) out$reblupbc <- as.numeric(Wbc %*% object$y)
 
   addAttr(out, c("prediction.fitrfh", "data.frame"), "class")
-
 }

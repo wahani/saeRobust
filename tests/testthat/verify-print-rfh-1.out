@@ -1,0 +1,16 @@
+> print(x)
+
+Call:
+rfh(formula = y ~ x, data = dat, samplingVar = "samplingVar", maxIter = 1, 
+maxIterRe = 1) 
+
+
+Coefficients:
+(Intercept)            x  
+    101.199        1.775  
+
+Variance Components:
+variance  
+   2.592  
+
+

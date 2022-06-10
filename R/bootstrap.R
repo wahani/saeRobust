@@ -34,35 +34,40 @@ bootstrap <- function(object, matV = variance(object), B = NULL, ...) {
 
 #' @export
 #' @rdname bootstrap
-boot(object, matV, B, ...) %g% standardGeneric("boot")
+setGeneric("boot", function(object, matV, B, ...) standardGeneric("boot"))
 
 #' @export
 #' @rdname bootstrap
-boot(object, matV, B ~ integer|numeric, filter = NULL, postProcessing = identity, ...) %m% {
-  if (is.null(filter)) {
-    pbreplicate(B, postProcessing(boot(object, matV, NULL, ...)), FALSE)
-  } else {
-    pbreplicate(B, postProcessing(boot(object, matV, NULL, ...))[filter], FALSE)
+setMethod(
+  "boot", c(B = "integerORnumeric"),
+  function(object, matV, B, filter = NULL, postProcessing = identity, ...) {
+    if (is.null(filter)) {
+      pbreplicate(B, postProcessing(boot(object, matV, NULL, ...)), FALSE)
+    } else {
+      pbreplicate(B, postProcessing(boot(object, matV, NULL, ...))[filter], FALSE)
+    }
   }
-}
+)
 
 #' @export
 #' @rdname bootstrap
-boot(object ~ rfh, matV ~ rfhVariance, B ~ NULL, ...) %m% {
-  # This we need to get directly in the update method for fitrfh class
-  # Otherwise weired things are happening in the call for the S4-generic
-  class(object) <- class(object)[-1] # this hopefully only removes 'rfh'
+setMethod(
+  "boot", c(object = "rfh", matV = "rfhVariance", B = "NULL"),
+  function(object, matV, B, ...) {
+    # This we need to get directly in the update method for fitrfh class
+    # Otherwise weired things are happening in the call for the S4-generic
+    class(object) <- class(object)[-1] # this hopefully only removes 'rfh'
 
-  # Bootstrap sample:
-  Xb <- fitted.values(object)
-  re <- MASS::mvrnorm(1, mu = rep(0, nrow(matV$Vu())), matV$Vu())
-  e <- MASS::mvrnorm(1, mu = rep(0, length(Xb)), matV$Ve())
-  trueY <- as.numeric(Xb + matV$Z() %*% re)
-  y <- trueY + e
+    # Bootstrap sample:
+    Xb <- fitted.values(object)
+    re <- MASS::mvrnorm(1, mu = rep(0, nrow(matV$Vu())), matV$Vu())
+    e <- MASS::mvrnorm(1, mu = rep(0, length(Xb)), matV$Ve())
+    trueY <- as.numeric(Xb + matV$Z() %*% re)
+    y <- trueY + e
 
-  # refit:
-  out <- update(object, y = y)
-  out$trueY <- trueY
-  out
-}
-
+    # refit:
+    out <- update(object, y = y)
+    out$trueY <- trueY
+    out
+  }
+)

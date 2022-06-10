@@ -30,3 +30,18 @@ setOldClass(c("fitrstfh", "fitrfh"))
 #   else if (!missing(n) & is.null(x)) as.matrix(Matrix::Diagonal(n = n))
 #   else as.matrix(Matrix::Diagonal(n = n, x = x))
 # }
+
+setClassUnion(
+    "integerORnumeric",
+    c("integer", "numeric")
+)
+
+setClassUnion(
+    "numericORinteger",
+    c("numeric", "integer")
+)
+
+setClassUnion(
+    "matrixORMatrix",
+    c("matrix", "Matrix")
+)

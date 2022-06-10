@@ -19,10 +19,10 @@ corSAR1AR1(...)
 \arguments{
 \item{W}{the row-standardised proximity matrix}
 
+\item{nTime}{(numeric) number of time periods}
+
 \item{...}{arguments passed to \code{new}. In the case of corSAR1AR1
 arguments \code{W} and \code{nTime} are expected.}
-
-\item{nTime}{(numeric) number of time periods}
 }
 \description{
 Various correlation structures. They can be used inside the \link{rfh}

@@ -179,4 +179,3 @@ test_that("NR for robust betas", {
         as.numeric(solve(crossprod(X)) %*% crossprod(X, y)))
 
 })
-

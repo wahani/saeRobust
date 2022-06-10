@@ -13,8 +13,7 @@
 #'
 #' @rdname update
 #' @export
-update(object ~ rfh, formula, ..., where = parent.frame(2)) %m% {
-
+setMethod("update", "rfh", function(object, formula, ..., where = parent.frame(2)) {
   object$call[c("x0Coef", "x0Var", "x0Re")] <-
     object[c("coefficients", "variance", "re")]
 
@@ -25,8 +24,9 @@ update(object ~ rfh, formula, ..., where = parent.frame(2)) %m% {
   call <- getCall(object)
   extras <- list(...)
 
-  if (!missing(formula) && inherits(formula, "formula"))
+  if (!missing(formula) && inherits(formula, "formula")) {
     call$formula <- update(formula(object), formula)
+  }
 
   if (length(extras)) {
     existing <- !is.na(match(names(extras), names(call)))
@@ -38,12 +38,11 @@ update(object ~ rfh, formula, ..., where = parent.frame(2)) %m% {
   }
 
   eval(call, where)
-
-}
+})
 
 #' @rdname update
 #' @export
-update(object ~ fitrfh, ...) %m% {
+setMethod("update", "fitrfh", function(object, ...) {
   # the first class should be the fitting function. If it is a rfh object this
   # method should never be called
   fun <- class(object)[1] # yeah...
@@ -55,5 +54,4 @@ update(object ~ fitrfh, ...) %m% {
   object[names(args)] <- args
 
   do.call(get(fun, mode = "function"), object)
-
-}
+})

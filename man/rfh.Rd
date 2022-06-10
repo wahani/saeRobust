@@ -2,7 +2,6 @@
 % Please edit documentation in R/rfh.R
 \name{rfh}
 \alias{rfh}
-\alias{rfh}
 \alias{rfh,formula,data.frame,character,ANY-method}
 \alias{predict.fitrfh}
 \title{Robust Fay Herriot Model}
@@ -150,5 +149,5 @@ Sinha, S. K. and J. N. K. Rao (2009). "Robust Small Area Estimation". In: The
 Canadian Journal of Statistics 37 (3), pp. 381–399.
 
 Warnholz, S. (2016): "Small Area Estimaiton Using Robust Extension to Area
-Level Models". Not published (yet).
+Level Models". Dissertation. https://refubium.fu-berlin.de/handle/fub188/9706.
 }

@@ -7,8 +7,7 @@
 \usage{
 mse(object, ...)
 
-\method{mse}{fitrfh}(object, type = "pseudo", predType = "reblupbc",
-  B = 100, ...)
+\method{mse}{fitrfh}(object, type = "pseudo", predType = "reblupbc", B = 100, ...)
 }
 \arguments{
 \item{object}{(see methods) an object containing the estimation result, e.g.

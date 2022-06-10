@@ -6,6 +6,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // matOmega1
 arma::mat matOmega1(arma::mat W, double rho);
 RcppExport SEXP _saeRobust_matOmega1(SEXP WSEXP, SEXP rhoSEXP) {
