@@ -14,11 +14,9 @@
 setClass("corSAR1", slots = c(W = "matrixORMatrix"))
 
 #' @name corSAR1
-#' @usage corSAR1(W, ...)
+#' @usage corSAR1(W)
 #'
 #' @param W the row-standardised proximity matrix
-#' @param ... arguments passed to \code{new}. In the case of corSAR1AR1
-#'   arguments \code{W} and \code{nTime} are expected.
 #'
 #' @rdname correlation
 #' @export corSAR1
@@ -36,7 +34,7 @@ corSAR1 <- function(W) {
 setClass("corAR1", slots = c(nTime = "numericORinteger"))
 
 #' @name corAR1
-#' @usage corAR1(nTime, ...)
+#' @usage corAR1(nTime)
 #'
 #' @param nTime (numeric) number of time periods
 #'
@@ -54,7 +52,7 @@ setClass("corSAR1AR1", contains = c("corAR1", "corSAR1"))
 #'   correlation
 #'
 #' @name corSAR1AR1
-#' @usage corSAR1AR1(...)
+#' @usage corSAR1AR1(nTime, W)
 #'
 #' @rdname correlation
 #' @export corSAR1AR1

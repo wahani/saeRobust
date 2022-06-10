@@ -10,19 +10,16 @@
 \alias{corSAR1AR1}
 \title{Correlation Structure}
 \usage{
-corSAR1(W, ...)
+corSAR1(W)
 
-corAR1(nTime, ...)
+corAR1(nTime)
 
-corSAR1AR1(...)
+corSAR1AR1(nTime, W)
 }
 \arguments{
 \item{W}{the row-standardised proximity matrix}
 
 \item{nTime}{(numeric) number of time periods}
-
-\item{...}{arguments passed to \code{new}. In the case of corSAR1AR1
-arguments \code{W} and \code{nTime} are expected.}
 }
 \description{
 Various correlation structures. They can be used inside the \link{rfh}

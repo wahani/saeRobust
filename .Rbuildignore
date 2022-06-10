@@ -4,3 +4,4 @@
 Readme.md
 ^cran-comments\.md$
 prepareRepo.R
+^\.lintr$
