@@ -83,6 +83,8 @@ test_that("spatial rfh is working", {
 
 test_that("temporal rfh is working", {
 
+  skip_on_cran()
+
   library("saeSim")
   set.seed(3)
   nDomains <- 20
@@ -113,6 +115,8 @@ test_that("temporal rfh is working", {
 
 test_that("temporal rfh is working", {
 
+  skip_on_cran()
+  
   library("saeSim")
   set.seed(3)
   nDomains <- 20
