@@ -48,7 +48,9 @@ summary.rfh <- function(object, ...) {
     "random effects" = NROW(object$iterations$re)
   )
 
-  retList("summary.rfh", super = object)
+  class(object) <- c("summary.rfh", class(object))
+  object
+
 }
 
 #' @method print summary.rfh
